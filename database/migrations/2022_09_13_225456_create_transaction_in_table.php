@@ -18,7 +18,7 @@ class CreateTransactionInTable extends Migration
             $table->date('trans_date');
             $table->integer('receive_from');
             $table->integer('store_to');
-            $table->integer('value');
+            $table->bigInteger('value');
             $table->string('reference', 255);
             $table->string('description', 255);
             $table->timestamps();

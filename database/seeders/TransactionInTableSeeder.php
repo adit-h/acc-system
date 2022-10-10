@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\TransactionIn;
 
-class TransactionInSeeder extends Seeder
+class TransactionInTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

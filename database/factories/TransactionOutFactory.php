@@ -25,8 +25,8 @@ class TransactionOutFactory extends Factory
         $date = $this->faker->dateTimeBetween('-1 month', '+1 month');
         $from = $this->faker->randomElement(['1', '2', '4', '5']);
         $to = $this->faker->randomElement(['1', '3', '4', '5']);
-        $value = $this->faker->numberBetween(100000, 1000000);
-        $ref = $this->faker->numerify('trans-####');
+        $value = $this->faker->numberBetween(100000000, 99999999999);
+        $ref = $this->faker->numerify('trans-out-####');
         $desc = $this->faker->text(100);
 
         return [
