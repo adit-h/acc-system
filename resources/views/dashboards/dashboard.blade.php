@@ -115,7 +115,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-12 col-lg-8">
+      <div class="col-md-12 col-lg-12">
          <div class="row">
             <div class="col-md-12">
                <div class="card" data-aos="fade-up" data-aos-delay="800">
@@ -146,7 +146,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="dropdown">
+                     <!-- <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                         This Week
                         </a>
@@ -155,7 +155,7 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div>
+                     </div> -->
                   </div>
                   <div class="card-body">
                      <div id="d-main" class="d-main"></div>
@@ -168,7 +168,7 @@
                      <div class="header-title">
                         <h4 class="card-title">Earnings</h4>
                      </div>
-                     <div class="dropdown">
+                     <!-- <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                            This Week
                         </a>
@@ -177,7 +177,7 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div>
+                     </div> -->
                   </div>
                   <div class="card-body">
                      <div class="d-flex align-items-center justify-content-between">
@@ -216,7 +216,7 @@
                      <div class="header-title">
                         <h4 class="card-title">Conversions</h4>
                      </div>
-                     <div class="dropdown">
+                     <!-- <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                            This Week
                         </a>
@@ -225,14 +225,14 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div>
+                     </div> -->
                   </div>
                   <div class="card-body">
                      <div id="d-activity" class="d-activity"></div>
                   </div>
                </div>
             </div>
-            <div class="col-md-12 col-lg-12">
+            <!-- <div class="col-md-12 col-lg-12">
                <div class="card overflow-hidden" data-aos="fade-up" data-aos-delay="400">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
@@ -412,10 +412,10 @@
                      </div>
                   </div>
                </div>
-            </div>
+            </div> -->
          </div>
       </div>
-      <div class="col-md-12 col-lg-4">
+      <!-- <div class="col-md-12 col-lg-4">
          <div class="row">
             <div class="col-md-6 col-lg-12">
                <div class="card credit-card-widget" data-aos="fade-up" data-aos-delay="900">
@@ -511,6 +511,7 @@
                   </div>
                </div>
             </div>
+
             <div class="col-md-12 col-lg-12">
                <div class="card" data-aos="fade-up" data-aos-delay="400">
                   <div class="card-header d-flex justify-content-between flex-wrap">
@@ -564,6 +565,6 @@
                </div>
             </div>
          </div>
-      </div>
+      </div> -->
    </div>
 </x-app-layout>
