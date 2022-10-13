@@ -22,12 +22,18 @@
                         <!-- Validation Errors -->
                         <x-auth-validation-errors class="mb-4" :errors="$errors" />
                         <form method="POST" action="{{ route('login') }}" data-toggle="validator">
-                            {{csrf_field()}}
+                           {{csrf_field()}}
                            <div class="row">
-                              <div class="col-lg-12">
+                              {{--<div class="col-lg-12">
                                  <div class="form-group">
                                     <label for="email" class="form-label">Email</label>
-                                    <input id="email" type="email" name="email"  value="{{env('IS_DEMO') ? 'admin@example.com' : old('email')}}"   class="form-control"  placeholder="admin@example.com" required autofocus>
+                                    <input id="email" type="email" name="email" value="{{env('IS_DEMO') ? 'admin@example.com' : old('email')}}" class="form-control" placeholder="admin@example.com" required autofocus>
+                                 </div>
+                              </div>--}}
+                              <div class="col-lg-12">
+                                 <div class="form-group">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input id="username" type="text" name="username" value="{{env('IS_DEMO') ? 'admin@example.com' : old('username')}}" class="form-control" placeholder="" required autofocus>
                                  </div>
                               </div>
                               <div class="col-lg-12">
