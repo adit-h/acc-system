@@ -11,6 +11,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 
+// Reports
+use App\Http\Controllers\Report\ReportIncomeStateController;
+
 use Illuminate\Support\Facades\Artisan;
 // Packages
 use Illuminate\Support\Facades\Route;
@@ -77,7 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Route::resource('account', TransInController::class);
     });
 
-    // Transaction Outc Module
+    // Transaction Out Module
     Route::group(['prefix' => 'trans.out'], function() {
         //Transaction Out Page Routes
         Route::get('index', [TransOutController::class, 'index'])->name('trans.out.index');
@@ -88,6 +91,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [TransOutController::class, 'destroy'])->name('trans.out.destroy');
 
         //Route::resource('account', TransOutController::class);
+    });
+
+    // Report Module
+    Route::group(['prefix' => 'report'], function() {
+        //Income Statement Routes
+        Route::get('index', [ReportIncomeStateController::class, 'index'])->name('report.income.state.index');
+        Route::post('filter', [ReportIncomeStateController::class, 'filter'])->name('report.income.state.filter');
+
+        //Route::get('create', [ReportIncomeStateController::class, 'create'])->name('report.income.state.create');
+        //Route::post('store', [ReportIncomeStateController::class, 'store'])->name('report.income.state.store');
+        //Route::get('edit/{id}', [ReportIncomeStateController::class, 'edit'])->name('report.income.state.edit');
+        //Route::patch('update/{id}', [ReportIncomeStateController::class, 'update'])->name('report.income.state.update');
+        //Route::delete('destroy/{id}', [ReportIncomeStateController::class, 'destroy'])->name('report.income.state.destroy');
+
+        //Route::resource('account', ReportIncomeStateController::class);
     });
 });
 
