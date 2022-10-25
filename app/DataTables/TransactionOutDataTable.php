@@ -20,10 +20,10 @@ class TransactionOutDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('receiveFrom.code', function($query) {
-                return $query->receiveFrom->code ?? '-';
+                return $query->receiveFrom->name ?? '-';
             })
             ->editColumn('storeTo.code', function($query) {
-                return $query->storeTo->code ?? '-';
+                return $query->storeTo->name ?? '-';
             })
             ->editColumn('value', function($query) {
                 $res = 'Rp. '. number_format($query->value, 0, ',', '.');
