@@ -99,6 +99,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('index', [ReportIncomeStateController::class, 'index'])->name('report.income.state.index');
         Route::post('filter', [ReportIncomeStateController::class, 'filter'])->name('report.income.state.filter');
 
+        Route::get('income-state/export-excel/', [ReportIncomeStateController::class, 'exportExcel'])->name('report.income.state.export.excel');
+        Route::get('income-state/export-pdf/', [ReportIncomeStateController::class, 'exportPdf'])->name('report.income.state.export.pdf');
+        Route::get('income-state/export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
+
         //Route::get('create', [ReportIncomeStateController::class, 'create'])->name('report.income.state.create');
         //Route::post('store', [ReportIncomeStateController::class, 'store'])->name('report.income.state.store');
         //Route::get('edit/{id}', [ReportIncomeStateController::class, 'edit'])->name('report.income.state.edit');

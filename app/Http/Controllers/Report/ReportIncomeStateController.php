@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 //use App\DataTables\Report\ReportIncomeStateDataTable;
 
+use App\Exports\ReportIncomeExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\TransactionIn;
 use App\Models\MasterAccount;
@@ -49,6 +52,7 @@ class ReportIncomeStateController extends Controller
             $year = date('Y', strtotime($date));
             $month = date('m', strtotime($date));
 
+            $filter = date('F Y', strtotime($year.'-'.$month.'-01'));
             $trans_in = DB::table('transaction_in')
                 ->select(DB::raw('master_accounts.id, master_accounts.code, master_accounts.name, SUM(transaction_in.value) AS value1'))
                 ->join('master_accounts', 'master_accounts.id', 'transaction_in.store_to')
@@ -65,7 +69,7 @@ class ReportIncomeStateController extends Controller
                 ->get();
         }
 
-        return view('report-incomeState.list', compact('trans_in', 'trans_out'));
+        return view('report-incomeState.list', compact('trans_in', 'trans_out', 'filter'));
     }
 
     /**
@@ -115,4 +119,54 @@ class ReportIncomeStateController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {}
+
+    public function exportExcel(Request $request) {
+
+        $filename = 'report_income_'.date('dmyhis').'.xlsx';
+        $date = $request->date_input;
+        if (!empty($date)) {
+            $year = date('Y', strtotime($date));
+            $month = date('m', strtotime($date));
+        } else {
+            $year = date('Y');
+            $month = date('m');
+        }
+
+        return Excel::download(new ReportIncomeExport($month, $year), $filename);
+    }
+
+    public function exportPdf(Request $request) {
+
+        $filename = 'report_income_'.date('dmyhis').'.pdf';
+        $date = $request->date_input;
+        if (!empty($date)) {
+            $year = date('Y', strtotime($date));
+            $month = date('m', strtotime($date));
+        } else {
+            $year = date('Y');
+            $month = date('m');
+        }
+
+        // using fromQuery
+        // return (new ReportIncomeExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
+        return Excel::download(new ReportIncomeExport($month, $year), $filename);
+    }
+
+    public function exportHtml(Request $request) {
+
+        $filename = 'report_income_'.date('dmyhis').'.html';
+        $date = $request->date_input;
+        if (!empty($date)) {
+            $year = date('Y', strtotime($date));
+            $month = date('m', strtotime($date));
+        } else {
+            $year = date('Y');
+            $month = date('m');
+        }
+
+        //using formQuery
+        //return (new ReportIncomeExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);
+        return Excel::download(new ReportIncomeExport($month, $year), $filename);
+    }
+
 }
