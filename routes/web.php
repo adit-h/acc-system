@@ -10,9 +10,12 @@ use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
+use App\Http\Controllers\TransSaleController;
 
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
+use App\Http\Controllers\Report\ReportTransJournalController;
+use App\Http\Controllers\Report\ReportGeneralLedgerController;
 
 use Illuminate\Support\Facades\Artisan;
 // Packages
@@ -93,15 +96,28 @@ Route::group(['middleware' => 'auth'], function () {
         //Route::resource('account', TransOutController::class);
     });
 
-    // Report Module
-    Route::group(['prefix' => 'report'], function() {
+    // Transaction Sale Module
+    Route::group(['prefix' => 'trans.sale'], function() {
+        //Transaction Sale Page Routes
+        Route::get('index', [TransSaleController::class, 'index'])->name('trans.sale.index');
+        Route::get('create', [TransSaleController::class, 'create'])->name('trans.sale.create');
+        Route::post('store', [TransSaleController::class, 'store'])->name('trans.sale.store');
+        Route::get('edit/{id}', [TransSaleController::class, 'edit'])->name('trans.sale.edit');
+        Route::patch('update/{id}', [TransSaleController::class, 'update'])->name('trans.sale.update');
+        Route::delete('destroy/{id}', [TransSaleController::class, 'destroy'])->name('trans.sale.destroy');
+
+        //Route::resource('account', TransSaleController::class);
+    });
+
+    // Report Income State Module
+    Route::group(['prefix' => 'report/income-state'], function() {
         //Income Statement Routes
         Route::get('index', [ReportIncomeStateController::class, 'index'])->name('report.income.state.index');
         Route::post('filter', [ReportIncomeStateController::class, 'filter'])->name('report.income.state.filter');
 
-        Route::get('income-state/export-excel/', [ReportIncomeStateController::class, 'exportExcel'])->name('report.income.state.export.excel');
-        Route::get('income-state/export-pdf/', [ReportIncomeStateController::class, 'exportPdf'])->name('report.income.state.export.pdf');
-        Route::get('income-state/export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
+        Route::get('export-excel/', [ReportIncomeStateController::class, 'exportExcel'])->name('report.income.state.export.excel');
+        Route::get('export-pdf/', [ReportIncomeStateController::class, 'exportPdf'])->name('report.income.state.export.pdf');
+        Route::get('export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
 
         //Route::get('create', [ReportIncomeStateController::class, 'create'])->name('report.income.state.create');
         //Route::post('store', [ReportIncomeStateController::class, 'store'])->name('report.income.state.store');
@@ -110,6 +126,26 @@ Route::group(['middleware' => 'auth'], function () {
         //Route::delete('destroy/{id}', [ReportIncomeStateController::class, 'destroy'])->name('report.income.state.destroy');
 
         //Route::resource('account', ReportIncomeStateController::class);
+    });
+
+    Route::group(['prefix' => 'report/trans-journal'], function() {
+        //Income Statement Routes
+        Route::get('index', [ReportTransJournalController::class, 'index'])->name('report.trans.journal.index');
+        Route::post('filter', [ReportTransJournalController::class, 'filter'])->name('report.trans.journal.filter');
+
+        Route::get('export-excel/', [ReportTransJournalController::class, 'exportExcel'])->name('report.trans.journal.export.excel');
+        Route::get('export-pdf/', [ReportTransJournalController::class, 'exportPdf'])->name('report.trans.journal.export.pdf');
+        Route::get('export-html/', [ReportTransJournalController::class, 'exportHtml'])->name('report.trans.journal.export.html');
+    });
+
+    Route::group(['prefix' => 'report/general-ledger'], function() {
+        //Income Statement Routes
+        Route::get('index', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger.index');
+        Route::post('filter', [ReportGeneralLedgerController::class, 'filter'])->name('report.general.ledger.filter');
+
+        Route::get('export-excel/', [ReportGeneralLedgerController::class, 'exportExcel'])->name('report.general.ledger.export.excel');
+        Route::get('export-pdf/', [ReportGeneralLedgerController::class, 'exportPdf'])->name('report.general.ledger.export.pdf');
+        Route::get('export-html/', [ReportGeneralLedgerController::class, 'exportHtml'])->name('report.general.ledger.export.html');
     });
 });
 

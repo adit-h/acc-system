@@ -102,7 +102,7 @@
             </li>
         </ul>
     </li> --> --}}
-
+    <!-- Master Menu -->
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#master-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
@@ -137,17 +137,18 @@
         </ul>
     </li>
 
+    <!-- Transaction Menu -->
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#transaction-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path opacity="0.4" d="M10.0833 15.958H3.50777C2.67555 15.958 2 16.6217 2 17.4393C2 18.2559 2.67555 18.9207 3.50777 18.9207H10.0833C10.9155 18.9207 11.5911 18.2559 11.5911 17.4393C11.5911 16.6217 10.9155 15.958 10.0833 15.958Z" fill="currentColor"></path>
-                    <path opacity="0.4" d="M22.0001 6.37867C22.0001 5.56214 21.3246 4.89844 20.4934 4.89844H13.9179C13.0857 4.89844 12.4102 5.56214 12.4102 6.37867C12.4102 7.1963 13.0857 7.86 13.9179 7.86H20.4934C21.3246 7.86 22.0001 7.1963 22.0001 6.37867Z" fill="currentColor"></path>
-                    <path d="M8.87774 6.37856C8.87774 8.24523 7.33886 9.75821 5.43887 9.75821C3.53999 9.75821 2 8.24523 2 6.37856C2 4.51298 3.53999 3 5.43887 3C7.33886 3 8.87774 4.51298 8.87774 6.37856Z" fill="currentColor"></path>
-                    <path d="M21.9998 17.3992C21.9998 19.2648 20.4609 20.7777 18.5609 20.7777C16.6621 20.7777 15.1221 19.2648 15.1221 17.3992C15.1221 15.5325 16.6621 14.0195 18.5609 14.0195C20.4609 14.0195 21.9998 15.5325 21.9998 17.3992Z" fill="currentColor"></path>
+                    <path opacity="0.4" d="M6.70555 12.8906C6.18944 12.8906 5.77163 13.3146 5.77163 13.8384L5.51416 18.4172C5.51416 19.0847 6.04783 19.6251 6.70555 19.6251C7.36328 19.6251 7.89577 19.0847 7.89577 18.4172L7.63947 13.8384C7.63947 13.3146 7.22167 12.8906 6.70555 12.8906Z" fill="currentColor"/>
+                    <path d="M7.98037 3.67345C7.98037 3.67345 7.71236 3.39789 7.54618 3.27793C7.30509 3.09264 7.00783 3 6.71173 3C6.37936 3 6.07039 3.10452 5.81877 3.30169C5.77313 3.34801 5.57886 3.5226 5.41852 3.68532C4.41204 4.6367 2.76539 7.12026 2.26215 8.42083C2.18257 8.618 2.01053 9.11685 2 9.38409C2 9.63827 2.05618 9.88294 2.17087 10.1145C2.3312 10.4044 2.58282 10.6372 2.88009 10.7642C3.08606 10.8462 3.70282 10.9733 3.71453 10.9733C4.38981 11.1016 5.48757 11.1704 6.70003 11.1704C7.85514 11.1704 8.90727 11.1016 9.59308 10.997C9.60478 10.9852 10.3702 10.8581 10.6335 10.7179C11.1133 10.4626 11.4118 9.96371 11.4118 9.43041V9.38409C11.4001 9.03608 11.1016 8.30444 11.0911 8.30444C10.5879 7.07394 9.02079 4.64858 7.98037 3.67345Z" fill="currentColor"/>
+                    <path opacity="0.4" d="M17.2949 11.1096C17.811 11.1096 18.2288 10.6856 18.2288 10.1618L18.4851 5.58296C18.4851 4.91543 17.9526 4.375 17.2949 4.375C16.6372 4.375 16.1035 4.91543 16.1035 5.58296L16.361 10.1618C16.361 10.6856 16.7788 11.1096 17.2949 11.1096Z" fill="currentColor"/>
+                    <path d="M21.8293 13.8853C21.6689 13.5955 21.4173 13.3638 21.1201 13.2356C20.9141 13.1536 20.2961 13.0265 20.2856 13.0265C19.6103 12.8982 18.5126 12.8293 17.3001 12.8293C16.145 12.8293 15.0929 12.8982 14.4071 13.0028C14.3954 13.0146 13.63 13.1429 13.3666 13.2819C12.8856 13.5373 12.5884 14.0361 12.5884 14.5706V14.6169C12.6001 14.9649 12.8973 15.6954 12.909 15.6954C13.4123 16.9259 14.9782 19.3525 16.0198 20.3265C16.0198 20.3265 16.2878 20.6021 16.454 20.7208C16.6939 20.9073 16.9911 21 17.2896 21C17.6208 21 17.9286 20.8954 18.1814 20.6983C18.227 20.652 18.4213 20.4774 18.5816 20.3158C19.5869 19.3632 21.2347 16.8796 21.7368 15.5802C21.8176 15.383 21.9896 14.883 22.0001 14.6169C22.0001 14.3616 21.944 14.1169 21.8293 13.8853Z" fill="currentColor"/>
                 </svg>
             </i>
-            <span class="item-name">Transaksi</span>
+            <span class="item-name"> @lang('global.transactions')</span>
             <i class="right-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -164,8 +165,8 @@
                             </g>
                         </svg>
                     </i>
-                  <i class="sidenav-mini-icon"> PM </i>
-                  <span class="item-name"> Pemasukan </span>
+                  <i class="sidenav-mini-icon"> I </i>
+                  <span class="item-name"> @lang('global.trans-in') </span>
                 </a>
             </li>
             <li class="nav-item ">
@@ -177,12 +178,85 @@
                             </g>
                         </svg>
                     </i>
-                  <i class="sidenav-mini-icon"> PK </i>
-                  <span class="item-name"> Pengeluaran </span>
+                  <i class="sidenav-mini-icon"> O </i>
+                  <span class="item-name"> @lang('global.trans-out') </span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('trans.sale.index'))}}" href="{{route('trans.sale.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> S </i>
+                  <span class="item-name"> @lang('global.trans-sale') </span>
                 </a>
             </li>
         </ul>
     </li>
+
+    <!-- Report Menu -->
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#report-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
+            <i class="icon">
+                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path opacity="0.4" d="M16.191 2H7.81C4.77 2 3 3.78 3 6.83V17.16C3 20.26 4.77 22 7.81 22H16.191C19.28 22 21 20.26 21 17.16V6.83C21 3.78 19.28 2 16.191 2Z" fill="currentColor"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.07996 6.6499V6.6599C7.64896 6.6599 7.29996 7.0099 7.29996 7.4399C7.29996 7.8699 7.64896 8.2199 8.07996 8.2199H11.069C11.5 8.2199 11.85 7.8699 11.85 7.4289C11.85 6.9999 11.5 6.6499 11.069 6.6499H8.07996ZM15.92 12.7399H8.07996C7.64896 12.7399 7.29996 12.3899 7.29996 11.9599C7.29996 11.5299 7.64896 11.1789 8.07996 11.1789H15.92C16.35 11.1789 16.7 11.5299 16.7 11.9599C16.7 12.3899 16.35 12.7399 15.92 12.7399ZM15.92 17.3099H8.07996C7.77996 17.3499 7.48996 17.1999 7.32996 16.9499C7.16996 16.6899 7.16996 16.3599 7.32996 16.1099C7.48996 15.8499 7.77996 15.7099 8.07996 15.7399H15.92C16.319 15.7799 16.62 16.1199 16.62 16.5299C16.62 16.9289 16.319 17.2699 15.92 17.3099Z" fill="currentColor"/>
+                </svg>
+            </i>
+            <span class="item-name"> @lang('global.report') </span>
+            <i class="right-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </i>
+        </a>
+        <ul class="sub-nav collapse" id="report-menu" data-bs-parent="#sidebar">
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.income.state.index'))}}" href="{{route('report.income.state.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> IS </i>
+                  <span class="item-name"> @lang('global.income_report') </span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.trans.journal.index'))}}" href="{{route('report.trans.journal.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> TJ </i>
+                  <span class="item-name"> @lang('global.journal_report') </span>
+                </a>
+            </li>
+            <!-- <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.general.ledger.index'))}}" href="{{route('report.general.ledger.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> GL </i>
+                  <span class="item-name"> @lang('global.ledger_report') </span>
+                </a>
+            </li> -->
+        </ul>
+    </li>
+
     {{--
     <!-- <li class="nav-item">
         <a class="nav-link" aria-current="page" href="{{route('uisheet')}}" target="_blank">
@@ -404,7 +478,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="sidebar-user" data-bs-parent="#sidebar">
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link {{activeRoute(route('users.show', 1))}}" href="{{route('users.show', 1)}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -416,7 +490,7 @@
                     <i class="sidenav-mini-icon"> U </i>
                     <span class="item-name">User Profile</span>
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link {{activeRoute(route('users.create'))}}" href="{{route('users.create')}}">
                     <i class="icon">
