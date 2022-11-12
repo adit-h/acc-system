@@ -24,19 +24,19 @@ class ReportTransJournalController extends Controller
     public function index(Request $request)
     {
         $trans_in = DB::table('transaction_in AS t')
-                ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
-                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
-                ->join('master_accounts AS mat', 'mat.id', 't.store_to');
+            ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to');
 
-            $trans = DB::table('transaction_out AS t')
-                ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
-                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
-                ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->union($trans_in)
-                ->orderBy('trans_date')
-                ->get();
+        $trans = DB::table('transaction_out AS t')
+            ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->union($trans_in)
+            ->orderBy('trans_date')
+            ->get();
 
-        return view('report-transJournal.list', compact('trans_in', 'trans_out'));
+        return view('report-transJournal.list', compact('trans_in', 'trans'));
     }
 
     /**
@@ -71,9 +71,10 @@ class ReportTransJournalController extends Controller
                 ->union($trans_in)
                 ->orderBy('trans_date')
                 ->get();
+
         }
 
-        return view('report-transJournal.list', compact('trans', 'filter'));
+        return view('report-transJournal.list', compact('trans', 'filter', 'date'));
     }
 
     /**
@@ -134,7 +135,7 @@ class ReportTransJournalController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.xlsx';
+        $filename = 'report_trans_journal_'.$month.$year.'.xlsx';
 
         return Excel::download(new ReportTransJournalExport($month, $year), $filename);
     }
@@ -149,7 +150,7 @@ class ReportTransJournalController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.pdf';
+        $filename = 'report_trans_journal_'.$month.$year.'.pdf';
 
         // using fromQuery
         // return (new ReportTransJournalExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
@@ -166,7 +167,7 @@ class ReportTransJournalController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.html';
+        $filename = 'report_trans_journal_'.$month.$year.'.html';
 
         //using formQuery
         //return (new ReportTransJournalExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);

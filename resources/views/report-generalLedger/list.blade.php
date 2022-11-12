@@ -4,11 +4,11 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title"> @lang('report.trans_journal_title')</h4>
+                        <h4 class="card-title"> @lang('report.general_ledger_title')</h4>
                     </div>
                 </div>
                 <div class="card-body justify-content-between">
-                    {!! Form::open(['route' => ['report.trans.journal.filter'], 'method' => 'post']) !!}
+                    {!! Form::open(['route' => ['report.general.ledger.filter'], 'method' => 'post']) !!}
                     <div class="row">
                         <div class="col-md-2"></div>
                         <div class="col-md-4"></div>
@@ -40,7 +40,7 @@
                                 <input type="text" class="form-control vanila-datepicker" name="date_input" placeholder="Tanggal" value="{{ !empty($date) ? $date : '' }}">
                                 <button class="btn btn-primary btn-sm" type="submit" id="date-filter">Filter</button>
                             </div>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.trans.journal.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.general.ledger.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -56,7 +56,7 @@
                                 </span>
                                 Excel
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.trans.journal.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.general.ledger.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -72,7 +72,7 @@
                                 </span>
                                 PDF
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.trans.journal.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.general.ledger.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                 <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -96,73 +96,50 @@
                         <table id="basic-table" class="table table-bordered table-hover mb-0" role="grid">
                             <thead>
                                 <tr>
-                                    <th colspan="8">{{ $filter }}</th>
+                                    <th colspan="6">{{ $filter }}</th>
                                 </tr>
                                 <tr class="table-primary">
-                                    <th>Date</th>
                                     <th>Account</th>
-                                    <th>Name</th>
-                                    <th>Debet</th>
-                                    <th>Credit</th>
-                                    <th>Balance</th>
-                                    <th>No. Reff</th>
                                     <th>Description</th>
+                                    <th>Last Balance</th>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
+                                    <th>Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @if (!empty($trans) && count($trans) > 0)
-                                @foreach ($trans as $t)
+                                @php
+                                    $total1 = $total2 = $total3 = $total4 = 0;
+                                @endphp
+                                @foreach ($bucket as $key => $m)
+                                @php
+                                    $bal = $m['last_balance'] + $m['debet'] - $m['kredit'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
+                                    $total1 += $m['last_balance'];
+                                    $total2 += $m['debet'];
+                                    $total3 += $m['kredit'];
+                                    $total4 += $bal;
+                                @endphp
                                 <tr>
-                                    <td>{{ date('d-M-Y', strtotime($t->trans_date)) }}</td>
-                                    <td>{{ $t->fromCode }}</td>
-                                    <td>{{ $t->fromName }}</td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td></td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td>{{ $t->reference }}</td>
-                                    <td>{{ $t->description }}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>{{ $t->toCode }}</td>
-                                    <td>{{ $t->toName }}</td>
-                                    <td></td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td>-</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                @endforeach
-
-                                {{--
-                                @foreach ($trans_out as $t)
-                                <tr>
-                                    <td>{{ date('d-M-Y', strtotime($t->trans_date)) }}</td>
-                                    <td>{{ $t->fromCode }}</td>
-                                    <td>{{ $t->fromName }}</td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td></td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td>{{ $t->reference }}</td>
-                                    <td>{{ $t->description }}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>{{ $t->toCode }}</td>
-                                    <td>{{ $t->toName }}</td>
-                                    <td></td>
-                                    <td>{{ number_format($t->value, 0, ',', '.') }}</td>
-                                    <td>-</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><strong>{{ $m['code'] }}</strong></td>
+                                    <td><strong>{{ $m['name'] }}</strong></td>
+                                    <td>{{ number_format($m['last_balance'], 0, ',', '.') }}</td>
+                                    <td>{{ number_format($m['debet'], 0, ',', '.') }}</td>
+                                    <td>{{ number_format($m['kredit'], 0, ',', '.') }}</td>
+                                    <td>{{ $balance }}</td>
                                 </tr>
                                 @endforeach
-                                --}}
-                            @else
-                                <tr>
-                                    <td colspan="8">No Data Available.</td>
+                                <tr class="table-secondary">
+                                    <td class="text-center" colspan="2"><strong>TOTAL</strong></td>
+                                    <td>Rp. {{ number_format($total1, 0, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total2, 0, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total3, 0, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total4, 0, ',', '.') }}</td>
                                 </tr>
-                            @endif
                             </tbody>
                         </table>
                         @else
@@ -175,6 +152,7 @@
                         </table>
                         @endif
                     </div>
+
                 </div>
             </div>
         </div>
