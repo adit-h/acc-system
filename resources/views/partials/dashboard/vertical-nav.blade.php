@@ -216,19 +216,6 @@
         </a>
         <ul class="sub-nav collapse" id="report-menu" data-bs-parent="#sidebar">
             <li class="nav-item ">
-                <a class="nav-link {{activeRoute(route('report.income.state.index'))}}" href="{{route('report.income.state.index')}}">
-                  <i class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <g>
-                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                            </g>
-                        </svg>
-                    </i>
-                  <i class="sidenav-mini-icon"> IS </i>
-                  <span class="item-name"> @lang('global.income_report') </span>
-                </a>
-            </li>
-            <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.trans.journal.index'))}}" href="{{route('report.trans.journal.index')}}">
                   <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -241,7 +228,7 @@
                   <span class="item-name"> @lang('global.journal_report') </span>
                 </a>
             </li>
-            <!-- <li class="nav-item ">
+            <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.general.ledger.index'))}}" href="{{route('report.general.ledger.index')}}">
                   <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -253,7 +240,20 @@
                   <i class="sidenav-mini-icon"> GL </i>
                   <span class="item-name"> @lang('global.ledger_report') </span>
                 </a>
-            </li> -->
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.income.state.index'))}}" href="{{route('report.income.state.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> IS </i>
+                  <span class="item-name"> @lang('global.income_report') </span>
+                </a>
+            </li>
         </ul>
     </li>
 

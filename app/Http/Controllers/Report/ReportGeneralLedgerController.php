@@ -23,18 +23,19 @@ class ReportGeneralLedgerController extends Controller
      */
     public function index(Request $request)
     {
-        $trans_in = DB::table('transaction_in')
-            ->select(DB::raw('master_accounts.id, master_accounts.code, master_accounts.name, SUM(transaction_in.value) AS value1'))
-            ->join('master_accounts', 'master_accounts.id', 'transaction_in.store_to')
-            ->groupBy('master_accounts.id', 'master_accounts.code', 'master_accounts.name')
-            ->get();
-        $trans_out = DB::table('transaction_out')
-            ->select(DB::raw('master_accounts.id, master_accounts.code, master_accounts.name, SUM(transaction_out.value) AS value1'))
-            ->join('master_accounts', 'master_accounts.id', 'transaction_out.store_to')
-            ->groupBy('master_accounts.id', 'master_accounts.code', 'master_accounts.name')
+        $trans_in = DB::table('transaction_in AS t')
+            ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to');
+        $trans = DB::table('transaction_out AS t')
+            ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->union($trans_in)
+            ->orderBy('trans_date')
             ->get();
 
-        return view('report-generalLedger.list', compact('trans_in', 'trans_out'));
+        return view('report-generalLedger.list', compact('trans'));
     }
 
     /**
