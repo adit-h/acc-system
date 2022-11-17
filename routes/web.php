@@ -16,6 +16,7 @@ use App\Http\Controllers\TransSaleController;
 use App\Http\Controllers\Report\ReportIncomeStateController;
 use App\Http\Controllers\Report\ReportTransJournalController;
 use App\Http\Controllers\Report\ReportGeneralLedgerController;
+use App\Http\Controllers\Report\ReportBalanceSheetController;
 
 use Illuminate\Support\Facades\Artisan;
 // Packages
@@ -67,7 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('update/{id}', [MasterController::class, 'update'])->name('master.update');
         Route::delete('destroy/{id}', [MasterController::class, 'destroy'])->name('master.destroy');
 
-        //Route::resource('account', MasterController::class);
+            //Route::resource('account', MasterController::class);
     });
 
     // Transaction In Module
@@ -139,7 +140,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'report/general-ledger'], function() {
-        //Income Statement Routes
+        //General Ledger Routes
         Route::get('index', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger.index');
         Route::post('filter', [ReportGeneralLedgerController::class, 'filter'])->name('report.general.ledger.filter');
 
@@ -147,6 +148,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-pdf/', [ReportGeneralLedgerController::class, 'exportPdf'])->name('report.general.ledger.export.pdf');
         Route::get('export-html/', [ReportGeneralLedgerController::class, 'exportHtml'])->name('report.general.ledger.export.html');
     });
+
+    Route::group(['prefix' => 'report/balance-sheet'], function() {
+        //Balance Sheet Routes
+        Route::get('index', [ReportBalanceSheetController::class, 'index'])->name('report.balance.sheet.index');
+        Route::post('filter', [ReportBalanceSheetController::class, 'filter'])->name('report.balance.sheet.filter');
+
+        Route::get('export-excel/', [ReportBalanceSheetController::class, 'exportExcel'])->name('report.balance.sheet.export.excel');
+        Route::get('export-pdf/', [ReportBalanceSheetController::class, 'exportPdf'])->name('report.balance.sheet.export.pdf');
+        Route::get('export-html/', [ReportBalanceSheetController::class, 'exportHtml'])->name('report.balance.sheet.export.html');
+    });
+
 });
 
 //App Details Page => 'Dashboard'], function() {
