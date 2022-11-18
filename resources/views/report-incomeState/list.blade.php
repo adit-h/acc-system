@@ -40,7 +40,7 @@
                                 <input type="text" class="form-control vanila-datepicker" name="date_input" placeholder="Tanggal" value="{{ !empty($date) ? $date : '' }}">
                                 <button class="btn btn-primary btn-sm" type="submit" id="date-filter">Filter</button>
                             </div>
-                            <a class="btn btn-outline-success btn-sm" href="/report/income-state/export-excel">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -56,7 +56,7 @@
                                 </span>
                                 Excel
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="/report/income-state/export-pdf">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -72,7 +72,7 @@
                                 </span>
                                 PDF
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="/report/income-state/export-html">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                 <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -106,11 +106,15 @@
                                     <th>{{ $filter }}</th>
                                     <th>{{ $filter_prev }}</th>
                                 </tr>
-                                @php $total_in1 = $total_in2 = 0; @endphp
-                                @foreach ($in_data as $key => $t)
                                 @php
-                                    $total_in1 += $t['balance'];
-                                    $total_in2 += $t['last_balance'];
+                                    $total_in1a = $total_in2a = 0;
+                                    $total_in1b = $total_in2b = 0;
+                                @endphp
+                                <!-- PENJUALAN -->
+                                @foreach ($in_data1 as $key => $t)
+                                @php
+                                    $total_in1a += $t['balance'];
+                                    $total_in2a += $t['last_balance'];
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
@@ -120,24 +124,94 @@
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>TOTAL INCOME<strong></th>
-                                    <td class="text-end">{{ number_format($total_in1, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_in2, 0, ',', '.') }}</td>
+                                    <th colspan='2' class="text-center"><strong>Sales Netto</strong></th>
+                                    <td class="text-end">{{ number_format($total_in1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in2a, 0, ',', '.') }}</td>
+                                </tr>
+                                <!-- PERSEDIAAN -->
+                                @foreach ($in_data2 as $key => $t)
+                                @php
+                                    $total_in1b += $t['balance'];
+                                    $total_in2b += $t['last_balance'];
+                                @endphp
+                                <tr>
+                                    <td><strong>{{ $t['code'] }}</strong></td>
+                                    <td><strong>{{ $t['name'] }}</strong></td>
+                                    <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                </tr>
+                                @endforeach
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>Cost of Goods</strong></th>
+                                    <td class="text-end">{{ number_format($total_in1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in2b, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>Gross Profit</strong></th>
+                                    <td class="text-end">{{ number_format($total_in1a - $total_in1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in2a - $total_in2b, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="">
                                     <td colspan="4">&nbsp;</td>
                                 </tr>
+
                                 <tr class="table-primary">
                                     <th>Account</th>
-                                    <th>Cost</th>
+                                    <th>Operational Cost</th>
                                     <th>{{ $filter }}</th>
                                     <th>{{ $filter_prev }}</th>
                                 </tr>
-                                @php $total_out1 = $total_out2 = 0; @endphp
-                                @foreach ($out_data as $key => $t)
                                 @php
-                                    $total_out1 += $t['balance'];
-                                    $total_out2 += $t['last_balance'];
+                                    $i = 0;
+                                    $total_out1a = $total_out2a = 0;
+                                    $total_out1b = $total_out2b = 0;
+                                    $total_sales_cost1a = $total_sales_cost2a = 0;
+                                    $total_adm_cost1a = $total_adm_cost2a = 0;
+                                @endphp
+                                @foreach ($out_data1 as $key => $t)
+                                @php
+                                    $total_out1a += $t['balance'];
+                                    $total_out2a += $t['last_balance'];
+
+                                    $total_sales_cost1a += $t['balance'];
+                                    $total_sales_cost2a += $t['last_balance'];
+                                @endphp
+                                <tr>
+                                    <td><strong>{{ $t['code'] }}</strong></td>
+                                    <td><strong>{{ $t['name'] }}</strong></td>
+                                    <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                </tr>
+                                @if ($i == 8)
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>TOTAL SALES COST</strong></th>
+                                    <td class="text-end">{{ number_format($total_sales_cost1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_sales_cost2a, 0, ',', '.') }}</td>
+                                </tr>
+                                @endif
+                                @php
+                                    if ($i > 8) {
+                                        $total_adm_cost1a += $t['balance'];
+                                        $total_adm_cost2a += $t['last_balance'];
+                                    }
+                                    $i++;
+                                @endphp
+                                @endforeach
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>TOTAL ADM COST</strong></th>
+                                    <td class="text-end">{{ number_format($total_adm_cost1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_adm_cost2a, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>TOTAL COST</strong></th>
+                                    <td class="text-end">{{ number_format($total_out1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out2a, 0, ',', '.') }}</td>
+                                </tr>
+                                <!-- BIAYA LAIN-LAIN -->
+                                @foreach ($out_data2 as $key => $t)
+                                @php
+                                    $total_out1b += $t['balance'];
+                                    $total_out2b += $t['last_balance'];
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
@@ -147,18 +221,24 @@
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>TOTAL EXPENSES</strong></th>
-                                    <td class="text-end">{{ number_format($total_out1, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_out2, 0, ',', '.') }}</td>
+                                    <th colspan='2' class="text-center"><strong>TOTAL OTHERS</strong></th>
+                                    <td class="text-end">{{ number_format($total_out1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out2b, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr class="table-secondary">
+                                    <th colspan='2' class="text-center"><strong>TOTAL OPERATIONAL COST</strong></th>
+                                    <td class="text-end">{{ number_format($total_out1a + $total_out1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out2a + $total_out2b, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="">
                                     <td colspan="4">&nbsp;</td>
                                 </tr>
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>SURPLUS/MINUS</strong></th>
-                                    <td class="text-end">{{ number_format( abs($total_in1 - $total_out1), 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format( abs($total_in2 - $total_out2), 0, ',', '.') }}</td>
+                                    <th colspan='2' class="text-center"><strong>INCOME STATEMENT OPERATIONAL</strong></th>
+                                    <td class="text-end">{{ number_format($total_in1a + $total_in1b - $total_out1a - $total_out1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in2a + $total_in2b - $total_out2a - $total_out2b, 0, ',', '.') }}</td>
                                 </tr>
+
                             </tbody>
                         </table>
                         @else

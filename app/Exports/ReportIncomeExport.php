@@ -58,8 +58,8 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles
 
     public function view(): View
     {
-        $in_cat = 6;
-        $out_cat = 8;
+        $in_cat = [6, 7];
+        $out_cat = [8, 9];
 
         $filter = date('F Y', strtotime($this->year.'-'.$this->month.'-01'));
         if ($this->month > 1) {
@@ -75,30 +75,19 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles
             ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->join('account_categories AS ac', 'maf.category_id', 'ac.id')
-            ->where('ac.id', '=', $in_cat)
+            ->join('account_categories AS ac', 'mat.category_id', 'ac.id')
+            ->whereIn('ac.id', $in_cat)
             ->whereYear('t.trans_date', '=', $this->year)
             ->whereMonth('t.trans_date', '=', $this->month)
             ->get();
-
-        // Main Price
-        // $main_price = DB::table('transaction_in AS t')
-        //     ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
-        //     ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
-        //     ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-        //     ->join('account_categories AS ac', 'maf.category_id', 'ac.id')
-        //     ->where('ac.id', '=', 7)
-        //     ->whereYear('t.trans_date', '=', $this->year)
-        //     ->whereMonth('t.trans_date', '=', $this->month)
-        //     ->get();
 
         // Outcome
         $trans_out = DB::table('transaction_out AS t')
             ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->join('account_categories AS ac', 'maf.category_id', 'ac.id')
-            ->where('ac.id', '=', $out_cat)
+            ->join('account_categories AS ac', 'mat.category_id', 'ac.id')
+            ->whereIn('ac.id', $out_cat)
             ->whereYear('t.trans_date', '=', $this->year)
             ->whereMonth('t.trans_date', '=', $this->month)
             ->get();
@@ -109,8 +98,8 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles
             ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->join('account_categories AS ac', 'maf.category_id', 'ac.id')
-            ->where('ac.id', '=', $in_cat)
+            ->join('account_categories AS ac', 'mat.category_id', 'ac.id')
+            ->whereIn('ac.id', $in_cat)
             ->whereYear('t.trans_date', '=', $prev_year)
             ->whereMonth('t.trans_date', '=', $prev_month)
             ->get();
@@ -119,32 +108,65 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles
             ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->join('account_categories AS ac', 'maf.category_id', 'ac.id')
-            ->where('ac.id', '=', $out_cat)
+            ->join('account_categories AS ac', 'mat.category_id', 'ac.id')
+            ->whereIn('ac.id', $out_cat)
             ->whereYear('t.trans_date', '=', $prev_year)
             ->whereMonth('t.trans_date', '=', $prev_month)
             ->orderBy('trans_date')
             ->get();
 
         // income data. filter master account with account id = 6
-        $in_data = $this->initMasterContainer($in_cat);
+        $in_data1 = $this->initMasterContainer(6);
         foreach ($trans_in_prev as $key => $t) {
-            $in_data[$t->fromId]['last_balance'] += $t->value;
+            if (array_key_exists($t->toId, $in_data1)) {
+                $in_data1[$t->toId]['last_balance'] += $t->value;
+            }
         }
         foreach ($trans_in as $key => $t) {
-            $in_data[$t->fromId]['balance'] += $t->value;
+            if (array_key_exists($t->toId, $in_data1)) {
+                $in_data1[$t->toId]['balance'] += $t->value;
+            }
+        }
+
+        // income data. filter master account with account id = 7
+        $in_data2 = $this->initMasterContainer(7);
+        foreach ($trans_in_prev as $key => $t) {
+            if (array_key_exists($t->toId, $in_data2)) {
+                $in_data2[$t->toId]['last_balance'] += $t->value;
+            }
+        }
+        foreach ($trans_in as $key => $t) {
+            if (array_key_exists($t->toId, $in_data2)) {
+                $in_data2[$t->toId]['balance'] += $t->value;
+            }
         }
 
         // outcome data. filter master account with account id = 8
-        $out_data = $this->initMasterContainer($out_cat);
+        $out_data1 = $this->initMasterContainer(8);
         foreach ($trans_out_prev as $key => $t) {
-            $out_data[$t->fromId]['last_balance'] += $t->value;
+            if (array_key_exists($t->toId, $out_data1)) {
+                $out_data1[$t->toId]['last_balance'] += $t->value;
+            }
         }
         foreach ($trans_out as $key => $t) {
-            $out_data[$t->fromId]['balance'] += $t->value;
+            if (array_key_exists($t->toId, $out_data1)) {
+                $out_data1[$t->toId]['balance'] += $t->value;
+            }
+        }
+        // outcome data. filter master account with account id = 9
+        $out_data2 = $this->initMasterContainer(9);
+        foreach ($trans_out_prev as $key => $t) {
+            if (array_key_exists($t->toId, $out_data2)) {
+                $out_data2[$t->toId]['last_balance'] += $t->value;
+            }
+        }
+        foreach ($trans_out as $key => $t) {
+            if (array_key_exists($t->toId, $out_data2)) {
+                $out_data2[$t->toId]['balance'] += $t->value;
+            }
         }
 
-        return view('reports.export-incomeState', compact('in_data', 'out_data', 'filter', 'filter_prev'));
+        return view('reports.export-incomeState', compact('in_data1', 'in_data2', 'out_data1', 'out_data2', 'filter', 'filter_prev',));
     }
 
     function initMasterContainer($catid)

@@ -40,7 +40,7 @@
                                 <input type="text" class="form-control vanila-datepicker" name="date_input" placeholder="Tanggal" value="{{ !empty($date) ? $date : '' }}">
                                 <button class="btn btn-primary btn-sm" type="submit" id="date-filter">Filter</button>
                             </div>
-                            <a class="btn btn-outline-success btn-sm" href="/report/balance-sheet/export-excel">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -56,7 +56,7 @@
                                 </span>
                                 Excel
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="/report/balance-sheet/export-pdf">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -72,7 +72,7 @@
                                 </span>
                                 PDF
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="/report/balance-sheet/export-html">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                 <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
