@@ -31,11 +31,11 @@
                                 {{ Form::text('value', old('value'), ['class' => 'form-control', 'placeholder' => 'Nilai Transaksi', 'required']) }}
                             </div>
                             <div class="form-group col-md-6">
-                                <label class="form-label" for="received_from">Diterima dari: <span class="text-danger">*</span></label>
+                                <label class="form-label" for="received_from">Debet: <span class="text-danger">*</span></label>
                                 {{ Form::select('receive_from', $acc_from, old('receive_from') ? old('receive_from') : $data->receive_from ?? '', ['class' => 'form-control', 'required', 'placeholder' => 'Pilih Akun']) }}
                             </div>
                             <div class="form-group col-md-6">
-                                <label class="form-label" for="store_to">Disimpan ke: <span class="text-danger">*</span></label>
+                                <label class="form-label" for="store_to">Kredit: <span class="text-danger">*</span></label>
                                 {{ Form::select('store_to', $acc_to, old('store_to') ? old('store_to') : $data->store_to ?? '', ['class' => 'form-control', 'required', 'placeholder' => 'Pilih Akun']) }}
                             </div>
                             <div class="form-group col-md-6">

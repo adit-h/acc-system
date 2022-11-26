@@ -81,8 +81,8 @@ class TransactionOutDataTable extends DataTable
         return [
             ['data' => 'id', 'name' => 'id', 'title' => 'id'],
             ['data' => 'trans_date', 'name' => 'trans_date', 'title' => 'Trans Date'],
-            ['data' => 'receiveFrom.code', 'name' => 'receiveFrom.code', 'title' => 'From'],
-            ['data' => 'storeTo.code', 'name' => 'storeTo.code', 'title' => 'To'],
+            ['data' => 'receiveFrom.code', 'name' => 'receiveFrom.code', 'title' => 'Debet'],
+            ['data' => 'storeTo.code', 'name' => 'storeTo.code', 'title' => 'Credit'],
             ['data' => 'value', 'name' => 'value', 'title' => 'Value'],
             ['data' => 'reference', 'name' => 'reference', 'title' => 'Ref Number'],
             ['data' => 'description', 'name' => 'description', 'title' => 'Description'],

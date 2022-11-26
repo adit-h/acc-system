@@ -2,12 +2,12 @@
 
 namespace App\DataTables;
 
-use App\Models\TransactionIn;
+use App\Models\TransactionSale;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class TransactionInDataTable extends DataTable
+class TransactionSaleDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -36,19 +36,19 @@ class TransactionInDataTable extends DataTable
                 $sql = "transaction_in.trans_date like ?";
                 return $query->whereRaw($sql, ["%{$keyword}%"]);
             })
-            ->addColumn('action', 'trans-in.action')
+            ->addColumn('action', 'trans-sale.action')
             ->rawColumns(['action']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\TransactionIn $model
+     * @param \App\Models\TransactionSale $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query()
     {
-        $model = TransactionIn::query()->with('receiveFrom')->with('storeTo');
+        $model = TransactionSale::query()->with('receiveFrom')->with('storeTo');
         return $this->applyScopes($model);
     }
 
@@ -102,6 +102,6 @@ class TransactionInDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'TransactionIn_' . date('YmdHis');
+        return 'TransactionSale_' . date('YmdHis');
     }
 }
