@@ -14,6 +14,6 @@ class TransactionOutTableSeeder extends Seeder
      */
     public function run()
     {
-        TransactionOut::factory(100)->create();
+        TransactionOut::factory(200)->create();
     }
 }

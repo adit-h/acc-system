@@ -23,10 +23,14 @@ class TransactionOutFactory extends Factory
     public function definition()
     {
         $date = $this->faker->dateTimeBetween('-1 month', '+1 month');
-        $from = $this->faker->randomElement(['1', '2', '4', '5']);
-        $to = $this->faker->randomElement(['1', '3', '4', '5']);
+        // cat : 1
+        $from = $this->faker->randomElement(['1', '2', '3']);
+        // cat : 2, 3, 4, 8, 9
+        $to = $this->faker->randomElement(['6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22',
+            '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57',
+            '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70']);
         $value = $this->faker->numberBetween(100000000, 99999999999);
-        $ref = $this->faker->numerify('trans-out-####');
+        $ref = $this->faker->numerify('out-#####');
         $desc = $this->faker->text(100);
 
         return [
