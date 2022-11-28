@@ -32,8 +32,8 @@ class TransSaleController extends Controller
      */
     public function create()
     {
-        $acc_from = MasterAccount::where('category_id', 6)->pluck('name', 'id');
-        $acc_to = MasterAccount::where('category_id', 1)->pluck('name', 'id');
+        $acc_from = MasterAccount::where('category_id', 1)->pluck('name', 'id');
+        $acc_to = MasterAccount::where('id', 30)->pluck('name', 'id');
 
         return view('trans-sale.form', compact('acc_from', 'acc_to'));
     }
@@ -47,11 +47,10 @@ class TransSaleController extends Controller
     public function store(TransactionSaleRequest $request)
     {
         $req = $request->all();
-        //dd($req);
         $data = [
             "trans_date" => $req['trans_date'],
-            "receive_from" => 30,
-            "store_to" => $req['store_to'],
+            "receive_from" => $req['receive_from'],
+            "store_to" => 30,
             "value" => !empty($req['value']) ? $req['value'] : 0,
             "sale_id" => 0,
             "reference" => $req['reference'],
@@ -63,7 +62,7 @@ class TransSaleController extends Controller
         $data_disc = [
             "trans_date" => $req['trans_date'],
             "receive_from" => 31,
-            "store_to" => 30,
+            "store_to" => $req['receive_from'],
             "value" => $disc,
             "sale_id" => $trans->id,
             "reference" => $req['reference'],
