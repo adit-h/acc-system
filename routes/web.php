@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 use App\Http\Controllers\TransSaleController;
+use App\Http\Controllers\TransAssetTransferController;
 
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
@@ -108,6 +109,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [TransSaleController::class, 'destroy'])->name('trans.sale.destroy');
 
         //Route::resource('account', TransSaleController::class);
+    });
+
+    // Transaction Asset Transfer Module
+    Route::group(['prefix' => 'trans.asset.transfer'], function() {
+        //Transaction In Page Routes
+        Route::get('index', [TransAssetTransferController::class, 'index'])->name('trans.asset.transfer.index');
+        Route::get('create', [TransAssetTransferController::class, 'create'])->name('trans.asset.transfer.create');
+        Route::post('store', [TransAssetTransferController::class, 'store'])->name('trans.asset.transfer.store');
+        Route::get('edit/{id}', [TransAssetTransferController::class, 'edit'])->name('trans.asset.transfer.edit');
+        Route::patch('update/{id}', [TransAssetTransferController::class, 'update'])->name('trans.asset.transfer.update');
+        Route::delete('destroy/{id}', [TransAssetTransferController::class, 'destroy'])->name('trans.asset.transfer.destroy');
+
+        //Route::resource('account', TransAssetTransferController::class);
     });
 
     // Report Income State Module

@@ -195,6 +195,19 @@
                   <span class="item-name"> @lang('global.trans-sale') </span>
                 </a>
             </li>
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('trans.asset.transfer.index'))}}" href="{{route('trans.asset.transfer.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> I </i>
+                  <span class="item-name"> @lang('global.trans-asset-transfer') </span>
+                </a>
+            </li>
         </ul>
     </li>
 
@@ -252,6 +265,19 @@
                     </i>
                   <i class="sidenav-mini-icon"> IS </i>
                   <span class="item-name"> @lang('global.income_report') </span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.balance.sheet.index'))}}" href="{{route('report.balance.sheet.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> BS </i>
+                  <span class="item-name"> @lang('global.balance_report') </span>
                 </a>
             </li>
         </ul>
