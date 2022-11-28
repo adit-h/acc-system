@@ -12,6 +12,7 @@ use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 use App\Http\Controllers\TransSaleController;
 use App\Http\Controllers\TransAssetTransferController;
+use App\Http\Controllers\TransDebtPaymentController;
 
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
@@ -123,6 +124,21 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Route::resource('account', TransAssetTransferController::class);
     });
+
+    // Transaction Debt Payment Module
+    Route::group(['prefix' => 'trans.debt.payment'], function() {
+        //Transaction Out Page Routes
+        Route::get('index', [TransDebtPaymentController::class, 'index'])->name('trans.debt.payment.index');
+        Route::get('create', [TransDebtPaymentController::class, 'create'])->name('trans.debt.payment.create');
+        Route::post('store', [TransDebtPaymentController::class, 'store'])->name('trans.debt.payment.store');
+        Route::get('edit/{id}', [TransDebtPaymentController::class, 'edit'])->name('trans.debt.payment.edit');
+        Route::patch('update/{id}', [TransDebtPaymentController::class, 'update'])->name('trans.debt.payment.update');
+        Route::delete('destroy/{id}', [TransDebtPaymentController::class, 'destroy'])->name('trans.debt.payment.destroy');
+
+        //Route::resource('account', TransDebtPaymentController::class);
+    });
+
+
 
     // Report Income State Module
     Route::group(['prefix' => 'report/income-state'], function() {
