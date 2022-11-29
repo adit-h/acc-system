@@ -64,17 +64,30 @@ class ReportGeneralLedgerController extends Controller
             // Query current Month Transactions
             $filter = date('F Y', strtotime($year.'-'.$month.'-01'));
             $trans_in = DB::table('transaction_in AS t')
-                ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
+                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+                ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+                ->whereYear('t.trans_date', '=', $year)
+                ->whereMonth('t.trans_date', '=', $month);
+            $trans_sale = DB::table('transaction_sale AS t')
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $year)
                 ->whereMonth('t.trans_date', '=', $month);
             $trans = DB::table('transaction_out AS t')
-                ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $year)
                 ->whereMonth('t.trans_date', '=', $month)
+                ->union($trans_sale)
                 ->union($trans_in)
                 ->orderBy('trans_date')
                 ->get();
@@ -82,18 +95,31 @@ class ReportGeneralLedgerController extends Controller
             // Query previous Month Transactions
             $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
-                ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
+                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+                ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+                ->whereYear('t.trans_date', '=', $prev_year)
+                ->whereMonth('t.trans_date', '=', $prev_month);
+            $trans_sale_prev = DB::table('transaction_sale AS t')
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $prev_year)
                 ->whereMonth('t.trans_date', '=', $prev_month);
             $trans_prev = DB::table('transaction_out AS t')
-                ->select(DB::raw('t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName, mat.id AS toId, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $prev_year)
                 ->whereMonth('t.trans_date', '=', $prev_month)
                 ->union($trans_in_prev)
+                ->union($trans_sale_prev)
                 ->orderBy('trans_date')
                 ->get();
 
@@ -107,9 +133,19 @@ class ReportGeneralLedgerController extends Controller
             $bucket = $this->initMasterContainer();
             // lets do for All transaction
             foreach ($trans as $key => $t) {
+                // switch debet/credit position
+                //dump($t, $bucket[$t->toId]['catid'], $bucket[$t->fromId]['catid']);
+                if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
+                    $bucket[$t->fromId]['debet'] += $t->value;
+                    $bucket[$t->toId]['debet'] += $t->value;
+                } else if ($bucket[$t->fromId]['catid'] == 4 ||$bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
+                    $bucket[$t->fromId]['kredit'] += $t->value;
+                    $bucket[$t->toId]['kredit'] += $t->value;
+                } else {
+                    $bucket[$t->fromId]['debet'] += $t->value;
+                    $bucket[$t->toId]['kredit'] += $t->value;
+                }
                 $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
-                $bucket[$t->fromId]['debet'] += $t->value;
-                $bucket[$t->toId]['kredit'] += $t->value;
             }
         }
 
@@ -227,6 +263,7 @@ class ReportGeneralLedgerController extends Controller
                 'id' => $m->id,
                 'code' => $m->code,
                 'name' => $m->name,
+                'catid' => $m->category_id,
                 'last_balance' => 0,
                 'debet' => 0,
                 'kredit' => 0,
