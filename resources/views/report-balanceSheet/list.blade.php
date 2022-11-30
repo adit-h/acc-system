@@ -56,7 +56,7 @@
                                 </span>
                                 Excel
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -72,7 +72,7 @@
                                 </span>
                                 PDF
                             </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
+                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.balance.sheet.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
                                 <span class="btn-inner">
                                 <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -96,7 +96,7 @@
                         <table id="basic-table" class="table table-bordered table-hover mb-0" role="grid">
                             <thead>
                                 <tr>
-                                    <th colspan="4" class="text-center">Balance Sheet</th>
+                                    <th colspan="5" class="text-center">Balance Sheet</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,77 +105,122 @@
                                     <th>Asset (AKTIVA)</th>
                                     <th>{{ $filter }}</th>
                                     <th>{{ $filter_prev }}</th>
+                                    <th>Surplus/Minus</th>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-center"><strong>Aktiva</strong></td>
+                                    <td colspan="5" class="text-center"><strong>Aktiva</strong></td>
                                 </tr>
                                 @php
                                     $total_in1a = $total_in2a = 0;
                                     $total_in1b = $total_in2b = 0;
                                     $total_in1c = $total_in2c = 0;
+                                    $bal = 0;
                                 @endphp
                                 <!-- ASET LANCAR -->
                                 @foreach ($in_data1 as $key => $t)
                                 @php
                                     $total_in1a += $t['balance'];
                                     $total_in2a += $t['last_balance'];
+                                    $dev = $total_in1a - $total_in2a;
+                                    if ($dev < 0) {
+                                        $total_in = '('.number_format(abs($dev), 0, ',', '.').')';
+                                    } else {
+                                        $total_in = number_format($dev, 0, ',', '.');
+                                    }
+                                    $bal = $t['last_balance'] - $t['balance'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $balance }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>ASET LANCAR<strong></th>
+                                    <th colspan='2' class="text-center"><strong>ASET LANCAR</strong></th>
                                     <td class="text-end">{{ number_format($total_in1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $total_in }}</td>
                                 </tr>
                                 <!-- ASET TAK LANCAR -->
                                 @foreach ($in_data2 as $key => $t)
                                 @php
                                     $total_in1b += $t['balance'];
                                     $total_in2b += $t['last_balance'];
+                                    $dev = $total_in1b - $total_in2b;
+                                    if ($dev < 0) {
+                                        $total_in = '('.number_format(abs($dev), 0, ',', '.').')';
+                                    } else {
+                                        $total_in = number_format($dev, 0, ',', '.');
+                                    }
+                                    $bal = $t['last_balance'] - $t['balance'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $balance }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>ASET TAK LANCAR<strong></th>
+                                    <th colspan='2' class="text-center"><strong>ASET TAK LANCAR</strong></th>
                                     <td class="text-end">{{ number_format($total_in1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $total_in }}</td>
                                 </tr>
                                 <!-- INVENTARIS & PENYUSUTAN -->
                                 @foreach ($in_data3 as $key => $t)
                                 @php
                                     $total_in1c += $t['balance'];
                                     $total_in2c += $t['last_balance'];
+                                    $dev = $total_in1c - $total_in2c;
+                                    if ($dev < 0) {
+                                        $total_in = '('.number_format(abs($dev), 0, ',', '.').')';
+                                    } else {
+                                        $total_in = number_format($dev, 0, ',', '.');
+                                    }
+                                    $bal = $t['last_balance'] - $t['balance'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $balance }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>AKTIVA TETAP<strong></th>
+                                    <th colspan='2' class="text-center"><strong>AKTIVA TETAP</strong></th>
                                     <td class="text-end">{{ number_format($total_in1c, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2c, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $total_in }}</td>
                                 </tr>
                                 @php
                                     $total_aktiva1 = $total_in1a + $total_in1b + $total_in1c;
                                     $total_aktiva2 = $total_in2a + $total_in2b + $total_in2c;
                                 @endphp
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>TOTAL AKTIVA<strong></th>
+                                    <th colspan='2' class="text-center"><strong>TOTAL AKTIVA</strong></th>
                                     <td class="text-end">{{ number_format($total_aktiva1, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_aktiva2, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_aktiva1 - $total_aktiva2, 0, ',', '.') }}</td>
                                 </tr>
 
                                 <tr class="">
@@ -183,9 +228,10 @@
                                 </tr>
                                 <tr class="table-primary">
                                     <th>Account</th>
-                                    <th>HUTANG & MODAL (PASIVA)</th>
+                                    <th>HUTANG dan MODAL (PASIVA)</th>
                                     <th>{{ $filter }}</th>
                                     <th>{{ $filter_prev }}</th>
+                                    <th>Surplus/Minus</th>
                                 </tr>
                                 @php
                                     $total_out1a = $total_out2a = 0;
@@ -196,45 +242,74 @@
                                 @php
                                     $total_out1a += $t['balance'];
                                     $total_out2a += $t['last_balance'];
+                                    $dev = $total_out1a - $total_out2a;
+                                    if ($dev < 0) {
+                                        $total_out = '('.number_format(abs($dev), 0, ',', '.').')';
+                                    } else {
+                                        $total_out = number_format($dev, 0, ',', '.');
+                                    }
+                                    $bal = $t['last_balance'] - $t['balance'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $balance }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL HUTANG/KEWAJIBAN</strong></th>
                                     <td class="text-end">{{ number_format($total_out1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_out2a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $total_out }}</td>
                                 </tr>
                                 <!-- MODAL / LABA DITAHAN -->
                                 @foreach ($out_data2 as $key => $t)
                                 @php
                                     $total_out1b += $t['balance'];
                                     $total_out2b += $t['last_balance'];
+                                    $dev = $total_out1b - $total_out2b;
+                                    if ($dev < 0) {
+                                        $total_out = '('.number_format(abs($dev), 0, ',', '.').')';
+                                    } else {
+                                        $total_out = number_format($dev, 0, ',', '.');
+                                    }
+                                    $bal = $t['last_balance'] - $t['balance'];
+                                    if ($bal < 0) {
+                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                    } else {
+                                        $balance = number_format($bal, 0, ',', '.');
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $balance }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL MODAL / LABA DITAHAN</strong></th>
                                     <td class="text-end">{{ number_format($total_out1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_out2b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ $total_out }}</td>
                                 </tr>
                                 @php
                                     $total_pasiva1 = $total_out1a + $total_out1b;
                                     $total_pasiva2 = $total_out2a + $total_out2b;
                                 @endphp
                                 <tr class="table-secondary">
-                                    <th colspan='2' class="text-center"><strong>TOTAL PASIVA<strong></th>
+                                    <th colspan='2' class="text-center"><strong>TOTAL PASIVA</strong></th>
                                     <td class="text-end">{{ number_format($total_pasiva1, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_pasiva2, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_pasiva1 - $total_pasiva2, 0, ',', '.') }}</td>
                                 </tr>
 
                                 <tr class="">
@@ -248,6 +323,7 @@
                                     <th colspan='2' class="text-center"><strong>SURPLUS/MINUS</strong></th>
                                     <td class="text-end">{{ number_format( $grand_total1, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format( $grand_total2, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format( $grand_total1 - $grand_total2, 0, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
