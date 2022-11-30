@@ -165,7 +165,7 @@ class ReportGeneralLedgerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MasterAccountRequest $request) {}
+    public function store() {}
 
     /**
      * Display the specified resource.
@@ -190,7 +190,7 @@ class ReportGeneralLedgerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MasterAccountRequest $request, $id) {}
+    public function update($id) {}
 
     /**
      * Remove the specified resource from storage.
