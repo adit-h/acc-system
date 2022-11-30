@@ -309,10 +309,13 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
     /**
      * Init Master Account array container
      */
-    function initMasterContainer($catid)
+    function initMasterContainer($catid = null)
     {
         // Query Master Accounts data
-        $master = MasterAccount::where('category_id', $catid)->get();
+        $master = MasterAccount::get();
+        if ($catid > 0) {
+            $master = MasterAccount::where('category_id', $catid)->get();
+        }
         $bucket = [];   // Master container
 
         foreach ($master as $key => $m) {
