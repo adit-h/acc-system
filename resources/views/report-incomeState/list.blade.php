@@ -10,9 +10,7 @@
                 <div class="card-body justify-content-between">
                     {!! Form::open(['route' => ['report.income.state.filter'], 'method' => 'post']) !!}
                     <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4"></div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="input-group search-input">
                                 <span class="input-group-text" id="search-input">
                                     <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,54 +38,60 @@
                                 <input type="text" class="form-control vanila-datepicker" name="date_input" placeholder="Tanggal" value="{{ !empty($date) ? $date : '' }}">
                                 <button class="btn btn-primary btn-sm" type="submit" id="date-filter">Filter</button>
                             </div>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
-                                <span class="btn-inner">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a class="btn btn-outline-success" href="{{ route('report.income.state.export.excel', ['date_input' => !empty($date) ? $date : '']) }}">
+                                    <span class="btn-inner">
+                                        <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M14.7379 2.76175H8.08493C6.00493 2.75375 4.29993 4.41175 4.25093 6.49075V17.2037C4.20493 19.3167 5.87993 21.0677 7.99293 21.1147C8.02393 21.1147 8.05393 21.1157 8.08493 21.1147H16.0739C18.1679 21.0297 19.8179 19.2997 19.8029 17.2037V8.03775L14.7379 2.76175Z"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M14.4751 2.75V5.659C14.4751 7.079 15.6231 8.23 17.0431 8.234H19.7981" stroke="currentColor" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M14.2882 15.3584H8.88818" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M12.2432 11.606H8.88721" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    Excel
+                                </a>
+                                <a class="btn btn-outline-success" href="{{ route('report.income.state.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
+                                    <span class="btn-inner">
+                                        <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M15.7161 12.0369H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M11.2521 7.86011H8.49707" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.909 2.74976C15.909 2.74976 8.23198 2.75376 8.21998 2.75376C5.45998 2.77076 3.75098 4.58676 3.75098 7.35676V16.5528C3.75098 19.3368 5.47298 21.1598 8.25698 21.1598C8.25698 21.1598 15.933 21.1568 15.946 21.1568C18.706 21.1398 20.416 19.3228 20.416 16.5528V7.35676C20.416 4.57276 18.693 2.74976 15.909 2.74976Z"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    PDF
+                                </a>
+                                <a class="btn btn-outline-info" href="{{ route('report.income.state.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
+                                    <span class="btn-inner">
                                     <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M14.7379 2.76175H8.08493C6.00493 2.75375 4.29993 4.41175 4.25093 6.49075V17.2037C4.20493 19.3167 5.87993 21.0677 7.99293 21.1147C8.02393 21.1147 8.05393 21.1157 8.08493 21.1147H16.0739C18.1679 21.0297 19.8179 19.2997 19.8029 17.2037V8.03775L14.7379 2.76175Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M14.4751 2.75V5.659C14.4751 7.079 15.6231 8.23 17.0431 8.234H19.7981" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M14.2882 15.3584H8.88818" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M12.2432 11.606H8.88721" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                                Excel
-                            </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.pdf', ['date_input' => !empty($date) ? $date : '']) }}">
-                                <span class="btn-inner">
-                                    <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15.7161 16.2234H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M15.7161 12.0369H8.49609" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M11.2521 7.86011H8.49707" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.909 2.74976C15.909 2.74976 8.23198 2.75376 8.21998 2.75376C5.45998 2.77076 3.75098 4.58676 3.75098 7.35676V16.5528C3.75098 19.3368 5.47298 21.1598 8.25698 21.1598C8.25698 21.1598 15.933 21.1568 15.946 21.1568C18.706 21.1398 20.416 19.3228 20.416 16.5528V7.35676C20.416 4.57276 18.693 2.74976 15.909 2.74976Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                                PDF
-                            </a>
-                            <a class="btn btn-outline-success btn-sm" href="{{ route('report.income.state.export.html', ['date_input' => !empty($date) ? $date : '']) }}">
-                                <span class="btn-inner">
-                                <svg width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M14.7379 2.76175H8.08493C6.00493 2.75375 4.29993 4.41175 4.25093 6.49075V17.2037C4.20493 19.3167 5.87993 21.0677 7.99293 21.1147C8.02393 21.1147 8.05393 21.1157 8.08493 21.1147H16.0739C18.1679 21.0297 19.8179 19.2997 19.8029 17.2037V8.03775L14.7379 2.76175Z"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M14.4751 2.75V5.659C14.4751 7.079 15.6231 8.23 17.0431 8.234H19.7981" stroke="currentColor" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M14.2882 15.3584H8.88818" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M12.2432 11.606H8.88721" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </span>
-                                Print
-                            </a>
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M14.7379 2.76175H8.08493C6.00493 2.75375 4.29993 4.41175 4.25093 6.49075V17.2037C4.20493 19.3167 5.87993 21.0677 7.99293 21.1147C8.02393 21.1147 8.05393 21.1157 8.08493 21.1147H16.0739C18.1679 21.0297 19.8179 19.2997 19.8029 17.2037V8.03775L14.7379 2.76175Z"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M14.4751 2.75V5.659C14.4751 7.079 15.6231 8.23 17.0431 8.234H19.7981" stroke="currentColor" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M14.2882 15.3584H8.88818" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M12.2432 11.606H8.88721" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                    Print
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
                         </div>
                     </div>
 
@@ -122,14 +126,14 @@
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>Sales Netto</strong></th>
                                     <td class="text-end">{{ number_format($total_in1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2a, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_in2a - $total_in1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in1a - $total_in2a, 0, ',', '.') }}</td>
                                 </tr>
                                 <!-- PERSEDIAAN -->
                                 @foreach ($in_data2 as $key => $t)
@@ -142,20 +146,20 @@
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>Cost of Goods</strong></th>
                                     <td class="text-end">{{ number_format($total_in1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_in2b - $total_in1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_in1b - $total_in2b, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>Gross Profit</strong></th>
                                     <td class="text-end">{{ number_format($total_in1a - $total_in1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_in2a - $total_in2b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_in2b - $total_in1b - $total_in2a - $total_in1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format(($total_in1a - $total_in1b) - ($total_in2a - $total_in2b), 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="">
                                     <td colspan="5">&nbsp;</td>
@@ -188,14 +192,14 @@
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
                                 </tr>
                                 @if ($i == 8)
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL SALES COST</strong></th>
                                     <td class="text-end">{{ number_format($total_sales_cost1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_sales_cost2a, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_sales_cost2a - $total_sales_cost1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_sales_cost1a - $total_sales_cost2a, 0, ',', '.') }}</td>
                                 </tr>
                                 @endif
                                 @php
@@ -210,13 +214,13 @@
                                     <th colspan='2' class="text-center"><strong>TOTAL ADM COST</strong></th>
                                     <td class="text-end">{{ number_format($total_adm_cost1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_adm_cost2a, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_adm_cost2a - $total_adm_cost1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_adm_cost1a - $total_adm_cost2a, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL COST</strong></th>
                                     <td class="text-end">{{ number_format($total_out1a, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_out2a, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_out2a - $total_out1a, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out1a - $total_out2a, 0, ',', '.') }}</td>
                                 </tr>
                                 <!-- BIAYA LAIN-LAIN -->
                                 @foreach ($out_data2 as $key => $t)
@@ -229,29 +233,29 @@
                                     <td><strong>{{ $t['name'] }}</strong></td>
                                     <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL OTHERS</strong></th>
                                     <td class="text-end">{{ number_format($total_out1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_out2b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_out2b - $total_out1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out1b - $total_out2b, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>TOTAL OPERATIONAL COST</strong></th>
                                     <td class="text-end">{{ number_format($total_out1a + $total_out1b, 0, ',', '.') }}</td>
                                     <td class="text-end">{{ number_format($total_out2a + $total_out2b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_out2a + $total_out2b - $total_out1a - $total_out1b, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($total_out1a + $total_out1b - $total_out2a - $total_out2b, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr class="">
                                     <td colspan="5">&nbsp;</td>
                                 </tr>
                                 <tr class="table-secondary">
                                     <th colspan='2' class="text-center"><strong>INCOME STATEMENT OPERATIONAL</strong></th>
-                                    <td class="text-end">{{ number_format($total_in1a + $total_in1b - $total_out1a - $total_out1b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format($total_in2a + $total_in2b - $total_out2a - $total_out2b, 0, ',', '.') }}</td>
-                                    <td class="text-end">{{ number_format( ($total_in2a + $total_in2b - $total_out2a - $total_out2b) - ($total_in1a + $total_in1b - $total_out1a - $total_out1b), 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format( ($total_in1a - $total_in1b) - ($total_out1a + $total_out1b), 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format( ($total_in2a - $total_in2b) - ($total_out2a + $total_out2b), 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format( (($total_in1a - $total_in1b) - ($total_in2a - $total_in2b)) - ($total_out1a + $total_out1b - $total_out2a - $total_out2b), 0, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
