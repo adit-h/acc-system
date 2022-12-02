@@ -206,6 +206,15 @@ Array.from(daterangePickers, (elem) => {
     new DateRangePicker(elem)
   }
 })
+const datemonthpickers = document.querySelectorAll('.vanila-datemonthpicker')
+Array.from(datemonthpickers, (elem) => {
+  if(typeof Datepicker !== typeof undefined) {
+    new Datepicker(elem, {
+        format : 'dd-mm-yyyy', pickLevel: 1, startView: 1, todayHighlight: true,
+        title : 'Month Filter'
+    });
+  }
+})
 
 /*---------------------------------------------------------------------
               CounterUp 2
