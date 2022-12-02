@@ -56,7 +56,7 @@ class UserController extends Controller
         $user->assignRole('user');
 
         // Save user Profile data...
-        $user->userProfile()->create($request->userProfile);
+        // $user->userProfile()->create($request->userProfile);
 
         return redirect()->route('users.index')->withSuccess(__('message.msg_added',['name' => __('users.store')]));
     }

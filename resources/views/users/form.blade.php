@@ -70,7 +70,7 @@
                         <label class="form-label">User Role: <span class="text-danger">*</span></label>
                         {{Form::select('user_role', $roles , old('user_role') ? old('user_role') : $data->user_type ?? 'user', ['class' => 'form-control', 'placeholder' => 'Select User Role'])}}
                      </div>
-                     <div class="form-group">
+                     <!-- <div class="form-group">
                         <label class="form-label" for="furl">Facebook Url:</label>
                         {{ Form::text('userProfile[facebook_url]', old('userProfile[facebook_url]'), ['class' => 'form-control', 'id' => 'furl', 'placeholder' => 'Facebook Url']) }}
                      </div>
@@ -85,7 +85,7 @@
                      <div class="form-group mb-0">
                         <label class="form-label" for="lurl">Linkedin Url:</label>
                         {{ Form::text('userProfile[linkdin_url]', old('userProfile[linkdin_url]'), ['class' => 'form-control', 'id' => 'lurl', 'placeholder' => 'Linkedin Url']) }}
-                     </div>
+                     </div> -->
                </div>
             </div>
          </div>
@@ -110,7 +110,7 @@
                               <label class="form-label" for="lname">Last Name: <span class="text-danger">*</span></label>
                               {{ Form::text('last_name', old('last_name'), ['class' => 'form-control', 'placeholder' => 'Last Name' ,'required']) }}
                            </div>
-                           <div class="form-group col-md-6">
+                           <!-- <div class="form-group col-md-6">
                               <label class="form-label" for="add1">Street Address 1:</label>
                               {{ Form::text('userProfile[street_addr_1]', old('userProfile[street_addr_1]'), ['class' => 'form-control', 'id' => 'add1', 'placeholder' => 'Enter Street Address 1']) }}
                            </div>
@@ -146,7 +146,7 @@
                            <div class="form-group col-md-12">
                               <label class="form-label" for="city">Town/City:</label>
                               {{ Form::text('userProfile[city]', old('city'), ['class' => 'form-control', 'id' => 'city', 'placeholder' => 'Enter City Name' ]) }}
-                           </div>
+                           </div> -->
                         </div>
                         <hr>
                         <h5 class="mb-3">Security</h5>
