@@ -1,4 +1,5 @@
 <x-app-layout :assets="$assets ?? []">
+   @if (auth()->user()->hasRole('admin'))
    <div class="row">
       <div class="col-md-12 col-lg-12">
          <div class="row row-cols-1">
@@ -567,4 +568,5 @@
          </div>
       </div> -->
    </div>
+   @endif
 </x-app-layout>

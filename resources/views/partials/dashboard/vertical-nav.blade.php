@@ -5,6 +5,7 @@
             <span class="mini-icon">-</span>
         </a>
     </li>
+    @if (auth()->user()->hasRole('admin'))
     <li class="nav-item">
         <a class="nav-link {{activeRoute(route('dashboard'))}}" aria-current="page" href="{{route('dashboard')}}">
             <i class="icon">
@@ -16,6 +17,7 @@
             <span class="item-name">Dashboard</span>
         </a>
     </li>
+    @endif
     {{--
     <!-- <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#horizontal-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
@@ -264,6 +266,7 @@
     </li>
 
     <!-- Report Menu -->
+    @if (auth()->user()->hasRole('admin'))
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#report-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
@@ -334,6 +337,7 @@
             </li>
         </ul>
     </li>
+    @endif
 
     {{--
     <!-- <li class="nav-item">
@@ -348,6 +352,7 @@
             <span>Design System<span class="badge rounded-pill bg-success">UI</span></span>
         </a>
     </li> --> --}}
+    @if (auth()->user()->hasRole('admin'))
     <li><hr class="hr-horizontal"></li>
     <li class="nav-item static-item">
         <a class="nav-link static-item disabled" href="#" tabindex="-1">
@@ -578,8 +583,8 @@
                             </g>
                         </svg>
                     </i>
-                    <i class="sidenav-mini-icon"> E </i>
-                    <span class="item-name">Edit User</span>
+                    <i class="sidenav-mini-icon"> CU </i>
+                    <span class="item-name">Create User</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -591,7 +596,7 @@
                             </g>
                         </svg>
                     </i>
-                    <i class="sidenav-mini-icon"> U </i>
+                    <i class="sidenav-mini-icon"> UL </i>
                     <span class="item-name">User List</span>
                 </a>
             </li>
@@ -941,4 +946,5 @@
             </li>
         </ul>
     </li> --> --}}
+    @endif
 </ul>
