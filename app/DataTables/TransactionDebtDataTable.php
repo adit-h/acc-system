@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\TransactionIn;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -48,7 +49,10 @@ class TransactionDebtDataTable extends DataTable
      */
     public function query()
     {
-        $model = TransactionIn::query()->with('receiveFrom')->with('storeTo');
+        $model = TransactionIn::query()->with('receiveFrom')->with('storeTo')
+            ->select(DB::raw('transaction_in.id, transaction_in.trans_date, transaction_in.receive_from, transaction_in.store_to, transaction_in.value, transaction_in.reference, transaction_in.description'))
+            ->join('master_accounts AS mat', 'mat.id', 'transaction_in.store_to')
+            ->whereIn('mat.category_id', [4]);
         return $this->applyScopes($model);
     }
 

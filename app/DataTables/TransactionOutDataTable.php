@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\TransactionOut;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -48,7 +49,12 @@ class TransactionOutDataTable extends DataTable
      */
     public function query()
     {
-        $model = TransactionOut::query()->with('receiveFrom')->with('storeTo');
+        $model = TransactionOut::query()->with('receiveFrom')->with('storeTo')
+            ->select(DB::raw('transaction_out.id, transaction_out.trans_date, transaction_out.receive_from, transaction_out.store_to, transaction_out.value, transaction_out.reference, transaction_out.description'))
+            ->join('master_accounts AS maf', 'maf.id', 'transaction_out.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 'transaction_out.store_to')
+            ->whereIn('maf.category_id', [8, 9])
+            ->whereIn('mat.category_id', [1, 2, 3]);
         return $this->applyScopes($model);
     }
 

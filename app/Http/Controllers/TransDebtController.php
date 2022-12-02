@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\DataTables\TransactionInDataTable;
+use App\DataTables\TransactionDebtDataTable;
 use App\Models\TransactionIn;
 use App\Models\MasterAccount;
 use App\Helpers\AuthHelper;
@@ -16,7 +16,7 @@ class TransDebtController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TransactionInDataTable $dataTable)
+    public function index(TransactionDebtDataTable $dataTable)
     {
         $pageTitle = trans('global-message.list_form_title',['form' => trans('transactions-debt.title')] );
         $auth_user = AuthHelper::authSession();
@@ -32,7 +32,7 @@ class TransDebtController extends Controller
      */
     public function create()
     {
-        $acc_from = MasterAccount::whereIn('category_id', [1])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('category_id', [1, 2, 3])->pluck('name', 'id');
         $acc_to = MasterAccount::whereIn('category_id', [4])->pluck('name', 'id');
 
         return view('trans-debt.form', compact('acc_from', 'acc_to'));
@@ -75,7 +75,7 @@ class TransDebtController extends Controller
     {
         $data = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        $acc_from = MasterAccount::whereIn('category_id', [1])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('category_id', [1, 2, 3])->pluck('name', 'id');
         $acc_to = MasterAccount::whereIn('category_id', [4])->pluck('name', 'id');
 
         return view('trans-debt.form', compact('data', 'id', 'acc_from', 'acc_to'));

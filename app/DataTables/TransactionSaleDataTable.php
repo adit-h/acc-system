@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\TransactionSale;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -33,7 +34,7 @@ class TransactionSaleDataTable extends DataTable
                 return date('d-m-Y', strtotime($query->trans_date));
             })
             ->filterColumn('trans_date', function($query, $keyword) {
-                $sql = "transaction_in.trans_date like ?";
+                $sql = "transaction_sale.trans_date like ?";
                 return $query->whereRaw($sql, ["%{$keyword}%"]);
             })
             ->addColumn('action', 'trans-sale.action')
@@ -49,6 +50,12 @@ class TransactionSaleDataTable extends DataTable
     public function query()
     {
         $model = TransactionSale::query()->with('receiveFrom')->with('storeTo');
+            /*
+            ->select(DB::raw('transaction_sale.id, transaction_sale.trans_date, transaction_sale.receive_from, transaction_sale.store_to, transaction_sale.value, transaction_sale.reference, transaction_sale.description'))
+            ->join('master_accounts AS maf', 'maf.id', 'transaction_sale.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 'transaction_sale.store_to')
+            ->whereIn('maf.category_id', [1, 2, 3])
+            ->whereIn('mat.category_id', [6, 7]);*/
         return $this->applyScopes($model);
     }
 
