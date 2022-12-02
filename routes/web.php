@@ -12,8 +12,11 @@ use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 use App\Http\Controllers\TransSaleController;
 use App\Http\Controllers\TransAssetTransferController;
+
 use App\Http\Controllers\TransDebtPaymentController;
 use App\Http\Controllers\TransDebtController;
+use App\Http\Controllers\TransReceivableController;
+use App\Http\Controllers\TransReceivableDepositController;
 
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
@@ -77,6 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction In Module
     Route::group(['prefix' => 'trans.in'], function() {
         //Transaction In Page Routes
+        Route::get('/', [TransInController::class, 'index'])->name('trans.in');
         Route::get('index', [TransInController::class, 'index'])->name('trans.in.index');
         Route::get('create', [TransInController::class, 'create'])->name('trans.in.create');
         Route::post('store', [TransInController::class, 'store'])->name('trans.in.store');
@@ -90,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction Out Module
     Route::group(['prefix' => 'trans.out'], function() {
         //Transaction Out Page Routes
+        Route::get('/', [TransOutController::class, 'index'])->name('trans.out');
         Route::get('index', [TransOutController::class, 'index'])->name('trans.out.index');
         Route::get('create', [TransOutController::class, 'create'])->name('trans.out.create');
         Route::post('store', [TransOutController::class, 'store'])->name('trans.out.store');
@@ -103,6 +108,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction Sale Module
     Route::group(['prefix' => 'trans.sale'], function() {
         //Transaction Sale Page Routes
+        Route::get('/', [TransSaleController::class, 'index'])->name('trans.sale');
         Route::get('index', [TransSaleController::class, 'index'])->name('trans.sale.index');
         Route::get('create', [TransSaleController::class, 'create'])->name('trans.sale.create');
         Route::post('store', [TransSaleController::class, 'store'])->name('trans.sale.store');
@@ -116,6 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction Asset Transfer Module
     Route::group(['prefix' => 'trans.asset.transfer'], function() {
         //Transaction In Page Routes
+        Route::get('/', [TransAssetTransferController::class, 'index'])->name('trans.asset.transfer');
         Route::get('index', [TransAssetTransferController::class, 'index'])->name('trans.asset.transfer.index');
         Route::get('create', [TransAssetTransferController::class, 'create'])->name('trans.asset.transfer.create');
         Route::post('store', [TransAssetTransferController::class, 'store'])->name('trans.asset.transfer.store');
@@ -129,6 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction Debt Payment Module
     Route::group(['prefix' => 'trans.debt.payment'], function() {
         //Transaction Out Page Routes
+        Route::get('/', [TransDebtPaymentController::class, 'index'])->name('trans.debt.payment');
         Route::get('index', [TransDebtPaymentController::class, 'index'])->name('trans.debt.payment.index');
         Route::get('create', [TransDebtPaymentController::class, 'create'])->name('trans.debt.payment.create');
         Route::post('store', [TransDebtPaymentController::class, 'store'])->name('trans.debt.payment.store');
@@ -142,6 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Transaction Debt Module
     Route::group(['prefix' => 'trans.debt'], function() {
         //Transaction Out Page Routes
+        Route::get('/', [TransDebtController::class, 'index'])->name('trans.debt');
         Route::get('index', [TransDebtController::class, 'index'])->name('trans.debt.index');
         Route::get('create', [TransDebtController::class, 'create'])->name('trans.debt.create');
         Route::post('store', [TransDebtController::class, 'store'])->name('trans.debt.store');
@@ -153,28 +162,49 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 
+    // Transaction Receivable Module
+    Route::group(['prefix' => 'trans.receivable'], function() {
+        //Transaction Receivable Page Routes
+        Route::get('/', [TransReceivableController::class, 'index'])->name('trans.receivable');
+        Route::get('index', [TransReceivableController::class, 'index'])->name('trans.receivable.index');
+        Route::get('create', [TransReceivableController::class, 'create'])->name('trans.receivable.create');
+        Route::post('store', [TransReceivableController::class, 'store'])->name('trans.receivable.store');
+        Route::get('edit/{id}', [TransReceivableController::class, 'edit'])->name('trans.receivable.edit');
+        Route::patch('update/{id}', [TransReceivableController::class, 'update'])->name('trans.receivable.update');
+        Route::delete('destroy/{id}', [TransReceivableController::class, 'destroy'])->name('trans.receivable.destroy');
 
-    // Report Income State Module
+        //Route::resource('account', TransReceivableController::class);
+    });
+
+    // Transaction Receivable Deposit Module
+    Route::group(['prefix' => 'trans.receivable.deposit'], function() {
+        //Transaction Receivable Deposit Routes
+        Route::get('/', [TransReceivableDepositController::class, 'index'])->name('trans.receivable.deposit');
+        Route::get('index', [TransReceivableDepositController::class, 'index'])->name('trans.receivable.deposit.index');
+        Route::get('create', [TransReceivableDepositController::class, 'create'])->name('trans.receivable.deposit.create');
+        Route::post('store', [TransReceivableDepositController::class, 'store'])->name('trans.receivable.deposit.store');
+        Route::get('edit/{id}', [TransReceivableDepositController::class, 'edit'])->name('trans.receivable.deposit.edit');
+        Route::patch('update/{id}', [TransReceivableDepositController::class, 'update'])->name('trans.receivable.deposit.update');
+        Route::delete('destroy/{id}', [TransReceivableDepositController::class, 'destroy'])->name('trans.receivable.deposit.destroy');
+
+        //Route::resource('account', TransReceivableDepositController::class);
+    });
+
+
     Route::group(['prefix' => 'report/income-state'], function() {
         //Income Statement Routes
+        Route::get('/', [ReportIncomeStateController::class, 'index'])->name('report.income.state');
         Route::get('index', [ReportIncomeStateController::class, 'index'])->name('report.income.state.index');
         Route::post('filter', [ReportIncomeStateController::class, 'filter'])->name('report.income.state.filter');
 
         Route::get('export-excel/', [ReportIncomeStateController::class, 'exportExcel'])->name('report.income.state.export.excel');
         Route::get('export-pdf/', [ReportIncomeStateController::class, 'exportPdf'])->name('report.income.state.export.pdf');
         Route::get('export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
-
-        //Route::get('create', [ReportIncomeStateController::class, 'create'])->name('report.income.state.create');
-        //Route::post('store', [ReportIncomeStateController::class, 'store'])->name('report.income.state.store');
-        //Route::get('edit/{id}', [ReportIncomeStateController::class, 'edit'])->name('report.income.state.edit');
-        //Route::patch('update/{id}', [ReportIncomeStateController::class, 'update'])->name('report.income.state.update');
-        //Route::delete('destroy/{id}', [ReportIncomeStateController::class, 'destroy'])->name('report.income.state.destroy');
-
-        //Route::resource('account', ReportIncomeStateController::class);
     });
 
     Route::group(['prefix' => 'report/trans-journal'], function() {
-        //Income Statement Routes
+        //Trans Journal Routes
+        Route::get('/', [ReportTransJournalController::class, 'index'])->name('report.trans.journal');
         Route::get('index', [ReportTransJournalController::class, 'index'])->name('report.trans.journal.index');
         Route::post('filter', [ReportTransJournalController::class, 'filter'])->name('report.trans.journal.filter');
 
@@ -185,6 +215,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'report/general-ledger'], function() {
         //General Ledger Routes
+        Route::get('/', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger');
         Route::get('index', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger.index');
         Route::post('filter', [ReportGeneralLedgerController::class, 'filter'])->name('report.general.ledger.filter');
 
@@ -195,6 +226,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'report/balance-sheet'], function() {
         //Balance Sheet Routes
+        Route::get('/', [ReportBalanceSheetController::class, 'index'])->name('report.balance.sheet');
         Route::get('index', [ReportBalanceSheetController::class, 'index'])->name('report.balance.sheet.index');
         Route::post('filter', [ReportBalanceSheetController::class, 'filter'])->name('report.balance.sheet.filter');
 
