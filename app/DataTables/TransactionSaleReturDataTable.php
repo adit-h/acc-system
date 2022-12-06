@@ -8,7 +8,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class TransactionSaleDataTable extends DataTable
+class TransactionSaleReturDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -37,7 +37,7 @@ class TransactionSaleDataTable extends DataTable
                 $sql = "transaction_sale.trans_date like ?";
                 return $query->whereRaw($sql, ["%{$keyword}%"]);
             })
-            ->addColumn('action', 'trans-sale.action')
+            ->addColumn('action', 'trans-sale-retur.action')
             ->rawColumns(['action']);
     }
 
@@ -54,14 +54,13 @@ class TransactionSaleDataTable extends DataTable
             ->join('master_accounts AS maf', 'maf.id', 'transaction_sale.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_sale.store_to')
             ->orWhere(function($query) {
-                $query->whereIn('transaction_sale.store_to', [30])
-                      ->whereIn('maf.category_id', [1]);
+                $query->whereIn('transaction_sale.receive_from', [30])
+                      ->whereIn('mat.category_id', [1]);
             })
             ->orWhere(function($query) {
-                $query->whereIn('transaction_sale.receive_from', [31])
-                      ->whereIn('mat.category_id', [1]);
+                $query->whereIn('transaction_sale.store_to', [31])
+                      ->whereIn('maf.category_id', [1]);
             });
-
         return $this->applyScopes($model);
     }
 
@@ -77,7 +76,6 @@ class TransactionSaleDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
-
                     ->parameters([
                         "processing" => true,
                         "autoWidth" => false,
@@ -115,6 +113,6 @@ class TransactionSaleDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'TransactionSale_' . date('YmdHis');
+        return 'TransactionSaleRetur_' . date('YmdHis');
     }
 }

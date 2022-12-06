@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 use App\Http\Controllers\TransSaleController;
+use App\Http\Controllers\TransSaleReturController;
 use App\Http\Controllers\TransAssetTransferController;
 
 use App\Http\Controllers\TransDebtPaymentController;
@@ -117,6 +118,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [TransSaleController::class, 'destroy'])->name('trans.sale.destroy');
 
         //Route::resource('account', TransSaleController::class);
+    });
+
+    // Transaction Sale Module
+    Route::group(['prefix' => 'trans.sale.retur'], function() {
+        //Transaction Sale Retur Page Routes
+        Route::get('/', [TransSaleReturController::class, 'index'])->name('trans.sale.retur');
+        Route::get('index', [TransSaleReturController::class, 'index'])->name('trans.sale.retur.index');
+        Route::get('create', [TransSaleReturController::class, 'create'])->name('trans.sale.retur.create');
+        Route::post('store', [TransSaleReturController::class, 'store'])->name('trans.sale.retur.store');
+        Route::get('edit/{id}', [TransSaleReturController::class, 'edit'])->name('trans.sale.retur.edit');
+        Route::patch('update/{id}', [TransSaleReturController::class, 'update'])->name('trans.sale.retur.update');
+        Route::delete('destroy/{id}', [TransSaleReturController::class, 'destroy'])->name('trans.sale.retur.destroy');
+
+        //Route::resource('account', TransSaleReturController::class);
     });
 
     // Transaction Asset Transfer Module

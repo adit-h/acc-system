@@ -5,6 +5,7 @@ return [
     'trans-in' => 'In',
     'trans-out' => 'Out',
     'trans-sale' => 'Sales',
+    'trans-sale-retur' => 'Sales Retur',
     'trans-asset-transfer' => 'Asset Transfer',
     'trans-debt-payment' => 'Debt Payment',
     'trans-debt' => 'Add Debt',

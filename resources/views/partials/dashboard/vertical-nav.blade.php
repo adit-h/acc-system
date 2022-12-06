@@ -198,6 +198,19 @@
                 </a>
             </li>
             <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('trans.sale.retur.index'))}}" href="{{route('trans.sale.retur.index')}}">
+                  <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> SR </i>
+                  <span class="item-name"> @lang('global.trans-sale-retur') </span>
+                </a>
+            </li>
+            <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.asset.transfer.index'))}}" href="{{route('trans.asset.transfer.index')}}">
                   <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
