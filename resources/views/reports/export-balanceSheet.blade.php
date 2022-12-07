@@ -40,7 +40,7 @@
                 } else {
                     $total_in = number_format($dev, 0, ',', '.');
                 }
-                $bal = $t['last_balance'] - $t['balance'];
+                $bal = $t['balance'] - $t['last_balance'];
                 if ($bal < 0) {
                     $balance = '('.number_format(abs($bal), 0, ',', '.').')';
                 } else {
@@ -72,7 +72,7 @@
                 } else {
                     $total_in = number_format($dev, 0, ',', '.');
                 }
-                $bal = $t['last_balance'] - $t['balance'];
+                $bal = $t['balance'] - $t['last_balance'];
                 if ($bal < 0) {
                     $balance = '('.number_format(abs($bal), 0, ',', '.').')';
                 } else {
@@ -104,7 +104,7 @@
                 } else {
                     $total_in = number_format($dev, 0, ',', '.');
                 }
-                $bal = $t['last_balance'] - $t['balance'];
+                $bal = $t['balance'] - $t['last_balance'];
                 if ($bal < 0) {
                     $balance = '('.number_format(abs($bal), 0, ',', '.').')';
                 } else {
@@ -160,7 +160,7 @@
                 } else {
                     $total_out = number_format($dev, 0, ',', '.');
                 }
-                $bal = $t['last_balance'] - $t['balance'];
+                $bal = $t['balance'] - $t['last_balance'];
                 if ($bal < 0) {
                     $balance = '('.number_format(abs($bal), 0, ',', '.').')';
                 } else {
@@ -192,7 +192,7 @@
                 } else {
                     $total_out = number_format($dev, 0, ',', '.');
                 }
-                $bal = $t['last_balance'] - $t['balance'];
+                $bal = $t['balance'] - $t['last_balance'];
                 if ($bal < 0) {
                     $balance = '('.number_format(abs($bal), 0, ',', '.').')';
                 } else {

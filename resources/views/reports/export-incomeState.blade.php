@@ -68,7 +68,7 @@
                 <th colspan='2' class="text-center"><strong>Gross Profit</strong></th>
                 <td class="text-end">{{ number_format($total_in1a - $total_in1b, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_in2a - $total_in2b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_in2b - $total_in1b - $total_in2a - $total_in1a, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format(($total_in1a - $total_in1b) - ($total_in2a - $total_in2b), 0, ',', '.') }}</td>
             </tr>
             <tr class="">
                 <td colspan="5">&nbsp;</td>
@@ -162,9 +162,9 @@
             </tr>
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>INCOME STATEMENT OPERATIONAL</strong></th>
-                <td class="text-end">{{ number_format($total_in1a + $total_in1b - $total_out1a - $total_out1b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_in2a + $total_in2b - $total_out2a - $total_out2b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format( ($total_in2a + $total_in2b - $total_out2a - $total_out2b) - ($total_in1a + $total_in1b - $total_out1a - $total_out1b), 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format( ($total_in1a - $total_in1b) - ($total_out1a + $total_out1b), 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format( ($total_in2a - $total_in2b) - ($total_out2a + $total_out2b), 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format( (($total_in1a - $total_in1b) - ($total_in2a - $total_in2b)) - ($total_out1a + $total_out1b - $total_out2a - $total_out2b), 0, ',', '.') }}</td>
             </tr>
         </tbody>
     </table>
