@@ -156,28 +156,29 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
             if (array_key_exists($t->toId, $in_data1)) {
                 //$in_data1[$t->toId]['balance'] += $t->value;
                 $in_data1[$t->toId]['kredit'] += $t->value;
-                $in_data1[$t->toId]['balance'] = $in_data1[$t->toId]['last_balance'] + $in_data1[$t->toId]['debet'] - $in_data1[$t->toId]['kredit'];
+                //$in_data1[$t->toId]['balance'] = $in_data1[$t->toId]['last_balance'] +  $in_data1[$t->toId]['debet'] - $in_data1[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data1)) {
                 $in_data1[$t->fromId]['debet'] += $t->value;
-                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
+                //$in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
+                $in_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1))  {
-                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
+                //$in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
             }
         }
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $in_data1)) {
                 //$in_data1[$t->toId]['balance'] += $t->value;
                 $in_data1[$t->toId]['kredit'] += $t->value;
-                $in_data1[$t->toId]['balance'] = $in_data1[$t->toId]['last_balance'] + $in_data1[$t->toId]['debet'] - $in_data1[$t->toId]['kredit'];
+                $in_data1[$t->toId]['balance'] = $in_data1[$t->toId]['debet'] - $in_data1[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data1)) {
                 $in_data1[$t->fromId]['debet'] += $t->value;
-                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
+                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1))  {
-                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
+                $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
             }
         }
 
@@ -187,28 +188,29 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
             if (array_key_exists($t->toId, $in_data2)) {
                 //$in_data2[$t->toId]['balance'] += $t->value;
                 $in_data2[$t->toId]['kredit'] += $t->value;
-                $in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['last_balance'] + $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
+                //$in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['last_balance'] + $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data2)) {
                 $in_data2[$t->fromId]['debet'] += $t->value;
-                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                $in_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
-                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
             }
         }
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $in_data2)) {
                 //$in_data2[$t->toId]['balance'] += $t->value;
                 $in_data2[$t->toId]['kredit'] += $t->value;
-                $in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['last_balance'] + $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
+                $in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data2)) {
                 $in_data2[$t->fromId]['debet'] += $t->value;
-                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
-                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
             }
         }
         // Aktiva 3. filter master account with account id = 3
@@ -217,28 +219,29 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
             if (array_key_exists($t->toId, $in_data3)) {
                 //$in_data3[$t->toId]['balance'] += $t->value;
                 $in_data3[$t->toId]['kredit'] += $t->value;
-                $in_data3[$t->toId]['balance'] = $in_data3[$t->toId]['last_balance'] + $in_data3[$t->toId]['debet'] - $in_data3[$t->toId]['kredit'];
+                //$in_data3[$t->toId]['balance'] = $in_data3[$t->toId]['last_balance'] + $in_data3[$t->toId]['debet'] - $in_data3[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data3)) {
                 $in_data3[$t->fromId]['debet'] += $t->value;
-                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
+                //$in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
+                $in_data3[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data3) && array_key_exists($t->fromId, $in_data3))  {
-                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
+                //$in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
             }
         }
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $in_data3)) {
                 //$in_data3[$t->toId]['balance'] += $t->value;
                 $in_data3[$t->toId]['kredit'] += $t->value;
-                $in_data3[$t->toId]['balance'] = $in_data3[$t->toId]['last_balance'] + $in_data3[$t->toId]['debet'] - $in_data3[$t->toId]['kredit'];
+                $in_data3[$t->toId]['balance'] = $in_data3[$t->toId]['debet'] - $in_data3[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data3)) {
                 $in_data3[$t->fromId]['debet'] += $t->value;
-                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
+                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data3) && array_key_exists($t->fromId, $in_data3))  {
-                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['last_balance'] + $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
+                $in_data3[$t->fromId]['balance'] = $in_data3[$t->fromId]['debet'] - $in_data3[$t->fromId]['kredit'];
             }
         }
 
@@ -247,29 +250,30 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out_data1)) {
                 //$out_data1[$t->toId]['balance'] += $t->value;
-                $out_data1[$t->toId]['kredit'] += $t->value;
-                $out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['last_balance'] + $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
+                $out_data1[$t->toId]['debet'] += $t->value;
+                //$out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['last_balance'] + $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $out_data1)) {
-                $out_data1[$t->fromId]['debet'] += $t->value;
-                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                $out_data1[$t->fromId]['kredit'] += $t->value;
+                //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                $out_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1))  {
-                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
             }
         }
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $out_data1)) {
                 //$out_data1[$t->toId]['balance'] += $t->value;
-                $out_data1[$t->toId]['kredit'] += $t->value;
-                $out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['last_balance'] + $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
+                $out_data1[$t->toId]['debet'] += $t->value;
+                $out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $out_data1)) {
-                $out_data1[$t->fromId]['debet'] += $t->value;
-                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                $out_data1[$t->fromId]['kredit'] += $t->value;
+                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1))  {
-                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
             }
         }
         // Pasiva 2. filter master account with account id = 5
@@ -277,33 +281,182 @@ class ReportBalanceSheetExport implements FromView, WithColumnWidths, WithStyles
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out_data2)) {
                 //$out_data2[$t->toId]['balance'] += $t->value;
-                $out_data2[$t->toId]['kredit'] += $t->value;
-                $out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['last_balance'] + $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
+                $out_data2[$t->toId]['debet'] += $t->value;
+                //$out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['last_balance'] + $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $out_data2)) {
-                $out_data2[$t->fromId]['debet'] += $t->value;
-                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                $out_data2[$t->fromId]['kredit'] += $t->value;
+                //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                $out_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2))  {
-                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
             }
         }
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $out_data2)) {
                 //$out_data2[$t->toId]['balance'] += $t->value;
-                $out_data2[$t->toId]['kredit'] += $t->value;
-                $out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['last_balance'] + $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
+                $out_data2[$t->toId]['debet'] += $t->value;
+                $out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $out_data2)) {
-                $out_data2[$t->fromId]['debet'] += $t->value;
-                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                $out_data2[$t->fromId]['kredit'] += $t->value;
+                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2))  {
-                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
             }
         }
 
+        // lets count special account
+        $special = $this->countIncomeState($trans, $trans_prev, $bucket_prev);
+        $out_data2[29]['debet'] = $special['debet'];
+        $out_data2[29]['kredit'] = $special['kredit'];
+        $out_data2[29]['balance'] = $special['balance'];
+        $out_data2[29]['last_balance'] = $special['last_balance'];
+
         return view('reports.export-balanceSheet', compact('in_data1', 'in_data2', 'in_data3', 'out_data1', 'out_data2', 'filter', 'filter_prev'));
+    }
+
+    function countIncomeState($trans, $trans_prev, $bucket_prev)
+    {
+        $result = [];
+        // income data. filter master account with account id = 6
+        // switch debet & kredit position
+        $in1 = $this->initMasterContainer(6);
+        foreach ($trans_prev as $key => $t) {
+            if (array_key_exists($t->toId, $in1)) {
+                $in1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] + $bucket_prev[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $in1)) {
+                if ($t->fromId == 31) {
+                    $in1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
+                } else {
+                    $in1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+                }
+            }
+        }
+        foreach ($trans as $key => $t) {
+            if (array_key_exists($t->toId, $in1)) {
+                $in1[$t->toId]['debet'] += $t->value;
+                $in1[$t->toId]['balance'] = $in1[$t->toId]['debet'] - $in1[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $in1)) {
+                $in1[$t->fromId]['kredit'] += $t->value;
+                $in1[$t->fromId]['balance'] = $in1[$t->fromId]['debet'] - $in1[$t->fromId]['kredit'];
+            }
+            if (array_key_exists($t->toId, $in1) && array_key_exists($t->fromId, $in1))  {
+                $in1[$t->fromId]['balance'] = $in1[$t->fromId]['debet'] - $in1[$t->fromId]['kredit'];
+            }
+        }
+        // income data. filter master account with account id = 7
+        $in2 = $this->initMasterContainer(7);
+        foreach ($trans_prev as $key => $t) {
+            if (array_key_exists($t->toId, $in2)) {
+                $in2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $in2)) {
+                $in2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+            }
+        }
+        foreach ($trans as $key => $t) {
+            if (array_key_exists($t->toId, $in2)) {
+                $in2[$t->toId]['kredit'] += $t->value;
+                $in2[$t->toId]['balance'] = $in2[$t->toId]['debet'] - $in2[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $in2)) {
+                $in2[$t->fromId]['debet'] += $t->value;
+                $in2[$t->fromId]['balance'] = $in2[$t->fromId]['debet'] - $in2[$t->fromId]['kredit'];
+            }
+            if (array_key_exists($t->toId, $in2) && array_key_exists($t->fromId, $in2))  {
+                $in2[$t->fromId]['balance'] = $in2[$t->fromId]['debet'] - $in2[$t->fromId]['kredit'];
+            }
+        }
+
+        // outcome data. filter master account with account id = 8
+        $out1 = $this->initMasterContainer(8);
+        foreach ($trans_prev as $key => $t) {
+            if (array_key_exists($t->toId, $out1)) {
+                $out1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $out1)) {
+                $out1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+            }
+        }
+        foreach ($trans as $key => $t) {
+            if (array_key_exists($t->toId, $out1)) {
+                $out1[$t->toId]['kredit'] += $t->value;
+                $out1[$t->toId]['balance'] = $out1[$t->toId]['debet'] - $out1[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $out1)) {
+                $out1[$t->fromId]['debet'] += $t->value;
+                $out1[$t->fromId]['balance'] = $out1[$t->fromId]['debet'] - $out1[$t->fromId]['kredit'];
+            }
+            if (array_key_exists($t->toId, $out1) && array_key_exists($t->fromId, $out1))  {
+                $out1[$t->fromId]['balance'] = $out1[$t->fromId]['debet'] - $out1[$t->fromId]['kredit'];
+            }
+        }
+        // outcome data. filter master account with account id = 9
+        $out2 = $this->initMasterContainer(9);
+        foreach ($trans_prev as $key => $t) {
+            if (array_key_exists($t->toId, $out2)) {
+                $out2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $out2)) {
+                $out2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+            }
+        }
+        foreach ($trans as $key => $t) {
+            if (array_key_exists($t->toId, $out2)) {
+                $out2[$t->toId]['kredit'] += $t->value;
+                $out2[$t->toId]['balance'] = $out2[$t->toId]['debet'] - $out2[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $out2)) {
+                $out2[$t->fromId]['debet'] += $t->value;
+                $out2[$t->fromId]['balance'] = $out2[$t->fromId]['debet'] - $out2[$t->fromId]['kredit'];
+            }
+            if (array_key_exists($t->toId, $out2) && array_key_exists($t->fromId, $out2))  {
+                $out2[$t->fromId]['balance'] = $out2[$t->fromId]['debet'] - $out2[$t->fromId]['kredit'];
+            }
+        }
+
+        $total6 = $total7 = $total8 = $total9 = [
+            'balance' => 0,
+            'last_balance' => 0,
+            'debet' => 0,
+            'kredit' => 0
+        ];
+        foreach ($in1 as $key => $t) {
+            $total6['last_balance'] += $t['last_balance'];
+            $total6['balance'] += $t['balance'];
+            $total6['debet'] += $t['debet'];
+            $total6['kredit'] += $t['kredit'];
+        }
+        foreach ($in2 as $key => $t) {
+            $total7['last_balance'] += $t['last_balance'];
+            $total7['balance'] += $t['balance'];
+            $total7['debet'] += $t['debet'];
+            $total7['kredit'] += $t['kredit'];
+        }
+        foreach ($out1 as $key => $t) {
+            $total8['last_balance'] += $t['last_balance'];
+            $total8['balance'] += $t['balance'];
+            $total8['debet'] += $t['debet'];
+            $total8['kredit'] += $t['kredit'];
+        }
+        foreach ($out2 as $key => $t) {
+            $total9['last_balance'] += $t['last_balance'];
+            $total9['balance'] += $t['balance'];
+            $total9['debet'] += $t['debet'];
+            $total9['kredit'] += $t['kredit'];
+        }
+
+        $result['last_balance'] = $total6['last_balance'] - ($total7['last_balance'] + $total8['last_balance'] + $total9['last_balance']);
+        $result['balance'] = $total6['balance'] - ($total7['balance'] + $total8['balance'] + $total9['balance']);
+        $result['debet'] = $total6['debet'] - ($total7['debet'] + $total8['debet'] + $total9['debet']);
+        $result['kredit'] = $total6['kredit'] - ($total7['kredit'] + $total8['kredit'] + $total9['kredit']);
+
+        return $result;
     }
 
     /**
