@@ -54,7 +54,7 @@ class TransactionSaleReturDataTable extends DataTable
             ->join('master_accounts AS maf', 'maf.id', 'transaction_sale.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_sale.store_to')
             ->orWhere(function($query) {
-                $query->whereIn('transaction_sale.receive_from', [30])
+                $query->whereIn('transaction_sale.receive_from', [32])
                       ->whereIn('mat.category_id', [1]);
             })
             ->orWhere(function($query) {
