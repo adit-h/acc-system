@@ -142,6 +142,16 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
         }
 
         $bucket = $this->initMasterContainer();
+        // Add calculate previous month transactions
+        foreach ($trans_prev as $key => $t) {
+            $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+            if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
+                $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
+            }
+            else if ($bucket[$t->fromId]['catid'] == 4 ||$bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
+                $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
+            }
+        }
         // lets do for All transaction
         foreach ($trans as $key => $t) {
             // switch debet/credit position
@@ -156,7 +166,6 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
                 $bucket[$t->fromId]['debet'] += $t->value;
                 $bucket[$t->toId]['kredit'] += $t->value;
             }
-            $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
         }
 
         // lets count special account
