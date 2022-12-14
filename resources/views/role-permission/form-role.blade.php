@@ -7,7 +7,7 @@
 {!! Form::open(['route' => ['role.store'], 'method' => 'post']) !!}
 @endif
     <div class="form-group">
-        <label class="form-label">Role Ritle</label>
+        <label class="form-label">Role Title</label>
         {{ Form::text('title', old('title') ? old('title') : !empty($data) ? $data->title : '', ['class' => 'form-control','id' => 'role-title', 'placeholder' => 'Role Title', 'required']) }}
     </div>
     <label class="form-label">Status</label>

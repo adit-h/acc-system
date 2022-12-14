@@ -38,7 +38,15 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //code here
+        $req = $request->all();
+
+        $perm = new Permission();
+        $perm->name = strtolower(str_replace(" ", "_", trim($req['title'])));
+        $perm->title = $req['title'];
+        $perm->guard_name = 'web';
+        $perm->save();
+
+        return redirect()->back()->withSuccess(__('message.msg_added',['name' => __('permission.title')]));
     }
 
     /**
@@ -60,7 +68,10 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-       //code here
+        $data = Permission::findOrFail($id);
+        //code here
+        $view = view('role-permission.form-permission', compact('data', 'id'))->render();
+        return response()->json(['data' =>  $view, 'status'=> true]);
     }
 
     /**
@@ -72,7 +83,14 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //code here
+        $req = $request->all();
+
+        $perm = Permission::find($id);
+        $perm->name = strtolower(str_replace(" ", "-", trim($req['title'])));
+        $perm->title = $req['title'];
+        $perm->save();
+
+        return redirect()->back()->withSuccess(__('message.msg_updated',['name' => __('permission.title')]));
     }
 
     /**
@@ -83,6 +101,16 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //code here
+        $perm = Permission::findOrFail($id);
+        $status = 'error';
+        $message = __('global-message.delete_form', ['form' => __('permission.title')]);
+
+        if ($perm != '') {
+            $perm->delete();
+            $status = 'success';
+            $message = __('global-message.delete_form', ['form' => __('permission.title')]);
+        }
+
+        return redirect()->back()->withSuccess(__($message));
     }
 }
