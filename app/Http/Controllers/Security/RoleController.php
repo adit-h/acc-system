@@ -38,7 +38,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-       //code here
+        $req = $request->all();
+
+        $role = new Role();
+        $role->name = strtolower(str_replace(" ", "_", trim($req['title'])));
+        $role->title = $req['title'];
+        $role->status = intval($req['status']);
+        $role->save();
+
+        return redirect()->back()->withSuccess(__('message.msg_added',['name' => __('role.title')]));
     }
 
     /**
@@ -60,7 +68,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        $data = Role::findOrFail($id);
         //code here
+        $view = view('role-permission.form-role', compact('data', 'id'))->render();
+        return response()->json(['data' =>  $view, 'status'=> true]);
     }
 
     /**
@@ -72,7 +83,15 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //code here
+        $req = $request->all();
+
+        $role = Role::find($id);
+        $role->name = strtolower(str_replace(" ", "_", trim($req['title'])));
+        $role->title = $req['title'];
+        $role->status = intval($req['status']);
+        $role->save();
+
+        return redirect()->back()->withSuccess(__('message.msg_updated',['name' => __('role.title')]));
     }
 
     /**
@@ -83,6 +102,16 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-       //code here
+        $role = Role::findOrFail($id);
+        $status = 'error';
+        $message = __('global-message.delete_form', ['form' => __('role.title')]);
+
+        if ($role != '') {
+            $role->delete();
+            $status = 'success';
+            $message = __('global-message.delete_form', ['form' => __('role.title')]);
+        }
+
+        return redirect()->back()->withSuccess(__($message));
     }
 }

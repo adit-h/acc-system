@@ -36,7 +36,7 @@
                                     @foreach ($roles as $role)
                                         <th class="text-center">{{ $role->title }}
                                         <div style="float:right;">
-                                        <a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" title="Edit User" href="#">
+                                        <a href="#" class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" data-modal-form="form" data-size="small" data--href="{{ route('role.edit', $role->id) }}" data-app-title="Edit Role" data-placement="top" title="Edit Role">
                                             <span class="btn-inner">
                                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
                                                     <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -45,7 +45,7 @@
                                                 </svg>
                                             </span>
                                         </a>
-                                        <a class="btn btn-sm btn-icon text-danger"  data-bs-toggle="tooltip" title="Delete User" href="#">
+                                        <a href="#" class="btn btn-sm btn-icon text-danger" onclick="return confirm('Delete this Role?') ? document.getElementById('role-delete-{{$role->id}}').submit() : false" data-bs-toggle="tooltip" title="Delete Role">
                                             <span class="btn-inner">
                                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                                     <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -54,6 +54,10 @@
                                                 </svg>
                                             </span>
                                         </a>
+                                        <form action="{{route('role.destroy', $role->id)}}" id="role-delete-{{$role->id}}" method="post">
+                                            @method('delete')
+                                            @csrf()
+                                        </form>
                                         </div>
                                         </th>
                                     @endforeach
@@ -64,7 +68,7 @@
                                 <tr class="{{ !isset($permission->parent_id) ? 'bg-body' : '' }}">
                                     <td>{{ $permission->title }}
                                     <div style="float:right;">
-                                    <a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" title="Edit User" href="#">
+                                    <a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" title="Edit Permission" href="#">
                                         <span class="btn-inner">
                                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
                                                 <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -73,7 +77,7 @@
                                             </svg>
                                         </span>
                                     </a>
-                                    <a class="btn btn-sm btn-icon text-danger "  data-bs-toggle="tooltip" title="Delete User" href="#">
+                                    <a class="btn btn-sm btn-icon text-danger "  data-bs-toggle="tooltip" title="Delete Permission" href="#">
                                         <span class="btn-inner">
                                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                                 <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
