@@ -19,6 +19,9 @@ use App\Http\Controllers\TransDebtController;
 use App\Http\Controllers\TransReceivableController;
 use App\Http\Controllers\TransReceivableDepositController;
 
+use App\Http\Controllers\AdjustmentInController;
+use App\Http\Controllers\AdjustmentOutController;
+
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
 use App\Http\Controllers\Report\ReportTransJournalController;
@@ -203,6 +206,35 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [TransReceivableDepositController::class, 'destroy'])->name('trans.receivable.deposit.destroy');
 
         //Route::resource('account', TransReceivableDepositController::class);
+    });
+
+
+     // Adjustment In Module
+     Route::group(['prefix' => 'adjustment.in'], function() {
+        //Adjustment In Page Routes
+        Route::get('/', [AdjustmentInController::class, 'index'])->name('adjustment.in');
+        Route::get('index', [AdjustmentInController::class, 'index'])->name('adjustment.in.index');
+        Route::get('create', [AdjustmentInController::class, 'create'])->name('adjustment.in.create');
+        Route::post('store', [AdjustmentInController::class, 'store'])->name('adjustment.in.store');
+        Route::get('edit/{id}', [AdjustmentInController::class, 'edit'])->name('adjustment.in.edit');
+        Route::patch('update/{id}', [AdjustmentInController::class, 'update'])->name('adjustment.in.update');
+        Route::delete('destroy/{id}', [AdjustmentInController::class, 'destroy'])->name('adjustment.in.destroy');
+
+        //Route::resource('account', AdjustmentInController::class);
+    });
+
+    // Adjustment Out Module
+    Route::group(['prefix' => 'adjustment.out'], function() {
+        //Adjustment Out Page Routes
+        Route::get('/', [AdjustmentOutController::class, 'index'])->name('adjustment.out');
+        Route::get('index', [AdjustmentOutController::class, 'index'])->name('adjustment.out.index');
+        Route::get('create', [AdjustmentOutController::class, 'create'])->name('adjustment.out.create');
+        Route::post('store', [AdjustmentOutController::class, 'store'])->name('adjustment.out.store');
+        Route::get('edit/{id}', [AdjustmentOutController::class, 'edit'])->name('adjustment.out.edit');
+        Route::patch('update/{id}', [AdjustmentOutController::class, 'update'])->name('adjustment.out.update');
+        Route::delete('destroy/{id}', [AdjustmentOutController::class, 'destroy'])->name('adjustment.out.destroy');
+
+        //Route::resource('account', AdjustmentOutController::class);
     });
 
 
