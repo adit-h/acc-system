@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="trans_date">Tanggal: <span class="text-danger">*</span></label>
-                                {{ Form::text('trans_date', old('trans_date') ? old('trans_date') : !empty($data) ? date('d-m-Y', strtotime($data->trans_date)) : '', ['class' => 'form-control vanila-datepicker', 'placeholder' => 'Tanggal Transaksi', 'required']) }}
+                                {{ Form::text('trans_date', (old('trans_date') ? old('trans_date') : !empty($data)) ? date('d-m-Y', strtotime($data->trans_date)) : '', ['class' => 'form-control vanila-datepicker', 'placeholder' => 'Tanggal Transaksi', 'required']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="value">Nilai: <span class="text-danger">*</span></label>
