@@ -32,8 +32,8 @@ class TransInController extends Controller
      */
     public function create()
     {
-        $acc_from = MasterAccount::whereIn('category_id', [1, 2])->pluck('name', 'id');
-        $acc_to = MasterAccount::whereIn('category_id', [3, 6, 7])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('category_id', [1, 2, 3])->pluck('name', 'id');
+        $acc_to = MasterAccount::whereIn('category_id', [6, 7])->pluck('name', 'id');
 
         return view('trans-in.form', compact('acc_from', 'acc_to'));
     }
@@ -75,8 +75,8 @@ class TransInController extends Controller
     {
         $data = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        $acc_from = MasterAccount::whereIn('category_id', [1, 2])->pluck('name', 'id');
-        $acc_to = MasterAccount::whereIn('category_id', [3, 6, 7])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('category_id', [1, 2, 3])->pluck('name', 'id');
+        $acc_to = MasterAccount::whereIn('category_id', [6, 7])->pluck('name', 'id');
 
         return view('trans-in.form', compact('data', 'id', 'acc_from', 'acc_to'));
     }

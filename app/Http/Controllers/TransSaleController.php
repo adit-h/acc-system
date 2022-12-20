@@ -96,8 +96,8 @@ class TransSaleController extends Controller
     {
         $data = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        $acc_from = MasterAccount::get()->pluck('name', 'id');
-        $acc_to = MasterAccount::get()->pluck('name', 'id');
+        $acc_from = MasterAccount::where('category_id', 1)->pluck('name', 'id');
+        $acc_to = MasterAccount::where('id', 30)->pluck('name', 'id');
 
         return view('trans-sale.form', compact('data', 'id', 'acc_from', 'acc_to'));
     }
