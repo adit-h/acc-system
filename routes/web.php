@@ -6,6 +6,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
+use App\Http\Controllers\SettingController;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
@@ -45,7 +46,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/storage', function () {
     Artisan::call('storage:link');
@@ -56,10 +57,21 @@ Route::get('/uisheet', [HomeController::class, 'uisheet'])->name('uisheet');
 // set default route to login page
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login-show');
 
+//Route::post('/role-permission/ajax-update', [RolePermission::class, 'ajaxUpdate'])->name('role.permission.ajax-update');
+
 Route::group(['middleware' => 'auth'], function () {
     // Permission Module
-    Route::get('/role-permission',[RolePermission::class, 'index'])->name('role.permission.list');
-    Route::resource('permission',PermissionController::class);
+    Route::group(['prefix' => 'role-permission'], function () {
+        Route::get('/', [RolePermission::class, 'index'])->name('role.permission.list');
+        Route::post('store', [RolePermission::class, 'store'])->name('role.permission.store');
+
+        // Called by custom.js Role Permission submit sve
+        Route::post('ajax-update', [RolePermission::class, 'ajaxUpdate'])->name('role.permission.ajax-update');
+    });
+    //Route::get('/role-permission', [RolePermission::class, 'index'])->name('role.permission.list');
+    //Route::post('/role-permission/store', [RolePermission::class, 'store'])->name('role.permission.store');
+
+    Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
 
     // Dashboard Routes
@@ -68,8 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Users Module
     Route::resource('users', UserController::class);
 
+    // Settings Module
+    Route::resource('settings', SettingController::class);
+
     // Master Module
-    Route::group(['prefix' => 'master'], function() {
+    Route::group(['prefix' => 'master'], function () {
         //Master Page Routes
         Route::get('account', [MasterController::class, 'index'])->name('master.account');
         Route::get('create', [MasterController::class, 'create'])->name('master.create');
@@ -78,11 +93,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('update/{id}', [MasterController::class, 'update'])->name('master.update');
         Route::delete('destroy/{id}', [MasterController::class, 'destroy'])->name('master.destroy');
 
-            //Route::resource('account', MasterController::class);
+        //Route::resource('account', MasterController::class);
     });
 
     // Transaction In Module
-    Route::group(['prefix' => 'trans.in'], function() {
+    Route::group(['prefix' => 'trans.in'], function () {
         //Transaction In Page Routes
         Route::get('/', [TransInController::class, 'index'])->name('trans.in');
         Route::get('index', [TransInController::class, 'index'])->name('trans.in.index');
@@ -96,7 +111,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Out Module
-    Route::group(['prefix' => 'trans.out'], function() {
+    Route::group(['prefix' => 'trans.out'], function () {
         //Transaction Out Page Routes
         Route::get('/', [TransOutController::class, 'index'])->name('trans.out');
         Route::get('index', [TransOutController::class, 'index'])->name('trans.out.index');
@@ -110,7 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Sale Module
-    Route::group(['prefix' => 'trans.sale'], function() {
+    Route::group(['prefix' => 'trans.sale'], function () {
         //Transaction Sale Page Routes
         Route::get('/', [TransSaleController::class, 'index'])->name('trans.sale');
         Route::get('index', [TransSaleController::class, 'index'])->name('trans.sale.index');
@@ -124,7 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Sale Module
-    Route::group(['prefix' => 'trans.sale.retur'], function() {
+    Route::group(['prefix' => 'trans.sale.retur'], function () {
         //Transaction Sale Retur Page Routes
         Route::get('/', [TransSaleReturController::class, 'index'])->name('trans.sale.retur');
         Route::get('index', [TransSaleReturController::class, 'index'])->name('trans.sale.retur.index');
@@ -138,7 +153,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Asset Transfer Module
-    Route::group(['prefix' => 'trans.asset.transfer'], function() {
+    Route::group(['prefix' => 'trans.asset.transfer'], function () {
         //Transaction In Page Routes
         Route::get('/', [TransAssetTransferController::class, 'index'])->name('trans.asset.transfer');
         Route::get('index', [TransAssetTransferController::class, 'index'])->name('trans.asset.transfer.index');
@@ -152,7 +167,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Debt Payment Module
-    Route::group(['prefix' => 'trans.debt.payment'], function() {
+    Route::group(['prefix' => 'trans.debt.payment'], function () {
         //Transaction Out Page Routes
         Route::get('/', [TransDebtPaymentController::class, 'index'])->name('trans.debt.payment');
         Route::get('index', [TransDebtPaymentController::class, 'index'])->name('trans.debt.payment.index');
@@ -166,7 +181,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Debt Module
-    Route::group(['prefix' => 'trans.debt'], function() {
+    Route::group(['prefix' => 'trans.debt'], function () {
         //Transaction Out Page Routes
         Route::get('/', [TransDebtController::class, 'index'])->name('trans.debt');
         Route::get('index', [TransDebtController::class, 'index'])->name('trans.debt.index');
@@ -181,7 +196,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // Transaction Receivable Module
-    Route::group(['prefix' => 'trans.receivable'], function() {
+    Route::group(['prefix' => 'trans.receivable'], function () {
         //Transaction Receivable Page Routes
         Route::get('/', [TransReceivableController::class, 'index'])->name('trans.receivable');
         Route::get('index', [TransReceivableController::class, 'index'])->name('trans.receivable.index');
@@ -195,7 +210,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Transaction Receivable Deposit Module
-    Route::group(['prefix' => 'trans.receivable.deposit'], function() {
+    Route::group(['prefix' => 'trans.receivable.deposit'], function () {
         //Transaction Receivable Deposit Routes
         Route::get('/', [TransReceivableDepositController::class, 'index'])->name('trans.receivable.deposit');
         Route::get('index', [TransReceivableDepositController::class, 'index'])->name('trans.receivable.deposit.index');
@@ -209,8 +224,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 
-     // Adjustment In Module
-     Route::group(['prefix' => 'adjustment.in'], function() {
+    // Adjustment In Module
+    Route::group(['prefix' => 'adjustment.in'], function () {
         //Adjustment In Page Routes
         Route::get('/', [AdjustmentInController::class, 'index'])->name('adjustment.in');
         Route::get('index', [AdjustmentInController::class, 'index'])->name('adjustment.in.index');
@@ -224,7 +239,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Adjustment Out Module
-    Route::group(['prefix' => 'adjustment.out'], function() {
+    Route::group(['prefix' => 'adjustment.out'], function () {
         //Adjustment Out Page Routes
         Route::get('/', [AdjustmentOutController::class, 'index'])->name('adjustment.out');
         Route::get('index', [AdjustmentOutController::class, 'index'])->name('adjustment.out.index');
@@ -238,7 +253,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 
-    Route::group(['prefix' => 'report/income-state'], function() {
+    Route::group(['prefix' => 'report/income-state'], function () {
         //Income Statement Routes
         Route::get('/', [ReportIncomeStateController::class, 'index'])->name('report.income.state');
         Route::get('index', [ReportIncomeStateController::class, 'index'])->name('report.income.state.index');
@@ -249,7 +264,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
     });
 
-    Route::group(['prefix' => 'report/trans-journal'], function() {
+    Route::group(['prefix' => 'report/trans-journal'], function () {
         //Trans Journal Routes
         Route::get('/', [ReportTransJournalController::class, 'index'])->name('report.trans.journal');
         Route::get('index', [ReportTransJournalController::class, 'index'])->name('report.trans.journal.index');
@@ -260,7 +275,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-html/', [ReportTransJournalController::class, 'exportHtml'])->name('report.trans.journal.export.html');
     });
 
-    Route::group(['prefix' => 'report/general-ledger'], function() {
+    Route::group(['prefix' => 'report/general-ledger'], function () {
         //General Ledger Routes
         Route::get('/', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger');
         Route::get('index', [ReportGeneralLedgerController::class, 'index'])->name('report.general.ledger.index');
@@ -271,7 +286,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-html/', [ReportGeneralLedgerController::class, 'exportHtml'])->name('report.general.ledger.export.html');
     });
 
-    Route::group(['prefix' => 'report/balance-sheet'], function() {
+    Route::group(['prefix' => 'report/balance-sheet'], function () {
         //Balance Sheet Routes
         Route::get('/', [ReportBalanceSheetController::class, 'index'])->name('report.balance.sheet');
         Route::get('index', [ReportBalanceSheetController::class, 'index'])->name('report.balance.sheet.index');
@@ -281,11 +296,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-pdf/', [ReportBalanceSheetController::class, 'exportPdf'])->name('report.balance.sheet.export.pdf');
         Route::get('export-html/', [ReportBalanceSheetController::class, 'exportHtml'])->name('report.balance.sheet.export.html');
     });
-
 });
 
 //App Details Page => 'Dashboard'], function() {
-Route::group(['prefix' => 'menu-style'], function() {
+Route::group(['prefix' => 'menu-style'], function () {
     //MenuStyle Page Routs
     Route::get('horizontal', [HomeController::class, 'horizontal'])->name('menu-style.horizontal');
     Route::get('dual-horizontal', [HomeController::class, 'dualhorizontal'])->name('menu-style.dualhorizontal');

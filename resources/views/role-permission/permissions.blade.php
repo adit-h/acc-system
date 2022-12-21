@@ -28,7 +28,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    {{ Form::open(['url' => '#','method' => 'get']) }}
+                    {{ Form::open(['route' => ['role.permission.store'], 'method' => 'post']) }}
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -103,7 +103,11 @@
                             </tbody>
                         </table>
                         <div class="text-center">
-                        {{ Form::submit( __('global-message.save'), ['class'=>'btn btn-md btn-primary']) }}
+                            {{-- Form::submit( __('global-message.save'), ['class'=>'btn btn-md btn-primary']) --}}
+                            <!-- <button type="submit" class="btn btn-lg btn-primary">Save</button> -->
+                            <a href="#" class="btn btn-primary" onclick="return confirm('Update current Permission?') ? submitRolePermission('{{$url}}') : false" title="Save Role Permission">
+                                Update
+                            </a>
                         </div>
                     {{ Form::close() }}
                 </div>

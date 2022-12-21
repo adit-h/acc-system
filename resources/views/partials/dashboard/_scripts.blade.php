@@ -50,3 +50,6 @@
 <!-- Custom JavaScript -->
 <script src="{{asset('js/hope-ui.js') }}"></script>
 <script src="{{asset('js/modelview.js')}}"></script>
+
+<!-- Include Custom Development scripts -->
+<script src="{{asset('js/custom.js')}}"></script>
