@@ -20,7 +20,8 @@ class MasterAccount extends Model
      * Get the category associated with the account.
      */
     public function accountCategory() {
-        return $this->hasOne(accountCategory::class, 'id', 'category_id');
+        //return $this->hasOne(accountCategory::class, 'id', 'category_id');
+        return $this->hasOne('App\Models\AccountCategory', 'id', 'category_id');
     }
 
     /**
