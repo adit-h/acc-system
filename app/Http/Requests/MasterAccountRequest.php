@@ -29,6 +29,8 @@ class MasterAccountRequest extends FormRequest
     {
         $method = strtolower($this->method());
         $user_id = $this->route()->user;
+        // get current id
+        $id = $this->route()->parameter('id');
 
         $rules = [];
         switch ($method) {
@@ -42,7 +44,7 @@ class MasterAccountRequest extends FormRequest
                 break;
             case 'patch':
                 $rules = [
-                    'code' => 'required|unique:master_accounts|max:100',
+                    'code' => 'required|max:100|unique:master_accounts,code,'.$id,
                     'name' => 'required|max:100',
                     'status' => 'required',
                     'category_id' => 'required',
