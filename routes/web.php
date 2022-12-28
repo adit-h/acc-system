@@ -22,6 +22,8 @@ use App\Http\Controllers\TransReceivableDepositController;
 
 use App\Http\Controllers\AdjustmentInController;
 use App\Http\Controllers\AdjustmentOutController;
+use App\Http\Controllers\GoodsPurchaseController;
+use App\Http\Controllers\GoodsCostController;
 
 // Reports
 use App\Http\Controllers\Report\ReportIncomeStateController;
@@ -250,6 +252,30 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [AdjustmentOutController::class, 'destroy'])->name('adjustment.out.destroy');
 
         //Route::resource('account', AdjustmentOutController::class);
+    });
+
+    // Goods Purchase Module
+    Route::group(['prefix' => 'goods.purchase'], function () {
+        //Goods Purchase Page Routes
+        Route::get('/', [GoodsPurchaseController::class, 'index'])->name('goods.purchase');
+        Route::get('index', [GoodsPurchaseController::class, 'index'])->name('goods.purchase.index');
+        Route::get('create', [GoodsPurchaseController::class, 'create'])->name('goods.purchase.create');
+        Route::post('store', [GoodsPurchaseController::class, 'store'])->name('goods.purchase.store');
+        Route::get('edit/{id}', [GoodsPurchaseController::class, 'edit'])->name('goods.purchase.edit');
+        Route::patch('update/{id}', [GoodsPurchaseController::class, 'update'])->name('goods.purchase.update');
+        Route::delete('destroy/{id}', [GoodsPurchaseController::class, 'destroy'])->name('goods.purchase.destroy');
+    });
+
+    // Cost of Goods Module
+    Route::group(['prefix' => 'goods.cost'], function () {
+        //Cost of Goods Page Routes
+        Route::get('/', [GoodsCostController::class, 'index'])->name('goods.cost');
+        Route::get('index', [GoodsCostController::class, 'index'])->name('goods.cost.index');
+        Route::get('create', [GoodsCostController::class, 'create'])->name('goods.cost.create');
+        Route::post('store', [GoodsCostController::class, 'store'])->name('goods.cost.store');
+        Route::get('edit/{id}', [GoodsCostController::class, 'edit'])->name('goods.cost.edit');
+        Route::patch('update/{id}', [GoodsCostController::class, 'update'])->name('goods.cost.update');
+        Route::delete('destroy/{id}', [GoodsCostController::class, 'destroy'])->name('goods.cost.destroy');
     });
 
 

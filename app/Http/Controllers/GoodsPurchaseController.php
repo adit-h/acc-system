@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\DataTables\TransactionSaleDataTable;
-use App\Models\TransactionSale;
+use App\DataTables\GoodsPurchaseDataTable;
+use App\Models\TransactionIn;
 use App\Models\MasterAccount;
 use App\Helpers\AuthHelper;
-use App\Http\Requests\TransactionSaleRequest;
+use App\Http\Requests\TransactionInRequest;
 
-class TransSaleController extends Controller
+class GoodsPurchaseController extends Controller
 {
     /**
      * Display a list of the Trans In.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TransactionSaleDataTable $dataTable)
+    public function index(GoodsPurchaseDataTable $dataTable)
     {
-        $pageTitle = trans('global-message.list_form_title',['form' => trans('transactions-sale.title')] );
+        $pageTitle = trans('global-message.list_form_title',['form' => trans('goods-purchase.title')] );
         $auth_user = AuthHelper::authSession();
         $assets = ['data-table'];
-        $headerAction = '<a href="'.route('trans.sale.create').'" class="btn btn-sm btn-primary" role="button">Add Trans</a>';
+        $headerAction = '<a href="'.route('goods.purchase.create').'" class="btn btn-sm btn-primary" role="button">Add Purchase</a>';
         return $dataTable->render('global.datatable', compact('pageTitle', 'auth_user', 'assets', 'headerAction'));
     }
 
@@ -32,10 +32,10 @@ class TransSaleController extends Controller
      */
     public function create()
     {
-        $acc_from = MasterAccount::where('category_id', 1)->pluck('name', 'id');
-        $acc_to = MasterAccount::where('id', 30)->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('code', ["2000"])->pluck('name', 'id');
+        $acc_to = MasterAccount::whereIn('category_id', [1, 4])->pluck('name', 'id');
 
-        return view('trans-sale.form', compact('acc_from', 'acc_to'));
+        return view('goods-purchase.form', compact('acc_from', 'acc_to'));
     }
 
     /**
@@ -44,33 +44,32 @@ class TransSaleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TransactionSaleRequest $request)
+    public function store(TransactionInRequest $request)
     {
         $req = $request->all();
         $data = [
             "trans_date" => $req['trans_date'],
             "receive_from" => $req['receive_from'],
-            "store_to" => 30,
+            "store_to" => $req['store_to'],
             "value" => !empty($req['value']) ? $req['value'] : 0,
-            "sale_id" => 0,
             "reference" => $req['reference'],
             "description" => $req['description']
         ];
-        $trans = TransactionSale::create($data);
-        // insert discount transaction
-        $disc = !empty($req['disc']) ? $req['disc'] : 0;
-        $data_disc = [
+        $trans = TransactionIn::create($data);
+        // insert auto
+        $acc1 = MasterAccount::whereIn('code', ["2000"])->first();  // pembelian
+        $acc2 = MasterAccount::whereIn('code', ["7001"])->first();  // pembelian bersih total
+        $data2 = [
             "trans_date" => $req['trans_date'],
-            "receive_from" => 31,
-            "store_to" => $req['receive_from'],
-            "value" => $disc,
-            "sale_id" => $trans->id,
+            "receive_from" => $acc2->id,
+            "store_to" => $acc1->id,
+            "value" => !empty($req['value']) ? $req['value'] : 0,
             "reference" => $req['reference'],
             "description" => $req['description']
         ];
-        $trans_disc = TransactionSale::create($data_disc);
+        $trans2 = TransactionIn::create($data2);
 
-        return redirect()->route('trans.sale.index')->withSuccess(__('message.msg_added',['name' => __('transactions-sale.title')]));
+        return redirect()->route('goods.purchase.index')->withSuccess(__('message.msg_added',['name' => __('goods-purchase.title')]));
     }
 
     /**
@@ -81,9 +80,9 @@ class TransSaleController extends Controller
      */
     public function show($id)
     {
-        $data = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $data = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
         // TODO : create view blade
-        // return view('trans-sale.view', compact('data'));
+        // return view('goods-purchase.view', compact('data'));
     }
 
     /**
@@ -94,12 +93,12 @@ class TransSaleController extends Controller
      */
     public function edit($id)
     {
-        $data = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $data = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        $acc_from = MasterAccount::where('category_id', 1)->pluck('name', 'id');
-        $acc_to = MasterAccount::where('id', 30)->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('code', ["2000"])->pluck('name', 'id');
+        $acc_to = MasterAccount::whereIn('category_id', [1, 4])->pluck('name', 'id');
 
-        return view('trans-sale.form', compact('data', 'id', 'acc_from', 'acc_to'));
+        return view('goods-purchase.form', compact('data', 'id', 'acc_from', 'acc_to'));
     }
 
     /**
@@ -109,18 +108,18 @@ class TransSaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TransactionSaleRequest $request, $id)
+    public function update(TransactionInRequest $request, $id)
     {
         // dd($request->all());
-        $trans = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
         // Update master account data...
         $trans->fill($request->all())->update();
 
         if(auth()->check()){
-            return redirect()->route('trans.sale.index')->withSuccess(__('message.msg_updated',['name' => __('transactions-sale.title')]));
+            return redirect()->route('goods.purchase.index')->withSuccess(__('message.msg_updated',['name' => __('goods-purchase.title')]));
         }
-        return redirect()->back()->withSuccess(__('message.msg_updated',['name' => __('transactions-sale.title')]));
+        return redirect()->back()->withSuccess(__('message.msg_updated',['name' => __('goods-purchase.title')]));
     }
 
     /**
@@ -131,14 +130,14 @@ class TransSaleController extends Controller
      */
     public function destroy($id)
     {
-        $trans = TransactionSale::findOrFail($id);
+        $trans = TransactionIn::findOrFail($id);
         $status = 'errors';
-        $message= __('global-message.delete_form', ['form' => __('transsactions-sale.title')]);
+        $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
 
         if ($trans != '') {
             $trans->delete();
             $status = 'success';
-            $message= __('global-message.delete_form', ['form' => __('transactions-sale.title')]);
+            $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
         }
 
         if (request()->ajax()) {
