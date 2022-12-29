@@ -62,7 +62,7 @@ class ReportGeneralLedgerController extends Controller
             }
 
             // Query current Month Transactions
-            $filter = date('F Y', strtotime($year.'-'.$month.'-01'));
+            $filter = date('F Y', strtotime($year . '-' . $month . '-01'));
             $trans_in = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
@@ -93,35 +93,35 @@ class ReportGeneralLedgerController extends Controller
                 ->get();
 
             // Query all trans to previous Month
-            $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
-            $prev_date = date('Y-m-t', strtotime($prev_year.'-'.$prev_month.'-01'));
+            $filter_prev = date('F Y', strtotime($prev_year . '-' . $prev_month . '-01'));
+            $prev_date = date('Y-m-t', strtotime($prev_year . '-' . $prev_month . '-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date);
+                ->where('t.trans_date', '<=', $prev_date);
             $trans_sale_prev = DB::table('transaction_sale AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date);
-            $trans_prev_raw = DB::table('transaction_out AS t')
+                ->where('t.trans_date', '<=', $prev_date);
+            $trans_prev = DB::table('transaction_out AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date)
+                ->where('t.trans_date', '<=', $prev_date)
                 ->union($trans_in_prev)
                 ->union($trans_sale_prev)
-                ->orderBy('trans_date');
+                ->orderBy('trans_date')
+                ->get();
 
-            $trans_prev = $trans_prev_raw->get();
-
+            //$trans_prev = $trans_prev_raw->get();
             $bucket = $bucket_prev = $this->initMasterContainer();
             // calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
@@ -135,8 +135,7 @@ class ReportGeneralLedgerController extends Controller
                 $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
                     $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
-                }
-                else if ($bucket[$t->fromId]['catid'] == 4 ||$bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
+                } else if ($bucket[$t->fromId]['catid'] == 4 || $bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
                     $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
                 }
             }
@@ -147,7 +146,7 @@ class ReportGeneralLedgerController extends Controller
                 if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
                     $bucket[$t->fromId]['debet'] += $t->value;
                     $bucket[$t->toId]['debet'] += $t->value;
-                } else if ($bucket[$t->fromId]['catid'] == 4 ||$bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
+                } else if ($bucket[$t->fromId]['catid'] == 4 || $bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
                     $bucket[$t->fromId]['kredit'] += $t->value;
                     $bucket[$t->toId]['kredit'] += $t->value;
                 } else {
@@ -173,7 +172,9 @@ class ReportGeneralLedgerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -181,7 +182,9 @@ class ReportGeneralLedgerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store() {}
+    public function store()
+    {
+    }
 
     /**
      * Display the specified resource.
@@ -189,7 +192,9 @@ class ReportGeneralLedgerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {}
+    public function show($id)
+    {
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -197,7 +202,9 @@ class ReportGeneralLedgerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {}
+    public function edit($id)
+    {
+    }
 
     /**
      * Update the specified resource in storage.
@@ -206,7 +213,9 @@ class ReportGeneralLedgerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id) {}
+    public function update($id)
+    {
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -214,7 +223,9 @@ class ReportGeneralLedgerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+    }
 
     public function exportExcel(Request $request)
     {
@@ -226,7 +237,7 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.xlsx';
+        $filename = 'report_gl_' . $month . $year . '.xlsx';
 
         return Excel::download(new ReportGeneralLedgerExport($month, $year), $filename);
     }
@@ -241,7 +252,7 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.pdf';
+        $filename = 'report_gl_' . $month . $year . '.pdf';
 
         // using fromQuery
         // return (new ReportGeneralLedgerExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
@@ -258,7 +269,7 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_'.$month.$year.'.html';
+        $filename = 'report_gl_' . $month . $year . '.html';
 
         //using formQuery
         //return (new ReportGeneralLedgerExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);
@@ -292,7 +303,7 @@ class ReportGeneralLedgerController extends Controller
                 $in1[$t->fromId]['kredit'] += $t->value;
                 $in1[$t->fromId]['balance'] = $in1[$t->fromId]['debet'] - $in1[$t->fromId]['kredit'];
             }
-            if (array_key_exists($t->toId, $in1) && array_key_exists($t->fromId, $in1))  {
+            if (array_key_exists($t->toId, $in1) && array_key_exists($t->fromId, $in1)) {
                 $in1[$t->fromId]['balance'] = $in1[$t->fromId]['debet'] - $in1[$t->fromId]['kredit'];
             }
         }
@@ -315,7 +326,7 @@ class ReportGeneralLedgerController extends Controller
                 $in2[$t->fromId]['debet'] += $t->value;
                 $in2[$t->fromId]['balance'] = $in2[$t->fromId]['debet'] - $in2[$t->fromId]['kredit'];
             }
-            if (array_key_exists($t->toId, $in2) && array_key_exists($t->fromId, $in2))  {
+            if (array_key_exists($t->toId, $in2) && array_key_exists($t->fromId, $in2)) {
                 $in2[$t->fromId]['balance'] = $in2[$t->fromId]['debet'] - $in2[$t->fromId]['kredit'];
             }
         }
@@ -339,7 +350,7 @@ class ReportGeneralLedgerController extends Controller
                 $out1[$t->fromId]['debet'] += $t->value;
                 $out1[$t->fromId]['balance'] = $out1[$t->fromId]['debet'] - $out1[$t->fromId]['kredit'];
             }
-            if (array_key_exists($t->toId, $out1) && array_key_exists($t->fromId, $out1))  {
+            if (array_key_exists($t->toId, $out1) && array_key_exists($t->fromId, $out1)) {
                 $out1[$t->fromId]['balance'] = $out1[$t->fromId]['debet'] - $out1[$t->fromId]['kredit'];
             }
         }
@@ -362,7 +373,7 @@ class ReportGeneralLedgerController extends Controller
                 $out2[$t->fromId]['debet'] += $t->value;
                 $out2[$t->fromId]['balance'] = $out2[$t->fromId]['debet'] - $out2[$t->fromId]['kredit'];
             }
-            if (array_key_exists($t->toId, $out2) && array_key_exists($t->fromId, $out2))  {
+            if (array_key_exists($t->toId, $out2) && array_key_exists($t->fromId, $out2)) {
                 $out2[$t->fromId]['balance'] = $out2[$t->fromId]['debet'] - $out2[$t->fromId]['kredit'];
             }
         }
@@ -432,5 +443,4 @@ class ReportGeneralLedgerController extends Controller
         }
         return $bucket;
     }
-
 }

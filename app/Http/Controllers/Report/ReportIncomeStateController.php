@@ -67,7 +67,7 @@ class ReportIncomeStateController extends Controller
                 $prev_year = $year - 1;
             }
 
-            $filter = date('F Y', strtotime($year.'-'.$month.'-01'));
+            $filter = date('F Y', strtotime($year . '-' . $month . '-01'));
             $trans_in = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
@@ -97,30 +97,30 @@ class ReportIncomeStateController extends Controller
                 ->orderBy('trans_date')
                 ->get();
 
-            // prev month
-            $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
-            $prev_date = date('Y-m-t', strtotime($prev_year.'-'.$prev_month.'-01'));
+            // All trans history to prev month
+            $filter_prev = date('F Y', strtotime($prev_year . '-' . $prev_month . '-01'));
+            $prev_date = date('Y-m-t', strtotime($prev_year . '-' . $prev_month . '-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date);
+                ->where('t.trans_date', '<=', $prev_date);
             $trans_sale_prev = DB::table('transaction_sale AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date);
+                ->where('t.trans_date', '<=', $prev_date);
             $trans_prev = DB::table('transaction_out AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date','<=', $prev_date)
+                ->where('t.trans_date', '<=', $prev_date)
                 ->union($trans_in_prev)
                 ->union($trans_sale_prev)
                 ->orderBy('trans_date')
@@ -138,22 +138,16 @@ class ReportIncomeStateController extends Controller
             $in_data1 = $this->initMasterContainer(6);
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $in_data1)) {
-                    //$in_data1[$t->toId]['balance'] += $t->value;
-                    //$in_data1[$t->toId]['debet'] += $t->value;
-                    //$in_data1[$t->toId]['balance'] = $in_data1[$t->toId]['last_balance'] + $in_data1[$t->toId]['debet'] - $in_data1[$t->toId]['kredit'];
                     $in_data1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] + $bucket_prev[$t->toId]['kredit'];
                 }
                 if (array_key_exists($t->fromId, $in_data1)) {
-                    //$in_data1[$t->fromId]['kredit'] += $t->value;
-                    //$in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
                     if ($t->fromId == 31) {
                         $in_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
                     } else {
                         $in_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
                     }
-
                 }
-                if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1))  {
+                if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1)) {
                     //$in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['last_balance'] + $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
                 }
             }
@@ -167,28 +161,39 @@ class ReportIncomeStateController extends Controller
                     $in_data1[$t->fromId]['kredit'] += $t->value;
                     $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1))  {
+                if (array_key_exists($t->toId, $in_data1) && array_key_exists($t->fromId, $in_data1)) {
                     $in_data1[$t->fromId]['balance'] = $in_data1[$t->fromId]['debet'] - $in_data1[$t->fromId]['kredit'];
                 }
             }
             // income data. filter master account with account id = 7
             $in_data2 = $this->initMasterContainer(7);
+            $supp = MasterAccount::where('code', "2000")->pluck('id');
+            $supp_id = $supp[0];
+            $begin_supp_id = 33;
+            $purchase_id = 34;
+            $last_supp_id = 35;
+
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $in_data2)) {
-                    //$in_data2[$t->toId]['balance'] += $t->value;
-                    //$in_data2[$t->toId]['kredit'] += $t->value;
-                    //$in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['last_balance'] + $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
                     $in_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 }
                 if (array_key_exists($t->fromId, $in_data2)) {
-                    //$in_data2[$t->fromId]['debet'] += $t->value;
-                    //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
                     $in_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
+                if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2)) {
                     //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
                 }
+
+                // lets count persediaan awal
+                if (array_key_exists($supp_id, $bucket_prev)) {
+                    $in_data2[$begin_supp_id]['last_balance'] = $bucket_prev[$supp_id]['last_balance'];
+                }
+                // handle pembelian bersih total
+                if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
+                    $in_data2[$purchase_id]['last_balance'] = $bucket_prev[$purchase_id]['debet'];
+                }
             }
+            $deb_supp = $cred_supp = 0;
             foreach ($trans as $key => $t) {
                 if (array_key_exists($t->toId, $in_data2)) {
                     //$in_data2[$t->toId]['balance'] += $t->value;
@@ -199,8 +204,28 @@ class ReportIncomeStateController extends Controller
                     $in_data2[$t->fromId]['debet'] += $t->value;
                     $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
-                    $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2)) {
+                    //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                }
+
+                // lets count persediaan awal
+                if (array_key_exists($begin_supp_id, $in_data2)) {
+                    $in_data2[$begin_supp_id]['balance'] = $bucket_prev[$supp_id]['debet'] - $bucket_prev[$supp_id]['kredit'];
+                    $in_data2[$last_supp_id]['last_balance'] = $in_data2[$begin_supp_id]['balance'];
+                }
+                // handle pembelian bersih total
+                if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
+                    $in_data2[$purchase_id]['balance'] = $in_data2[$purchase_id]['debet'];
+                }
+                // handle count persediaan akhir
+                if ($t->toId == $supp_id) {
+                    $cred_supp += $t->value;
+                }
+                if ($t->fromId == $supp_id) {
+                    $deb_supp += $t->value;
+                }
+                if ($t->toId == $supp_id || $t->fromId == $supp_id) {
+                    $in_data2[$last_supp_id]['balance'] = $in_data2[$last_supp_id]['last_balance'] + $deb_supp - $cred_supp;
                 }
             }
 
@@ -208,17 +233,12 @@ class ReportIncomeStateController extends Controller
             $out_data1 = $this->initMasterContainer(8);
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $out_data1)) {
-                    //$out_data1[$t->toId]['balance'] += $t->value;
-                    //$out_data1[$t->toId]['kredit'] += $t->value;
-                    //$out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['last_balance'] + $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
                     $out_data1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 }
                 if (array_key_exists($t->fromId, $out_data1)) {
-                    //$out_data1[$t->fromId]['debet'] += $t->value;
-                    //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
                     $out_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1))  {
+                if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1)) {
                     //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
                 }
             }
@@ -232,7 +252,7 @@ class ReportIncomeStateController extends Controller
                     $out_data1[$t->fromId]['debet'] += $t->value;
                     $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1))  {
+                if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1)) {
                     $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
                 }
             }
@@ -240,17 +260,12 @@ class ReportIncomeStateController extends Controller
             $out_data2 = $this->initMasterContainer(9);
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $out_data2)) {
-                    //$out_data2[$t->toId]['balance'] += $t->value;
-                    //$out_data2[$t->toId]['kredit'] += $t->value;
-                    //$out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['last_balance'] + $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
                     $out_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 }
                 if (array_key_exists($t->fromId, $out_data2)) {
-                    //$out_data2[$t->fromId]['debet'] += $t->value;
-                    //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
                     $out_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2))  {
+                if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2)) {
                     //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
                 }
             }
@@ -264,7 +279,7 @@ class ReportIncomeStateController extends Controller
                     $out_data2[$t->fromId]['debet'] += $t->value;
                     $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
                 }
-                if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2))  {
+                if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2)) {
                     $out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
                 }
             }
@@ -278,7 +293,9 @@ class ReportIncomeStateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {}
+    public function create()
+    {
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -286,7 +303,9 @@ class ReportIncomeStateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store() {}
+    public function store()
+    {
+    }
 
     /**
      * Display the specified resource.
@@ -294,7 +313,9 @@ class ReportIncomeStateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {}
+    public function show($id)
+    {
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -302,7 +323,9 @@ class ReportIncomeStateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {}
+    public function edit($id)
+    {
+    }
 
     /**
      * Update the specified resource in storage.
@@ -311,7 +334,9 @@ class ReportIncomeStateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id) {}
+    public function update($id)
+    {
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -319,7 +344,9 @@ class ReportIncomeStateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+    }
 
     public function exportExcel(Request $request)
     {
@@ -331,7 +358,7 @@ class ReportIncomeStateController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_income_'.$month.$year.'.xlsx';
+        $filename = 'report_income_' . $month . $year . '.xlsx';
 
         return Excel::download(new ReportIncomeExport($month, $year), $filename);
     }
@@ -346,7 +373,7 @@ class ReportIncomeStateController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_income_'.$month.$year.'.pdf';
+        $filename = 'report_income_' . $month . $year . '.pdf';
 
         // using fromQuery
         // return (new ReportIncomeExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
@@ -363,7 +390,7 @@ class ReportIncomeStateController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_income_'.$month.$year.'.html';
+        $filename = 'report_income_' . $month . $year . '.html';
 
         //using formQuery
         //return (new ReportIncomeExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);
@@ -397,5 +424,4 @@ class ReportIncomeStateController extends Controller
         }
         return $bucket;
     }
-
 }

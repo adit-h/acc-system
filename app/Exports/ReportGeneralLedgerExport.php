@@ -133,14 +133,13 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
             ->orderBy('trans_date')
             ->get();
 
-        $bucket_prev = $this->initMasterContainer();
+        $bucket = $bucket_prev = $this->initMasterContainer();
         // calculate previous month transactions
         foreach ($trans_prev as $key => $t) {
             $bucket_prev[$t->fromId]['debet'] += $t->value;
             $bucket_prev[$t->toId]['kredit'] += $t->value;
         }
 
-        $bucket = $this->initMasterContainer();
         // Add calculate previous month transactions
         foreach ($trans_prev as $key => $t) {
             $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];

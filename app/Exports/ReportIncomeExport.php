@@ -61,7 +61,7 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles, With
     public function columnFormats(): array
     {
         return [
-            'C' => NumberFormat::FORMAT_CURRENCY_USD,
+            'C' => NumberFormat::FORMAT_NUMBER,
             'D' => NumberFormat::FORMAT_NUMBER,
             'E' => NumberFormat::FORMAT_NUMBER,
         ];
@@ -186,22 +186,33 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles, With
         }
         // income data. filter master account with account id = 7
         $in_data2 = $this->initMasterContainer(7);
+        $supp = MasterAccount::where('code', "2000")->pluck('id');
+        $supp_id = $supp[0];
+        $begin_supp_id = 33;
+        $purchase_id = 34;
+        $last_supp_id = 35;
+
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in_data2)) {
-                //$in_data2[$t->toId]['balance'] += $t->value;
-                //$in_data2[$t->toId]['kredit'] += $t->value;
-                //$in_data2[$t->toId]['balance'] = $in_data2[$t->toId]['last_balance'] + $in_data2[$t->toId]['debet'] - $in_data2[$t->toId]['kredit'];
                 $in_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
             }
             if (array_key_exists($t->fromId, $in_data2)) {
-                //$in_data2[$t->fromId]['debet'] += $t->value;
-                //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
                 $in_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
                 //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
             }
+
+            // lets count persediaan awal
+            if (array_key_exists($supp_id, $bucket_prev)) {
+                $in_data2[$begin_supp_id]['last_balance'] = $bucket_prev[$supp_id]['last_balance'];
+            }
+            // handle pembelian bersih total
+            if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
+                $in_data2[$purchase_id]['last_balance'] = $bucket_prev[$purchase_id]['debet'];
+            }
         }
+        $deb_supp = $cred_supp = 0;
         foreach ($trans as $key => $t) {
             if (array_key_exists($t->toId, $in_data2)) {
                 //$in_data2[$t->toId]['balance'] += $t->value;
@@ -213,7 +224,27 @@ class ReportIncomeExport implements FromView, WithColumnWidths, WithStyles, With
                 $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
             }
             if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2))  {
-                $in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+                //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
+            }
+
+            // lets count persediaan awal
+            if (array_key_exists($begin_supp_id, $in_data2)) {
+                $in_data2[$begin_supp_id]['balance'] = $bucket_prev[$supp_id]['debet'] - $bucket_prev[$supp_id]['kredit'];
+                $in_data2[$last_supp_id]['last_balance'] = $in_data2[$begin_supp_id]['balance'];
+            }
+            // handle pembelian bersih total
+            if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
+                $in_data2[$purchase_id]['balance'] = $in_data2[$purchase_id]['debet'];
+            }
+            // handle count persediaan akhir
+            if ($t->toId == $supp_id) {
+                $cred_supp += $t->value;
+            }
+            if ($t->fromId == $supp_id) {
+                $deb_supp += $t->value;
+            }
+            if ($t->toId == $supp_id || $t->fromId == $supp_id) {
+                $in_data2[$last_supp_id]['balance'] = $in_data2[$last_supp_id]['last_balance'] + $deb_supp - $cred_supp;
             }
         }
 
