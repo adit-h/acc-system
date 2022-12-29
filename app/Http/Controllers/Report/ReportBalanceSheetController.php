@@ -99,30 +99,28 @@ class ReportBalanceSheetController extends Controller
 
             // prev month
             $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
+            $prev_date = date('Y-m-t', strtotime($prev_year.'-'.$prev_month.'-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month);
+                ->where('t.trans_date','<=', $prev_date);
             $trans_sale_prev = DB::table('transaction_sale AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month);
+                ->where('t.trans_date','<=', $prev_date);
             $trans_prev = DB::table('transaction_out AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month)
+                ->where('t.trans_date','<=', $prev_date)
                 ->union($trans_in_prev)
                 ->union($trans_sale_prev)
                 ->orderBy('trans_date')
@@ -236,18 +234,16 @@ class ReportBalanceSheetController extends Controller
             $out_data1 = $this->initMasterContainer(4);
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $out_data1)) {
-                    //$out_data1[$t->toId]['balance'] += $t->value;
                     $out_data1[$t->toId]['debet'] += $t->value;
-                    //$out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['last_balance'] + $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
-                    $out_data1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+                    //$out_data1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+                    // switch debet/credit position
+                    $out_data1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
                 }
                 if (array_key_exists($t->fromId, $out_data1)) {
                     $out_data1[$t->fromId]['kredit'] += $t->value;
-                    //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
-                    $out_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
-                }
-                if (array_key_exists($t->toId, $out_data1) && array_key_exists($t->fromId, $out_data1))  {
-                    //$out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['last_balance'] + $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
+                    //$out_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+                    // switch debet/credit position
+                    $out_data1[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
                 }
             }
             foreach ($trans as $key => $t) {
@@ -264,22 +260,22 @@ class ReportBalanceSheetController extends Controller
                     $out_data1[$t->fromId]['balance'] = $out_data1[$t->fromId]['debet'] - $out_data1[$t->fromId]['kredit'];
                 }
             }
+
             // Pasiva 2. filter master account with account id = 5
             $out_data2 = $this->initMasterContainer(5);
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $out_data2)) {
                     //$out_data2[$t->toId]['balance'] += $t->value;
                     $out_data2[$t->toId]['debet'] += $t->value;
-                    //$out_data2[$t->toId]['balance'] = $out_data2[$t->toId]['last_balance'] + $out_data2[$t->toId]['debet'] - $out_data2[$t->toId]['kredit'];
-                    $out_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+                    //$out_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
+                    // switch debet/credit position
+                    $out_data2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
                 }
                 if (array_key_exists($t->fromId, $out_data2)) {
                     $out_data2[$t->fromId]['kredit'] += $t->value;
-                    //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
-                    $out_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
-                }
-                if (array_key_exists($t->toId, $out_data2) && array_key_exists($t->fromId, $out_data2))  {
-                    //$out_data2[$t->fromId]['balance'] = $out_data2[$t->fromId]['last_balance'] + $out_data2[$t->fromId]['debet'] - $out_data2[$t->fromId]['kredit'];
+                    //$out_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+                    // switch debet/credit position
+                    $out_data2[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['kredit'] - $bucket_prev[$t->fromId]['debet'];
                 }
             }
             foreach ($trans as $key => $t) {
@@ -565,6 +561,7 @@ class ReportBalanceSheetController extends Controller
                 'id' => $m->id,
                 'code' => $m->code,
                 'name' => $m->name,
+                'catid' => $m->category_id,
                 'last_balance' => 0,
                 'debet' => 0,
                 'kredit' => 0,

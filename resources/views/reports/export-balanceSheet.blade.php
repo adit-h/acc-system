@@ -228,8 +228,8 @@
                 <td colspan="5">&nbsp;</td>
             </tr>
             @php
-                $grand_total1 = $total_pasiva1 + $total_aktiva1;
-                $grand_total2 = $total_pasiva2 + $total_aktiva2;
+                $grand_total1 = $total_aktiva1 - $total_pasiva1;
+                $grand_total2 = $total_aktiva2 - $total_pasiva2;
             @endphp
             <tr class="table-secondary">
                 <td colspan='2' class="text-center"><strong>SURPLUS/MINUS</strong></td>

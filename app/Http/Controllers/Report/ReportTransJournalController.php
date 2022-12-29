@@ -56,22 +56,27 @@ class ReportTransJournalController extends Controller
 
             $filter = date('F Y', strtotime($year.'-'.$month.'-01'));
             $trans_in = DB::table('transaction_in AS t')
-                ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $year)
                 ->whereMonth('t.trans_date', '=', $month);
-
+            $trans_sale = DB::table('transaction_sale AS t')
+                ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+                ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+                ->whereYear('t.trans_date', '=', $year)
+                ->whereMonth('t.trans_date', '=', $month);
             $trans = DB::table('transaction_out AS t')
-                ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+                ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
                 ->whereYear('t.trans_date', '=', $year)
                 ->whereMonth('t.trans_date', '=', $month)
                 ->union($trans_in)
+                ->union($trans_sale)
                 ->orderBy('trans_date')
                 ->get();
-
         }
 
         return view('report-transJournal.list', compact('trans', 'filter', 'date'));
@@ -90,7 +95,7 @@ class ReportTransJournalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MasterAccountRequest $request) {}
+    public function store() {}
 
     /**
      * Display the specified resource.
@@ -115,7 +120,7 @@ class ReportTransJournalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MasterAccountRequest $request, $id) {}
+    public function update($id) {}
 
     /**
      * Remove the specified resource from storage.

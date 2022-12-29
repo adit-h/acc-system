@@ -92,48 +92,47 @@ class ReportGeneralLedgerController extends Controller
                 ->orderBy('trans_date')
                 ->get();
 
-            // Query previous Month Transactions
+            // Query all trans to previous Month
             $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
+            $prev_date = date('Y-m-t', strtotime($prev_year.'-'.$prev_month.'-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month);
+                ->where('t.trans_date','<=', $prev_date);
             $trans_sale_prev = DB::table('transaction_sale AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month);
-            $trans_prev = DB::table('transaction_out AS t')
+                ->where('t.trans_date','<=', $prev_date);
+            $trans_prev_raw = DB::table('transaction_out AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $prev_year)
-                ->whereMonth('t.trans_date', '=', $prev_month)
+                ->where('t.trans_date','<=', $prev_date)
                 ->union($trans_in_prev)
                 ->union($trans_sale_prev)
-                ->orderBy('trans_date')
-                ->get();
+                ->orderBy('trans_date');
 
-            $bucket_prev = $this->initMasterContainer();
+            $trans_prev = $trans_prev_raw->get();
+
+            $bucket = $bucket_prev = $this->initMasterContainer();
             // calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
                 $bucket_prev[$t->fromId]['debet'] += $t->value;
                 $bucket_prev[$t->toId]['kredit'] += $t->value;
             }
 
-            $bucket = $this->initMasterContainer();
             // Add calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
                 $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
+                $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
                     $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
                 }
@@ -164,6 +163,7 @@ class ReportGeneralLedgerController extends Controller
             $bucket[29]['balance'] = $special['balance'];
             $bucket[29]['last_balance'] = $special['last_balance'];
         }
+        //dump($bucket[2]);
 
         return view('report-generalLedger.list', compact('bucket', 'trans', 'filter', 'date'));
     }

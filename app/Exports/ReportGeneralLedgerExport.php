@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\MasterAccount;
+use App\Models\TransactionIn;
 //use Maatwebsite\Excel\Concerns\FromQuery;
 //use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\View\View;
@@ -105,30 +106,28 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
 
         // Query previous Month Transactions
         $filter_prev = date('F Y', strtotime($prev_year.'-'.$prev_month.'-01'));
+        $prev_date = date('Y-m-t', strtotime($prev_year.'-'.$prev_month.'-01'));
         $trans_in_prev = DB::table('transaction_in AS t')
             ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                 maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                 t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->whereYear('t.trans_date', '=', $prev_year)
-            ->whereMonth('t.trans_date', '=', $prev_month);
+            ->where('t.trans_date','<=', $prev_date);
         $trans_sale_prev = DB::table('transaction_sale AS t')
             ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                 maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                 t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->whereYear('t.trans_date', '=', $prev_year)
-            ->whereMonth('t.trans_date', '=', $prev_month);
+            ->where('t.trans_date','<=', $prev_date);
         $trans_prev = DB::table('transaction_out AS t')
             ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                 maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                 t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-            ->whereYear('t.trans_date', '=', $prev_year)
-            ->whereMonth('t.trans_date', '=', $prev_month)
+            ->where('t.trans_date','<=', $prev_date)
             ->union($trans_in_prev)
             ->union($trans_sale_prev)
             ->orderBy('trans_date')

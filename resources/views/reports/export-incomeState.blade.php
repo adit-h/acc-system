@@ -35,34 +35,37 @@
                 <td><strong>{{ $t['name'] }}</strong></td>
                 <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>Sales Netto</strong></th>
                 <td class="text-end">{{ number_format($total_in1a, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_in2a, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_in2a - $total_in1a, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_in1a - $total_in2a, 0, ',', '.') }}</td>
             </tr>
             <!-- PERSEDIAAN -->
             @foreach ($in_data2 as $key => $t)
             @php
-                $total_in1b += $t['balance'];
-                $total_in2b += $t['last_balance'];
+                // Cost of Good == HPP value
+                if ($t['code'] == '7003') {
+                    $total_in1b = $t['balance'];
+                    $total_in2b = $t['last_balance'];
+                }
             @endphp
             <tr>
                 <td><strong>{{ $t['code'] }}</strong></td>
                 <td><strong>{{ $t['name'] }}</strong></td>
                 <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>Cost of Goods</strong></th>
                 <td class="text-end">{{ number_format($total_in1b, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_in2b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_in2b - $total_in1b, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_in1b - $total_in2b, 0, ',', '.') }}</td>
             </tr>
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>Gross Profit</strong></th>
@@ -101,14 +104,14 @@
                 <td><strong>{{ $t['name'] }}</strong></td>
                 <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
             </tr>
             @if ($i == 8)
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>TOTAL SALES COST</strong></th>
                 <td class="text-end">{{ number_format($total_sales_cost1a, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_sales_cost2a, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_sales_cost2a - $total_sales_cost1a, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_sales_cost1a - $total_sales_cost2a, 0, ',', '.') }}</td>
             </tr>
             @endif
             @php
@@ -123,13 +126,13 @@
                 <th colspan='2' class="text-center"><strong>TOTAL ADM COST</strong></th>
                 <td class="text-end">{{ number_format($total_adm_cost1a, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_adm_cost2a, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_adm_cost2a - $total_adm_cost1a, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_adm_cost1a - $total_adm_cost2a, 0, ',', '.') }}</td>
             </tr>
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>TOTAL COST</strong></th>
                 <td class="text-end">{{ number_format($total_out1a, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_out2a, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_out2a - $total_out1a, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_out1a - $total_out2a, 0, ',', '.') }}</td>
             </tr>
             <!-- BIAYA LAIN-LAIN -->
             @foreach ($out_data2 as $key => $t)
@@ -140,22 +143,22 @@
             <tr>
                 <td><strong>{{ $t['code'] }}</strong></td>
                 <td><strong>{{ $t['name'] }}</strong></td>
-                <td class="text-end">{{ number_format($t['balance'], 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($t['balance'], 0, '.', '.') }}</td>
                 <td class="text-end">{{ number_format($t['last_balance'], 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($t['last_balance'] - $t['balance'], 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($t['balance'] - $t['last_balance'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>TOTAL OTHERS</strong></th>
                 <td class="text-end">{{ number_format($total_out1b, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_out2b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_out2b - $total_out1b, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_out1b - $total_out2b, 0, ',', '.') }}</td>
             </tr>
             <tr class="table-secondary">
                 <th colspan='2' class="text-center"><strong>TOTAL OPERATIONAL COST</strong></th>
                 <td class="text-end">{{ number_format($total_out1a + $total_out1b, 0, ',', '.') }}</td>
                 <td class="text-end">{{ number_format($total_out2a + $total_out2b, 0, ',', '.') }}</td>
-                <td class="text-end">{{ number_format($total_out2a + $total_out2b - $total_out1a - $total_out1b, 0, ',', '.') }}</td>
+                <td class="text-end">{{ number_format($total_out1a + $total_out1b - $total_out2a - $total_out2b, 0, ',', '.') }}</td>
             </tr>
             <tr class="">
                 <td colspan="5">&nbsp;</td>
