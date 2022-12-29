@@ -138,8 +138,11 @@
                                 <!-- PERSEDIAAN -->
                                 @foreach ($in_data2 as $key => $t)
                                 @php
-                                    $total_in1b += $t['balance'];
-                                    $total_in2b += $t['last_balance'];
+                                    // Cost of Good == HPP value
+                                    if ($t['code'] == '7003') {
+                                        $total_in1b = $t['balance'];
+                                        $total_in2b = $t['last_balance'];
+                                    }
                                 @endphp
                                 <tr>
                                     <td><strong>{{ $t['code'] }}</strong></td>
