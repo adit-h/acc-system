@@ -13649,6 +13649,11 @@ body.offcanvas-active {
     padding: 0.5rem 1.5rem 0rem 0rem !important;
   }
 }
+@media (max-width: 575.98px) {
+  .iq-navbar .navbar-brand {
+    margin-left: -6px;
+  }
+}
 .dual-horizontal {
   position: -webkit-sticky;
   position: sticky;
