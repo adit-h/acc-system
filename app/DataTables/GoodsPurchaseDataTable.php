@@ -52,7 +52,7 @@ class GoodsPurchaseDataTable extends DataTable
             ->select(DB::raw('transaction_in.id, transaction_in.trans_date, transaction_in.receive_from, transaction_in.store_to, transaction_in.value, transaction_in.reference, transaction_in.description'))
             ->join('master_accounts AS maf', 'maf.id', 'transaction_in.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_in.store_to')
-            ->whereIn('maf.code', ["2000"])
+            ->whereIn('maf.code', ["7001"])
             ->whereIn('mat.category_id', [1, 4]);
         return $this->applyScopes($model);
     }

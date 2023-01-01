@@ -32,7 +32,7 @@ class GoodsPurchaseController extends Controller
      */
     public function create()
     {
-        $acc_from = MasterAccount::whereIn('code', ["2000"])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('code', ["7001"])->pluck('name', 'id');
         $acc_to = MasterAccount::whereIn('category_id', [1, 4])->pluck('name', 'id');
 
         return view('goods-purchase.form', compact('acc_from', 'acc_to'));
@@ -57,12 +57,12 @@ class GoodsPurchaseController extends Controller
         ];
         $trans = TransactionIn::create($data);
         // insert auto
-        $acc1 = MasterAccount::whereIn('code', ["2000"])->first();  // pembelian
+        $acc1 = MasterAccount::whereIn('code', ["2000"])->first();  // persediaan
         $acc2 = MasterAccount::whereIn('code', ["7001"])->first();  // pembelian bersih total
         $data2 = [
             "trans_date" => $req['trans_date'],
-            "receive_from" => $acc2->id,
-            "store_to" => $acc1->id,
+            "receive_from" => $acc1->id,
+            "store_to" => $acc2->id,
             "value" => !empty($req['value']) ? $req['value'] : 0,
             "reference" => $req['reference'],
             "description" => $req['description']
@@ -95,7 +95,7 @@ class GoodsPurchaseController extends Controller
     {
         $data = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        $acc_from = MasterAccount::whereIn('code', ["2000"])->pluck('name', 'id');
+        $acc_from = MasterAccount::whereIn('code', ["7001"])->pluck('name', 'id');
         $acc_to = MasterAccount::whereIn('category_id', [1, 4])->pluck('name', 'id');
 
         return view('goods-purchase.form', compact('data', 'id', 'acc_from', 'acc_to'));
