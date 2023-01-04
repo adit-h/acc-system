@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="value">Diskon: </label>
-                                {{ Form::text('disc', old('disc'), ['class' => 'form-control', 'placeholder' => 'Nilai Diskon']) }}
+                                {{ Form::text('disc', old('disc') ? old('disc') : $data_disc->value ?? '', ['class' => 'form-control', 'placeholder' => 'Nilai Diskon']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="received_from">Debet: <span class="text-danger">*</span></label>

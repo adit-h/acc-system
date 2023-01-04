@@ -1,4 +1,10 @@
 <div class="flex align-items-center list-user-action">
+    @php
+    // Set discount trans_sale id to parent id
+    if ($sale_id != 0) {
+        $id = $sale_id;
+    }
+    @endphp
     <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" title="Edit Trans" href="{{ route('trans.sale.retur.edit',$id) }}">
         <span class="btn-inner">
             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,7 +14,7 @@
             </svg>
         </span>
     </a>
-    @if(auth()->user()->hasRole('admin') && auth()->id() !== $id)
+    @if(auth()->user()->hasRole('admin') && $sale_id == 0)
     <?php
     $message = __('global-message.delete_alert', ['form' => __('transactions-sale-retur.title')])
     ?>

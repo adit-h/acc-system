@@ -50,7 +50,7 @@ class TransactionSaleDataTable extends DataTable
     public function query()
     {
         $model = TransactionSale::query()->with('receiveFrom')->with('storeTo')
-            ->select(DB::raw('transaction_sale.id, transaction_sale.trans_date, transaction_sale.receive_from, transaction_sale.store_to, transaction_sale.value, transaction_sale.reference, transaction_sale.description'))
+            ->select(DB::raw('transaction_sale.id, transaction_sale.trans_date, transaction_sale.receive_from, transaction_sale.store_to, transaction_sale.value, transaction_sale.sale_id, transaction_sale.reference, transaction_sale.description'))
             ->join('master_accounts AS maf', 'maf.id', 'transaction_sale.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_sale.store_to')
             ->orWhere(function($query) {

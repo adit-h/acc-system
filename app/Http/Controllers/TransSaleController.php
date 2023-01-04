@@ -95,11 +95,12 @@ class TransSaleController extends Controller
     public function edit($id)
     {
         $data = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $data_disc = TransactionSale::with('receiveFrom')->with('storeTo')->where('sale_id', $data->id)->first();
 
         $acc_from = MasterAccount::where('category_id', 1)->pluck('name', 'id');
         $acc_to = MasterAccount::where('id', 30)->pluck('name', 'id');
 
-        return view('trans-sale.form', compact('data', 'id', 'acc_from', 'acc_to'));
+        return view('trans-sale.form', compact('data', 'data_disc', 'id', 'acc_from', 'acc_to'));
     }
 
     /**
@@ -113,9 +114,26 @@ class TransSaleController extends Controller
     {
         // dd($request->all());
         $trans = TransactionSale::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $trans_disc = TransactionSale::with('receiveFrom')->with('storeTo')->where('sale_id', $trans->id)->first();
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        // Update trans sale...
+        $req = $request->all();
+        $trans->trans_date = $req['trans_date'];
+        $trans->receive_from = $req['receive_from'];
+        $trans->store_to = 30;
+        $trans->value = !empty($req['value']) ? $req['value'] : 0;
+        $trans->reference = $req['reference'];
+        $trans->description = $req['description'];
+        $trans->save();
+
+        // Update trans disc
+        $trans_disc->trans_date = $req['trans_date'];
+        $trans_disc->receive_from = 31;
+        $trans_disc->store_to = $req['receive_from'];
+        $trans_disc->value = !empty($req['disc']) ? $req['disc'] : 0;
+        $trans_disc->reference = $req['reference'];
+        $trans_disc->description = $req['description'];
+        $trans_disc->save();
 
         if(auth()->check()){
             return redirect()->route('trans.sale.index')->withSuccess(__('message.msg_updated',['name' => __('transactions-sale.title')]));
@@ -132,11 +150,13 @@ class TransSaleController extends Controller
     public function destroy($id)
     {
         $trans = TransactionSale::findOrFail($id);
+        $trans_disc = TransactionSale::where('sale_id', $trans->id)->first();
         $status = 'errors';
         $message= __('global-message.delete_form', ['form' => __('transsactions-sale.title')]);
 
         if ($trans != '') {
             $trans->delete();
+            $trans_disc->delete();
             $status = 'success';
             $message= __('global-message.delete_form', ['form' => __('transactions-sale.title')]);
         }
