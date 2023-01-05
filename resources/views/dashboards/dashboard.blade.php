@@ -163,13 +163,13 @@
                   </div>
                </div>
             </div>
-            <div class="col-md-12 col-lg-6">
+            <!-- <div class="col-md-12 col-lg-6">
                <div class="card" data-aos="fade-up" data-aos-delay="1000">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
                         <h4 class="card-title">Earnings</h4>
                      </div>
-                     <!-- <div class="dropdown">
+                     <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                            This Week
                         </a>
@@ -178,7 +178,7 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div> -->
+                     </div>
                   </div>
                   <div class="card-body">
                      <div class="d-flex align-items-center justify-content-between">
@@ -210,14 +210,14 @@
                      </div>
                   </div>
                </div>
-            </div>
-            <div class="col-md-12 col-lg-6">
+            </div> -->
+            <!-- <div class="col-md-12 col-lg-6">
                <div class="card" data-aos="fade-up" data-aos-delay="1200">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
                         <h4 class="card-title">Conversions</h4>
                      </div>
-                     <!-- <div class="dropdown">
+                     <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                            This Week
                         </a>
@@ -226,13 +226,13 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div> -->
+                     </div>
                   </div>
                   <div class="card-body">
                      <div id="d-activity" class="d-activity"></div>
                   </div>
                </div>
-            </div>
+            </div> -->
             <!-- <div class="col-md-12 col-lg-12">
                <div class="card overflow-hidden" data-aos="fade-up" data-aos-delay="400">
                   <div class="card-header d-flex justify-content-between flex-wrap">
