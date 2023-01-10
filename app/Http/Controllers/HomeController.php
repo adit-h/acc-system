@@ -3,16 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Report;
 
 class HomeController extends Controller
 {
+    protected $reportModel;
+    public function __construct(){
+        $this->reportModel = new Report();
+    }
+
     /*
      * Dashboard Pages Routs
      */
     public function index(Request $request)
     {
+        // get total value of Sales
+        $data = $this->reportModel->calculateIncomeState();
+        //dump($data);
+        $total_sales = $data['total_sales'];
+        $total_cost = $data['total_cost'];
+        $gross_profit = $data['gross_profit'];
+
         $assets = ['chart', 'animation'];
-        return view('dashboards.dashboard', compact('assets'));
+        return view('dashboards.dashboard', compact('assets', 'total_sales', 'total_cost', 'gross_profit'));
     }
 
     /*
