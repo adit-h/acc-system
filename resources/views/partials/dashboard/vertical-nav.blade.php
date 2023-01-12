@@ -1,3 +1,7 @@
+@php
+    // Call User Permission list function from helper
+    $perms = getUserPermission();
+@endphp
 <ul class="navbar-nav iq-main-menu"  id="sidebar">
     <li class="nav-item static-item">
         <a class="nav-link static-item disabled" href="#" tabindex="-1">
@@ -104,6 +108,7 @@
             </li>
         </ul>
     </li> --> --}}
+    @if (in_array('master', $perms))
     <!-- Master Menu -->
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#master-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
@@ -123,6 +128,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="master-menu" data-bs-parent="#sidebar">
+            @if (in_array('master-akun', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('master.account'))}}" href="{{route('master.account')}}">
                   <i class="icon">
@@ -136,9 +142,12 @@
                   <span class="item-name"> Master Akun </span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
+    @endif
 
+    @if (in_array('transaction', $perms))
     <!-- Transaction Menu -->
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#transaction-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
@@ -158,6 +167,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="transaction-menu" data-bs-parent="#sidebar">
+            @if (in_array('transaction-in', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.in.index'))}}" href="{{route('trans.in.index')}}">
                   <i class="icon">
@@ -171,6 +181,8 @@
                   <span class="item-name"> @lang('global.trans-in') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-out', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.out.index'))}}" href="{{route('trans.out.index')}}">
                   <i class="icon">
@@ -184,6 +196,8 @@
                   <span class="item-name"> @lang('global.trans-out') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-sales', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.sale.index'))}}" href="{{route('trans.sale.index')}}">
                   <i class="icon">
@@ -197,6 +211,8 @@
                   <span class="item-name"> @lang('global.trans-sale') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-sales-retur', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.sale.retur.index'))}}" href="{{route('trans.sale.retur.index')}}">
                   <i class="icon">
@@ -210,6 +226,8 @@
                   <span class="item-name"> @lang('global.trans-sale-retur') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-asset-transfer', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.asset.transfer.index'))}}" href="{{route('trans.asset.transfer.index')}}">
                   <i class="icon">
@@ -223,6 +241,8 @@
                   <span class="item-name"> @lang('global.trans-asset-transfer') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-debt-payment', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.debt.payment.index'))}}" href="{{route('trans.debt.payment.index')}}">
                   <i class="icon">
@@ -236,6 +256,8 @@
                   <span class="item-name"> @lang('global.trans-debt-payment') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-add-debt', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.debt.index'))}}" href="{{route('trans.debt.index')}}">
                   <i class="icon">
@@ -249,6 +271,8 @@
                   <span class="item-name"> @lang('global.trans-debt') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-add-receivable', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.receivable.index'))}}" href="{{route('trans.receivable.index')}}">
                   <i class="icon">
@@ -262,6 +286,8 @@
                   <span class="item-name"> @lang('global.trans-receivable') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('transaction-receivable-deposit', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('trans.receivable.deposit.index'))}}" href="{{route('trans.receivable.deposit.index')}}">
                   <i class="icon">
@@ -275,11 +301,13 @@
                   <span class="item-name"> @lang('global.trans-receivable-deposit') </span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
+    @endif
 
     <!-- Adjustment Journal -->
-    @if (auth()->user()->hasRole('admin'))
+    @if (in_array('adjustment-journal', $perms))
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#adjustment-journal-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
@@ -298,6 +326,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="adjustment-journal-menu" data-bs-parent="#sidebar">
+            @if (in_array('adjustment-in', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('adjustment.in.index'))}}" href="{{route('adjustment.in.index')}}">
                   <i class="icon">
@@ -311,6 +340,8 @@
                   <span class="item-name"> @lang('global.adjustment-in') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('adjustment-out', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('adjustment.out.index'))}}" href="{{route('adjustment.out.index')}}">
                   <i class="icon">
@@ -324,12 +355,13 @@
                   <span class="item-name"> @lang('global.adjustment-out') </span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
     @endif
 
-     <!-- Supplies Menu -->
-     @if (auth()->user()->hasRole('admin'))
+    <!-- Supplies Menu -->
+    @if (in_array('supplies', $perms))
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#supplies-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
@@ -348,6 +380,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="supplies-menu" data-bs-parent="#sidebar">
+            @if (in_array('goods-purchase', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('goods.purchase.index'))}}" href="{{route('goods.purchase.index')}}">
                   <i class="icon">
@@ -361,6 +394,8 @@
                   <span class="item-name"> @lang('global.goods-purchase') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('cost-of-goods', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('goods.cost.index'))}}" href="{{route('goods.cost.index')}}">
                   <i class="icon">
@@ -374,12 +409,13 @@
                   <span class="item-name"> @lang('global.goods-cost') </span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
     @endif
 
     <!-- Report Menu -->
-    @if (auth()->user()->hasRole('admin'))
+    @if (in_array('report', $perms))
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#report-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
@@ -396,6 +432,7 @@
             </i>
         </a>
         <ul class="sub-nav collapse" id="report-menu" data-bs-parent="#sidebar">
+            @if (in_array('report-transaction-journal', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.trans.journal.index'))}}" href="{{route('report.trans.journal.index')}}">
                   <i class="icon">
@@ -409,6 +446,8 @@
                   <span class="item-name"> @lang('global.journal_report') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('report-general-ledger', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.general.ledger.index'))}}" href="{{route('report.general.ledger.index')}}">
                   <i class="icon">
@@ -422,6 +461,8 @@
                   <span class="item-name"> @lang('global.ledger_report') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('report-income-statement', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.income.state.index'))}}" href="{{route('report.income.state.index')}}">
                   <i class="icon">
@@ -435,6 +476,8 @@
                   <span class="item-name"> @lang('global.income_report') </span>
                 </a>
             </li>
+            @endif
+            @if (in_array('report-balance-sheet', $perms))
             <li class="nav-item ">
                 <a class="nav-link {{activeRoute(route('report.balance.sheet.index'))}}" href="{{route('report.balance.sheet.index')}}">
                   <i class="icon">
@@ -448,6 +491,7 @@
                   <span class="item-name"> @lang('global.balance_report') </span>
                 </a>
             </li>
+            @endif
         </ul>
     </li>
     @endif

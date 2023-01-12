@@ -1,10 +1,4 @@
 <x-app-layout :assets="$assets ?? []">
-    @php
-    //dump(auth()->user()->userRole()->id);
-    //dump(auth()->user()->hasPermissionTo('transaction'));
-    //dump(auth()->user()->can('master'));
-    //dump(auth()->user->userRole->rolePermission);
-    @endphp
     @if (auth()->user()->hasRole('admin'))
     <div class="row">
         <div class="col-lg-3 col-xs-12">
