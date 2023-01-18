@@ -492,6 +492,22 @@
                 </a>
             </li>
             @endif
+
+            @if (in_array('report-general-ledger-adm', $perms))
+            <li class="nav-item ">
+                <a class="nav-link {{activeRoute(route('report.general.ledger.adm.index'))}}" href="{{route('report.general.ledger.adm.index')}}">
+                    <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                  <i class="sidenav-mini-icon"> GLA </i>
+                  <span class="item-name"> @lang('global.ledger_report_adm') </span>
+                </a>
+            </li>
+            @endif
         </ul>
     </li>
     @endif

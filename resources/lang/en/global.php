@@ -23,4 +23,5 @@ return [
     'balance_report' => 'Balance Sheet',
     'journal_report' => 'Transaction Journal',
     'ledger_report' => 'General Ledger',
+    'ledger_report_adm' => 'General Ledger Adm',
 ];

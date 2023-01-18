@@ -5,19 +5,19 @@ namespace App\Http\Controllers\Report;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Exports\ReportGeneralLedgerExport;
+use App\Exports\ReportGeneralLedgerAdminExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\TransactionIn;
-use App\Models\MasterAccount;
 use App\Models\Report;
+use App\Models\MasterAccount;
 use App\Helpers\AuthHelper;
 
-class ReportGeneralLedgerController extends Controller
+class ReportGeneralLedgerAdminController extends Controller
 {
     protected $reportModel;
-    public function __construct(){
+    public function __construct()
+    {
         $this->reportModel = new Report();
     }
 
@@ -40,7 +40,7 @@ class ReportGeneralLedgerController extends Controller
             ->orderBy('trans_date')
             ->get();
 
-        return view('report-generalLedger.list', compact('trans'));
+        return view('report-generalLedger-adm.list', compact('trans'));
     }
 
     /**
@@ -126,8 +126,13 @@ class ReportGeneralLedgerController extends Controller
                 ->orderBy('trans_date')
                 ->get();
 
+            //TODO : Add filter account
+            // akun yg di income statement dulu aja
+            // penjualan dan biaya !!!
+
             //$trans_prev = $trans_prev_raw->get();
-            $bucket = $bucket_prev = $this->initMasterContainer();
+            $catid = [6, 7, 8, 9];
+            $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
             // calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
                 $bucket_prev[$t->fromId]['debet'] += $t->value;
@@ -137,7 +142,6 @@ class ReportGeneralLedgerController extends Controller
             // Add calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
                 $bucket[$t->fromId]['last_balance'] = $bucket_prev[$t->fromId]['debet'] - $bucket_prev[$t->fromId]['kredit'];
-                $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
                 if ($bucket[$t->toId]['catid'] == 4 || $bucket[$t->toId]['catid'] == 5 || $bucket[$t->toId]['catid'] == 6) {
                     $bucket[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['kredit'] - $bucket_prev[$t->toId]['debet'];
                 } else if ($bucket[$t->fromId]['catid'] == 4 || $bucket[$t->fromId]['catid'] == 5 || $bucket[$t->fromId]['catid'] == 6) {
@@ -161,15 +165,14 @@ class ReportGeneralLedgerController extends Controller
             }
 
             // lets count special account
-            $special = $this->countIncomeState($trans, $trans_prev, $bucket_prev);
-            $bucket[29]['debet'] = $special['debet'];
-            $bucket[29]['kredit'] = $special['kredit'];
-            $bucket[29]['balance'] = $special['balance'];
-            $bucket[29]['last_balance'] = $special['last_balance'];
+            // $special = $this->countIncomeState($trans, $trans_prev, $bucket_prev);
+            // $bucket[29]['debet'] = $special['debet'];
+            // $bucket[29]['kredit'] = $special['kredit'];
+            // $bucket[29]['balance'] = $special['balance'];
+            // $bucket[29]['last_balance'] = $special['last_balance'];
         }
-        //dump($bucket[2]);
 
-        return view('report-generalLedger.list', compact('bucket', 'trans', 'filter', 'date'));
+        return view('report-generalLedger-adm.list', compact('bucket', 'catid', 'trans', 'filter', 'date'));
     }
 
     /**
@@ -242,9 +245,9 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_' . $month . $year . '.xlsx';
+        $filename = 'report_gl_adm_' . $month . $year . '.xlsx';
 
-        return Excel::download(new ReportGeneralLedgerExport($month, $year), $filename);
+        return Excel::download(new ReportGeneralLedgerAdminExport($month, $year), $filename);
     }
 
     public function exportPdf(Request $request)
@@ -257,11 +260,11 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_' . $month . $year . '.pdf';
+        $filename = 'report_gl_adm_' . $month . $year . '.pdf';
 
         // using fromQuery
-        // return (new ReportGeneralLedgerExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
-        return Excel::download(new ReportGeneralLedgerExport($month, $year), $filename);
+        // return (new ReportGeneralLedgerAdminExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::DOMPDF);
+        return Excel::download(new ReportGeneralLedgerAdminExport($month, $year), $filename);
     }
 
     public function exportHtml(Request $request)
@@ -274,11 +277,11 @@ class ReportGeneralLedgerController extends Controller
             $year = date('Y');
             $month = date('m');
         }
-        $filename = 'report_gl_' . $month . $year . '.html';
+        $filename = 'report_gl_adm_' . $month . $year . '.html';
 
         //using formQuery
-        //return (new ReportGeneralLedgerExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);
-        return Excel::download(new ReportGeneralLedgerExport($month, $year), $filename);
+        //return (new ReportGeneralLedgerAdminExport($month, $year))->download($filename, \Maatwebsite\Excel\Excel::HTML);
+        return Excel::download(new ReportGeneralLedgerAdminExport($month, $year), $filename);
     }
 
     function countIncomeState($trans, $trans_prev, $bucket_prev)
@@ -286,7 +289,7 @@ class ReportGeneralLedgerController extends Controller
         $result = [];
         // income data. filter master account with account id = 6
         // switch debet & kredit position
-        $in1 = $this->initMasterContainer(6);
+        $in1 = $this->reportModel->initMasterContainer(6);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in1)) {
                 $in1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] + $bucket_prev[$t->toId]['kredit'];
@@ -313,7 +316,7 @@ class ReportGeneralLedgerController extends Controller
             }
         }
         // income data. filter master account with account id = 7
-        $in2 = $this->initMasterContainer(7);
+        $in2 = $this->reportModel->initMasterContainer(7);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in2)) {
                 $in2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -337,7 +340,7 @@ class ReportGeneralLedgerController extends Controller
         }
 
         // outcome data. filter master account with account id = 8
-        $out1 = $this->initMasterContainer(8);
+        $out1 = $this->reportModel->initMasterContainer(8);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out1)) {
                 $out1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -360,7 +363,7 @@ class ReportGeneralLedgerController extends Controller
             }
         }
         // outcome data. filter master account with account id = 9
-        $out2 = $this->initMasterContainer(9);
+        $out2 = $this->reportModel->initMasterContainer(9);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out2)) {
                 $out2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -420,32 +423,5 @@ class ReportGeneralLedgerController extends Controller
         $result['kredit'] = $total6['kredit'] - ($total7['kredit'] + $total8['kredit'] + $total9['kredit']);
 
         return $result;
-    }
-
-    /**
-     * Init Master Account array container
-     */
-    function initMasterContainer($catid = null)
-    {
-        // Query Master Accounts data
-        $master = MasterAccount::get();
-        if ($catid > 0) {
-            $master = MasterAccount::where('category_id', $catid)->get();
-        }
-        $bucket = [];   // Master container
-
-        foreach ($master as $key => $m) {
-            $bucket[$m->id] = array(
-                'id' => $m->id,
-                'code' => $m->code,
-                'name' => $m->name,
-                'catid' => $m->category_id,
-                'last_balance' => 0,
-                'debet' => 0,
-                'kredit' => 0,
-                'balance' => 0
-            );
-        }
-        return $bucket;
     }
 }

@@ -31,6 +31,8 @@ use App\Http\Controllers\Report\ReportTransJournalController;
 use App\Http\Controllers\Report\ReportGeneralLedgerController;
 use App\Http\Controllers\Report\ReportBalanceSheetController;
 
+use App\Http\Controllers\Report\ReportGeneralLedgerAdminController;
+
 use Illuminate\Support\Facades\Artisan;
 // Packages
 use Illuminate\Support\Facades\Route;
@@ -310,6 +312,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-excel/', [ReportGeneralLedgerController::class, 'exportExcel'])->name('report.general.ledger.export.excel');
         Route::get('export-pdf/', [ReportGeneralLedgerController::class, 'exportPdf'])->name('report.general.ledger.export.pdf');
         Route::get('export-html/', [ReportGeneralLedgerController::class, 'exportHtml'])->name('report.general.ledger.export.html');
+    });
+
+    Route::group(['prefix' => 'report/general-ledger-adm'], function () {
+        //General Ledger Routes
+        Route::get('/', [ReportGeneralLedgerAdminController::class, 'index'])->name('report.general.ledger.adm');
+        Route::get('index', [ReportGeneralLedgerAdminController::class, 'index'])->name('report.general.ledger.adm.index');
+        Route::post('filter', [ReportGeneralLedgerAdminController::class, 'filter'])->name('report.general.ledger.adm.filter');
+
+        Route::get('export-excel/', [ReportGeneralLedgerAdminController::class, 'exportExcel'])->name('report.general.ledger.adm.export.excel');
+        Route::get('export-pdf/', [ReportGeneralLedgerAdminController::class, 'exportPdf'])->name('report.general.ledger.adm.export.pdf');
+        Route::get('export-html/', [ReportGeneralLedgerAdminController::class, 'exportHtml'])->name('report.general.ledger.adm.export.html');
     });
 
     Route::group(['prefix' => 'report/balance-sheet'], function () {

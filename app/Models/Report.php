@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -101,6 +102,52 @@ class Report extends Model
         return $res;
     }
 
+    public function getMonthlyTrans($date = null)
+    {
+        $res = [];
+        // get ALL trans on current year as default
+        $year = date('Y');
+        $month = date('m');
+        if (!empty($date)) {
+            $year = date('Y', strtotime($date));
+            $month = date('m', strtotime($date));
+        }
+
+        $trans_in = DB::table('transaction_in AS t')
+            ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->whereYear('t.trans_date', '=', $year)
+            ->whereMonth('t.trans_date', '=', $month);
+        $trans_sale = DB::table('transaction_sale AS t')
+            ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->whereYear('t.trans_date', '=', $year)
+            ->whereMonth('t.trans_date', '=', $month);
+        $trans = DB::table('transaction_out AS t')
+            ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
+                    maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
+                    t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->whereYear('t.trans_date', '=', $year)
+            ->whereMonth('t.trans_date', '=', $month)
+            ->union($trans_sale)
+            ->union($trans_in)
+            ->orderBy('trans_date');
+            //->get();
+
+        $return = $trans->get();
+        //dump($trans->toSql());
+
+        return $return;
+    }
+
     public function getYearlyTrans($date = null)
     {
         $res = [];
@@ -198,7 +245,9 @@ class Report extends Model
     {
         // Query Master Accounts data
         $master = MasterAccount::get();
-        if ($catid > 0) {
+        if (is_array($catid)) {
+            $master = MasterAccount::whereIn('category_id', $catid)->get();
+        } else if ($catid > 0) {
             $master = MasterAccount::where('category_id', $catid)->get();
         }
         $bucket = [];   // Master container
