@@ -27,6 +27,8 @@ class TransactionSale extends Model
         'sale_id',
         'reference',
         'description',
+        'createby',
+        'updateby'
     ];
 
     /**

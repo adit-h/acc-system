@@ -46,8 +46,12 @@ class TransInController extends Controller
      */
     public function store(TransactionInRequest $request)
     {
-        // dd($request->all());
-        $trans = TransactionIn::create($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
+
+        $data['createby'] = $auth_user->id;
+        $data['updateby'] = $auth_user->id;
+        $trans = TransactionIn::create($data);
 
         return redirect()->route('trans.in.index')->withSuccess(__('message.msg_added',['name' => __('transactions-in.title')]));
     }
@@ -90,11 +94,12 @@ class TransInController extends Controller
      */
     public function update(TransactionInRequest $request, $id)
     {
-        // dd($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
         $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        $data['updateby'] = $auth_user->id;
+        $trans->fill($data)->update();
 
         if(auth()->check()){
             return redirect()->route('trans.in.index')->withSuccess(__('message.msg_updated',['name' => __('transactions-in.title')]));

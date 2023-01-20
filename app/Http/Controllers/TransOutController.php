@@ -46,7 +46,12 @@ class TransOutController extends Controller
      */
     public function store(TransactionOutRequest $request)
     {
-        $account = TransactionOut::create($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
+
+        $data['createby'] = $auth_user->id;
+        $data['updateby'] = $auth_user->id;
+        $account = TransactionOut::create($data);
 
         return redirect()->route('trans.out.index')->withSuccess(__('message.msg_added',['name' => __('transactions-out.title')]));
     }
@@ -89,11 +94,12 @@ class TransOutController extends Controller
      */
     public function update(TransactionOutRequest $request, $id)
     {
-        //dd($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
         $trans = TransactionOut::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        $data['updateby'] = $auth_user->id;
+        $trans->fill($data)->update();
 
         if(auth()->check()){
             return redirect()->route('trans.out.index')->withSuccess(__('message.msg_updated',['name' => __('transactions-out.title')]));

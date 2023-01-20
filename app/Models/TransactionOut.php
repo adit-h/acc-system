@@ -25,6 +25,8 @@ class TransactionOut extends Model
         'value',
         'reference',
         'description',
+        'createby',
+        'updateby'
     ];
 
     /**

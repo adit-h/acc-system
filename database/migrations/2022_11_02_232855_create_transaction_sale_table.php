@@ -22,6 +22,8 @@ class CreateTransactionSaleTable extends Migration
             $table->bigInteger('sale_id');
             $table->string('reference', 255);
             $table->string('description', 255);
+            $table->integer('createby');
+            $table->integer('updateby');
             $table->timestamps();
         });
     }

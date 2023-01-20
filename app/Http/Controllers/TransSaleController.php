@@ -46,6 +46,7 @@ class TransSaleController extends Controller
      */
     public function store(TransactionSaleRequest $request)
     {
+        $auth_user = AuthHelper::authSession();
         $req = $request->all();
         $data = [
             "trans_date" => $req['trans_date'],
@@ -54,7 +55,9 @@ class TransSaleController extends Controller
             "value" => !empty($req['value']) ? $req['value'] : 0,
             "sale_id" => 0,
             "reference" => $req['reference'],
-            "description" => $req['description']
+            "description" => $req['description'],
+            "createby" => $auth_user->id,
+            "updateby" => $auth_user->id
         ];
         $trans = TransactionSale::create($data);
         // insert discount transaction
@@ -66,7 +69,9 @@ class TransSaleController extends Controller
             "value" => $disc,
             "sale_id" => $trans->id,
             "reference" => $req['reference'],
-            "description" => $req['description']
+            "description" => $req['description'],
+            "createby" => $auth_user->id,
+            "updateby" => $auth_user->id
         ];
         $trans_disc = TransactionSale::create($data_disc);
 
@@ -117,6 +122,7 @@ class TransSaleController extends Controller
         $trans_disc = TransactionSale::with('receiveFrom')->with('storeTo')->where('sale_id', $trans->id)->first();
 
         // Update trans sale...
+        $auth_user = AuthHelper::authSession();
         $req = $request->all();
         $trans->trans_date = $req['trans_date'];
         $trans->receive_from = $req['receive_from'];
@@ -124,6 +130,7 @@ class TransSaleController extends Controller
         $trans->value = !empty($req['value']) ? $req['value'] : 0;
         $trans->reference = $req['reference'];
         $trans->description = $req['description'];
+        $trans->updateby = $auth_user->id;
         $trans->save();
 
         // Update trans disc
@@ -133,6 +140,7 @@ class TransSaleController extends Controller
         $trans_disc->value = !empty($req['disc']) ? $req['disc'] : 0;
         $trans_disc->reference = $req['reference'];
         $trans_disc->description = $req['description'];
+        $trans_disc->updateby = $auth_user->id;
         $trans_disc->save();
 
         if(auth()->check()){

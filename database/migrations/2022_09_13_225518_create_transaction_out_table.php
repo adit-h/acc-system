@@ -21,6 +21,8 @@ class CreateTransactionOutTable extends Migration
             $table->bigInteger('value');
             $table->string('reference', 255);
             $table->string('description', 255);
+            $table->integer('createby');
+            $table->integer('updateby');
             $table->timestamps();
         });
     }
