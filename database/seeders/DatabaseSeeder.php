@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             MasterAccountTableSeeder::class,
             TransactionInTableSeeder::class,
             TransactionOutTableSeeder::class,
+            TransLimitTableSeeder::class,
         ]);
         \App\Models\User::factory(40)->create()->each(function($user) {
             $user->assignRole('user');

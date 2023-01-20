@@ -6,7 +6,9 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
+
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TransLimitController;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransInController;
@@ -86,6 +88,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Settings Module
     Route::resource('settings', SettingController::class);
+
+    // Trans Limit Module
+    Route::resource('transLimit', TransLimitController::class);
 
     // Master Module
     Route::group(['prefix' => 'master'], function () {
