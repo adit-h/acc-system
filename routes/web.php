@@ -11,6 +11,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransLimitController;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPassController;
 use App\Http\Controllers\TransInController;
 use App\Http\Controllers\TransOutController;
 use App\Http\Controllers\TransSaleController;
@@ -85,6 +86,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Users Module
     Route::resource('users', UserController::class);
+
+    // User Password Module
+    Route::resource('userPass', UserPassController::class);
 
     // Settings Module
     Route::resource('settings', SettingController::class);

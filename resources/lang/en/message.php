@@ -4,5 +4,6 @@ return [
     'msg_updated' => ':name Updated',
     'msg_added' => ':name Added',
     'user' => 'User',
-    'account' => 'Master Account'
+    'account' => 'Master Account',
+    'password' => 'Password'
 ];
