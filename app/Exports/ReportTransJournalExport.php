@@ -62,22 +62,28 @@ class ReportTransJournalExport implements FromView, WithColumnWidths
 
     public function view(): View
     {
-        $filter = date('F Y', strtotime($this->year.'-'.$this->month.'-01'));
+        $filter = date('F Y', strtotime($this->year . '-' . $this->month . '-01'));
 
         $trans_in = DB::table('transaction_in AS t')
-                ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
-                ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
-                ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->whereYear('t.trans_date', '=', $this->year)
-                ->whereMonth('t.trans_date', '=', $this->month);
-
+            ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->whereYear('t.trans_date', '=', $this->year)
+            ->whereMonth('t.trans_date', '=', $this->month);
+        $trans_sale = DB::table('transaction_sale AS t')
+            ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
+            ->join('master_accounts AS mat', 'mat.id', 't.store_to')
+            ->whereYear('t.trans_date', '=', $this->year)
+            ->whereMonth('t.trans_date', '=', $this->month);
         $trans = DB::table('transaction_out AS t')
-            ->select(DB::raw('t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
+            ->select(DB::raw('t.id, t.trans_date, maf.code AS fromCode, maf.name AS fromName, mat.code AS toCode, mat.name AS toName, t.value, t.reference, t.description'))
             ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 't.store_to')
             ->whereYear('t.trans_date', '=', $this->year)
             ->whereMonth('t.trans_date', '=', $this->month)
             ->union($trans_in)
+            ->union($trans_sale)
             ->orderBy('trans_date')
             ->get();
 
