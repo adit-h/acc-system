@@ -32,6 +32,9 @@ class GoodsCostDataTable extends DataTable
             ->editColumn('trans_date', function($query) {
                 return date('d-m-Y', strtotime($query->trans_date));
             })
+            ->editColumn('updated_at', function ($query) {
+                return date('d-m-Y H:i:s', strtotime($query->updated_at));
+            })
             ->filterColumn('trans_date', function($query, $keyword) {
                 $sql = "transaction_out.trans_date like ?";
                 return $query->whereRaw($sql, ["%{$keyword}%"]);
@@ -49,9 +52,10 @@ class GoodsCostDataTable extends DataTable
     public function query()
     {
         $model = TransactionOut::query()->with('receiveFrom')->with('storeTo')
-            ->select(DB::raw('transaction_out.id, transaction_out.trans_date, transaction_out.receive_from, transaction_out.store_to, transaction_out.value, transaction_out.reference, transaction_out.description'))
+            ->select(DB::raw('transaction_out.id, transaction_out.trans_date, transaction_out.receive_from, transaction_out.store_to, transaction_out.value, transaction_out.reference, transaction_out.description, transaction_out.updated_at, u.first_name'))
             ->join('master_accounts AS maf', 'maf.id', 'transaction_out.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_out.store_to')
+            ->join('users as u', 'u.id', 'transaction_out.updateby')
             ->whereIn('maf.code', ["7003"])
             ->whereIn('mat.code', ["2000"]);
         return $this->applyScopes($model);
@@ -91,6 +95,8 @@ class GoodsCostDataTable extends DataTable
             ['data' => 'value', 'name' => 'value', 'title' => 'Value'],
             ['data' => 'reference', 'name' => 'reference', 'title' => 'Ref Number'],
             ['data' => 'description', 'name' => 'description', 'title' => 'Description'],
+            ['data' => 'first_name', 'name' => 'first_name', 'title' => 'Update By'],
+            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Last Update'],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)

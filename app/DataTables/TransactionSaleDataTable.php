@@ -20,20 +20,23 @@ class TransactionSaleDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('receiveFrom.code', function($query) {
+            ->editColumn('receiveFrom.code', function ($query) {
                 return $query->receiveFrom->name ?? '-';
             })
-            ->editColumn('storeTo.code', function($query) {
+            ->editColumn('storeTo.code', function ($query) {
                 return $query->storeTo->name ?? '-';
             })
-            ->editColumn('value', function($query) {
-                $res = 'Rp. '. number_format($query->value, 0, ',', '.');
+            ->editColumn('value', function ($query) {
+                $res = 'Rp. ' . number_format($query->value, 0, ',', '.');
                 return $res;
             })
-            ->editColumn('trans_date', function($query) {
+            ->editColumn('trans_date', function ($query) {
                 return date('d-m-Y', strtotime($query->trans_date));
             })
-            ->filterColumn('trans_date', function($query, $keyword) {
+            ->editColumn('updated_at', function ($query) {
+                return date('d-m-Y H:i:s', strtotime($query->updated_at));
+            })
+            ->filterColumn('trans_date', function ($query, $keyword) {
                 $sql = "transaction_sale.trans_date like ?";
                 return $query->whereRaw($sql, ["%{$keyword}%"]);
             })
@@ -50,16 +53,17 @@ class TransactionSaleDataTable extends DataTable
     public function query()
     {
         $model = TransactionSale::query()->with('receiveFrom')->with('storeTo')
-            ->select(DB::raw('transaction_sale.id, transaction_sale.trans_date, transaction_sale.receive_from, transaction_sale.store_to, transaction_sale.value, transaction_sale.sale_id, transaction_sale.reference, transaction_sale.description'))
+            ->select(DB::raw('transaction_sale.id, transaction_sale.trans_date, transaction_sale.receive_from, transaction_sale.store_to, transaction_sale.value, transaction_sale.sale_id, transaction_sale.reference, transaction_sale.description, transaction_sale.updated_at, u.first_name'))
             ->join('master_accounts AS maf', 'maf.id', 'transaction_sale.receive_from')
             ->join('master_accounts AS mat', 'mat.id', 'transaction_sale.store_to')
-            ->orWhere(function($query) {
+            ->join('users as u', 'u.id', 'transaction_sale.updateby')
+            ->orWhere(function ($query) {
                 $query->whereIn('transaction_sale.store_to', [30])
-                      ->whereIn('maf.category_id', [1]);
+                    ->whereIn('maf.category_id', [1]);
             })
-            ->orWhere(function($query) {
+            ->orWhere(function ($query) {
                 $query->whereIn('transaction_sale.receive_from', [31])
-                      ->whereIn('mat.category_id', [1]);
+                    ->whereIn('mat.category_id', [1]);
             });
 
         return $this->applyScopes($model);
@@ -73,15 +77,15 @@ class TransactionSaleDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('dataTable')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
+            ->setTableId('dataTable')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('<"row align-items-center"<"col-md-2" l><"col-md-6" B><"col-md-4"f>><"table-responsive my-3" rt><"row align-items-center" <"col-md-6" i><"col-md-6" p>><"clear">')
 
-                    ->parameters([
-                        "processing" => true,
-                        "autoWidth" => false,
-                    ]);
+            ->parameters([
+                "processing" => true,
+                "autoWidth" => false,
+            ]);
     }
 
     /**
@@ -99,12 +103,14 @@ class TransactionSaleDataTable extends DataTable
             ['data' => 'value', 'name' => 'value', 'title' => 'Value'],
             ['data' => 'reference', 'name' => 'reference', 'title' => 'Ref Number'],
             ['data' => 'description', 'name' => 'description', 'title' => 'Description'],
+            ['data' => 'first_name', 'name' => 'first_name', 'title' => 'Update By'],
+            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Last Update'],
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->searchable(false)
-                  ->width(60)
-                  ->addClass('text-center hide-search'),
+                ->exportable(false)
+                ->printable(false)
+                ->searchable(false)
+                ->width(60)
+                ->addClass('text-center hide-search'),
         ];
     }
 
