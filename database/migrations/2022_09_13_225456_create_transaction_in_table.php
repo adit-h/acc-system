@@ -18,7 +18,7 @@ class CreateTransactionInTable extends Migration
             $table->date('trans_date');
             $table->integer('receive_from');
             $table->integer('store_to');
-            $table->bigInteger('value');
+            $table->double('value', 14, 2);
             $table->string('reference', 255);
             $table->string('description', 255);
             $table->integer('createby');

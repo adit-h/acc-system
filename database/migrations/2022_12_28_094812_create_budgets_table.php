@@ -17,7 +17,7 @@ class CreateBudgetsTable extends Migration
             $table->id();
             $table->date('trans_date');
             $table->integer('acc_id');
-            $table->bigInteger('value');
+            $table->double('value', 14, 2);
             $table->string('description', 255);
             $table->timestamps();
         });

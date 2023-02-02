@@ -18,7 +18,7 @@ class CreateTransactionSaleTable extends Migration
             $table->date('trans_date');
             $table->integer('receive_from');
             $table->integer('store_to');
-            $table->bigInteger('value');
+            $table->double('value', 14, 2);
             $table->bigInteger('sale_id');
             $table->string('reference', 255);
             $table->string('description', 255);
