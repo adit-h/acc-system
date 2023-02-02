@@ -131,7 +131,7 @@ class ReportGeneralLedgerAdminController extends Controller
             // penjualan dan biaya !!!
 
             //$trans_prev = $trans_prev_raw->get();
-            $catid = [6, 7, 8, 9];
+            $catid = [1, 2, 6, 7, 8, 9];
             $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
             // calculate previous month transactions
             foreach ($trans_prev as $key => $t) {

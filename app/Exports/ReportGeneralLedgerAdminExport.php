@@ -137,7 +137,7 @@ class ReportGeneralLedgerAdminExport implements FromView, WithColumnWidths, With
             ->orderBy('trans_date')
             ->get();
 
-        $catid = [6, 7, 8, 9];
+        $catid = [1, 2, 6, 7, 8, 9];
         $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
         // calculate previous month transactions
         foreach ($trans_prev as $key => $t) {
