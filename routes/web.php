@@ -7,6 +7,7 @@ use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
 
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransLimitController;
 
@@ -107,6 +108,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('destroy/{id}', [MasterController::class, 'destroy'])->name('master.destroy');
 
         //Route::resource('account', MasterController::class);
+    });
+
+    // Master Module
+    Route::group(['prefix' => 'budget'], function () {
+        //Master Page Routes
+        Route::get('/', [BudgetController::class, 'index'])->name('budget.index');
+        Route::get('create', [BudgetController::class, 'create'])->name('budget.create');
+        Route::post('store', [BudgetController::class, 'store'])->name('budget.store');
+        Route::get('edit/{id}', [BudgetController::class, 'edit'])->name('budget.edit');
+        Route::patch('update/{id}', [BudgetController::class, 'update'])->name('budget.update');
+        Route::delete('destroy/{id}', [BudgetController::class, 'destroy'])->name('budget.destroy');
     });
 
     // Transaction In Module
