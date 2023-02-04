@@ -27,7 +27,7 @@ class TransactionReceivableDataTable extends DataTable
                 return $query->storeTo->name ?? '-';
             })
             ->editColumn('value', function ($query) {
-                $res = 'Rp. ' . number_format($query->value, 0, ',', '.');
+                $res = 'Rp. ' . number_format($query->value, 2, ',', '.');
                 return $res;
             })
             ->editColumn('trans_date', function ($query) {

@@ -28,9 +28,9 @@
                 <td>{{ date('d-M-Y', strtotime($t->trans_date)) }}</td>
                 <td>{{ $t->fromCode }}</td>
                 <td>{{ $t->fromName }}</td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td>0</td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td>{{ $t->reference }}</td>
                 <td>{{ $t->description }}</td>
             </tr>
@@ -39,10 +39,10 @@
                 <td>{{ $t->toCode }}</td>
                 <td>{{ $t->toName }}</td>
                 <td>0</td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td>-</td>
-                <td></td>
-                <td></td>
+                <td>{{ $t->reference }}</td>
+                <td>{{ $t->description }}</td>
             </tr>
             @endforeach
 
@@ -52,9 +52,9 @@
                 <td>{{ date('d-M-Y', strtotime($t->trans_date)) }}</td>
                 <td>{{ $t->fromCode }}</td>
                 <td>{{ $t->fromName }}</td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td></td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td>{{ $t->reference }}</td>
                 <td>{{ $t->description }}</td>
             </tr>
@@ -63,10 +63,10 @@
                 <td>{{ $t->toCode }}</td>
                 <td>{{ $t->toName }}</td>
                 <td></td>
-                <td>{{ number_format($t->value, 0, ',', '.') }}</td>
+                <td>{{ number_format($t->value, 2, ',', '.') }}</td>
                 <td>-</td>
-                <td></td>
-                <td></td>
+                <td>{{ $t->reference }}</td>
+                <td>{{ $t->description }}</td>
             </tr>
             @endforeach
             --}}

@@ -81,9 +81,9 @@
                                 @php
                                     $bal = $m['last_balance'] + $m['debet'] - $m['kredit'];
                                     if ($bal < 0) {
-                                        $balance = '('.number_format(abs($bal), 0, ',', '.').')';
+                                        $balance = '('.number_format(abs($bal), 2, ',', '.').')';
                                     } else {
-                                        $balance = number_format($bal, 0, ',', '.');
+                                        $balance = number_format($bal, 2, ',', '.');
                                     }
                                     $total1 += $m['last_balance'];
                                     $total2 += $m['debet'];
@@ -93,19 +93,19 @@
                                 <tr>
                                     <td><strong>{{ $m['code'] }}</strong></td>
                                     <td><strong>{{ $m['name'] }}</strong></td>
-                                    <td>{{ number_format($m['last_balance'], 0, ',', '.') }}</td>
-                                    <td>{{ number_format($m['debet'], 0, ',', '.') }}</td>
-                                    <td>{{ number_format($m['kredit'], 0, ',', '.') }}</td>
+                                    <td>{{ number_format($m['last_balance'], 2, ',', '.') }}</td>
+                                    <td>{{ number_format($m['debet'], 2, ',', '.') }}</td>
+                                    <td>{{ number_format($m['kredit'], 2, ',', '.') }}</td>
                                     <td>{{ $balance }}</td>
                                 </tr>
                                 @endif
                                 @endforeach
                                 <tr class="table-secondary">
                                     <td class="text-center" colspan="2"><strong>TOTAL</strong></td>
-                                    <td>Rp. {{ number_format($total1, 0, ',', '.') }}</td>
-                                    <td>Rp. {{ number_format($total2, 0, ',', '.') }}</td>
-                                    <td>Rp. {{ number_format($total3, 0, ',', '.') }}</td>
-                                    <td>Rp. {{ number_format($total4, 0, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total1, 2, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total2, 2, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total3, 2, ',', '.') }}</td>
+                                    <td>Rp. {{ number_format($total4, 2, ',', '.') }}</td>
                                 </tr>
                             </tbody>
                         </table>
