@@ -150,7 +150,7 @@ class Report extends Model
 
     public function getYearlyTrans($date = null)
     {
-        $res = [];
+        $return = [];
         // get ALL trans on current year as default
         $year = date('Y');
         $month = date('m');
@@ -187,6 +187,28 @@ class Report extends Model
 
         $return = $trans->get();
         //dump($trans->toSql());
+
+        return $return;
+    }
+
+    function getBudgetTrans($date)
+    {
+        $return = [];
+
+        if (!empty($date)) {
+            $year = date('Y', strtotime($date));
+            $month = date('m', strtotime($date));
+
+            $trans = DB::table('budgets AS t')
+                ->select(DB::raw('t.id, t.trans_date, ma.id AS accId, ma.code AS accCode, ma.name AS accName,
+                    ma.category_id AS accCat, t.value, t.description'))
+                ->join('master_accounts AS ma', 'ma.id', 't.acc_id')
+                ->whereYear('t.trans_date', '=', $year)
+                ->whereMonth('t.trans_date', '=', $month)
+                ->orderBy('trans_date');
+
+            $return = $trans->get();
+        }
 
         return $return;
     }

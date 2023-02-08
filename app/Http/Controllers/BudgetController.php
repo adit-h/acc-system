@@ -32,7 +32,7 @@ class BudgetController extends Controller
      */
     public function create()
     {
-        $acc_list = MasterAccount::get()->pluck('name', 'id');
+        $acc_list = MasterAccount::whereIn('category_id', [6, 7, 8, 9])->pluck('name', 'id');
 
         return view('budget.form', compact('acc_list'));
     }
@@ -73,7 +73,7 @@ class BudgetController extends Controller
     public function edit($id)
     {
         $data = Budget::findOrFail($id);
-        $acc_list = MasterAccount::get()->pluck('name', 'id');
+        $acc_list = MasterAccount::whereIn('category_id', [6, 7, 8, 9])->pluck('name', 'id');
 
         return view('budget.form', compact('data', 'id', 'acc_list'));
     }

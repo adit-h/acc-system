@@ -8,6 +8,7 @@ use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
 
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\Report\ReportBudgetController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransLimitController;
 
@@ -110,7 +111,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Route::resource('account', MasterController::class);
     });
 
-    // Master Module
+    // Budget Module
     Route::group(['prefix' => 'budget'], function () {
         //Master Page Routes
         Route::get('/', [BudgetController::class, 'index'])->name('budget.index');
@@ -119,6 +120,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('edit/{id}', [BudgetController::class, 'edit'])->name('budget.edit');
         Route::patch('update/{id}', [BudgetController::class, 'update'])->name('budget.update');
         Route::delete('destroy/{id}', [BudgetController::class, 'destroy'])->name('budget.destroy');
+    });
+
+    // Budget Report Module
+    Route::group(['prefix' => 'report/budget'], function () {
+        //Trans Journal Routes
+        Route::get('/', [ReportBudgetController::class, 'index'])->name('report.budget');
+        Route::get('index', [ReportBudgetController::class, 'index'])->name('report.budget.index');
+        Route::post('filter', [ReportBudgetController::class, 'filter'])->name('report.budget.filter');
+
+        Route::get('export-excel/', [ReportBudgetController::class, 'exportExcel'])->name('report.budget.export.excel');
+        Route::get('export-pdf/', [ReportBudgetController::class, 'exportPdf'])->name('report.budget.export.pdf');
+        Route::get('export-html/', [ReportBudgetController::class, 'exportHtml'])->name('report.budget.export.html');
     });
 
     // Transaction In Module
