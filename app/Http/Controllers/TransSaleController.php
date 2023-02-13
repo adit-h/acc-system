@@ -52,7 +52,7 @@ class TransSaleController extends Controller
             "trans_date" => $req['trans_date'],
             "receive_from" => $req['receive_from'],
             "store_to" => 30,
-            "value" => !empty($req['value']) ? $req['value'] : 0,
+            "value" => !empty($req['value']) ? str_replace(",", "", $req['value']) : 0,
             "sale_id" => 0,
             "reference" => $req['reference'],
             "description" => $req['description'],
@@ -61,7 +61,7 @@ class TransSaleController extends Controller
         ];
         $trans = TransactionSale::create($data);
         // insert discount transaction
-        $disc = !empty($req['disc']) ? $req['disc'] : 0;
+        $disc = !empty($req['disc']) ? str_replace(",", "", $req['disc']) : 0;
         $data_disc = [
             "trans_date" => $req['trans_date'],
             "receive_from" => 31,
@@ -127,7 +127,7 @@ class TransSaleController extends Controller
         $trans->trans_date = $req['trans_date'];
         $trans->receive_from = $req['receive_from'];
         $trans->store_to = 30;
-        $trans->value = !empty($req['value']) ? $req['value'] : 0;
+        $trans->value = !empty($req['value']) ? str_replace(",", "", $req['value']) : 0;
         $trans->reference = $req['reference'];
         $trans->description = $req['description'];
         $trans->updateby = $auth_user->id;
@@ -137,7 +137,7 @@ class TransSaleController extends Controller
         $trans_disc->trans_date = $req['trans_date'];
         $trans_disc->receive_from = 31;
         $trans_disc->store_to = $req['receive_from'];
-        $trans_disc->value = !empty($req['disc']) ? $req['disc'] : 0;
+        $trans_disc->value = !empty($req['disc']) ? str_replace(",", "", $req['disc']) : 0;
         $trans_disc->reference = $req['reference'];
         $trans_disc->description = $req['description'];
         $trans_disc->updateby = $auth_user->id;

@@ -46,8 +46,10 @@ class AdjustmentInController extends Controller
      */
     public function store(TransactionInRequest $request)
     {
-        // dd($request->all());
-        $trans = TransactionIn::create($request->all());
+        $data = $request->all();
+        $data['value'] = str_replace(",", "", $data['value']);
+
+        $trans = TransactionIn::create($data);
 
         return redirect()->route('adjustment.in.index')->withSuccess(__('message.msg_added',['name' => __('adjustment-in.title')]));
     }
@@ -90,11 +92,11 @@ class AdjustmentInController extends Controller
      */
     public function update(TransactionInRequest $request, $id)
     {
-        // dd($request->all());
+        $data = $request->all();
         $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        $data['value'] = str_replace(",", "", $data['value']);
+        $trans->fill($data)->update();
 
         if(auth()->check()){
             return redirect()->route('adjustment.in.index')->withSuccess(__('message.msg_updated',['name' => __('adjustment-in.title')]));

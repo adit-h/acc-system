@@ -49,6 +49,7 @@ class TransReceivableController extends Controller
         $auth_user = AuthHelper::authSession();
         $data = $request->all();
 
+        $data['value'] = str_replace(",", "", $data['value']);
         $data['createby'] = $auth_user->id;
         $data['updateby'] = $auth_user->id;
         $trans = TransactionIn::create($data);
@@ -98,6 +99,7 @@ class TransReceivableController extends Controller
         $data = $request->all();
         $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
+        $data['value'] = str_replace(",", "", $data['value']);
         $data['updateby'] = $auth_user->id;
         $trans->fill($data)->update();
 

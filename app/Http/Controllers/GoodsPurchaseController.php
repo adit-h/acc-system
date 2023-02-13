@@ -46,14 +46,17 @@ class GoodsPurchaseController extends Controller
      */
     public function store(TransactionInRequest $request)
     {
+        $auth_user = AuthHelper::authSession();
         $req = $request->all();
         $data = [
             "trans_date" => $req['trans_date'],
             "receive_from" => $req['receive_from'],
             "store_to" => $req['store_to'],
-            "value" => !empty($req['value']) ? $req['value'] : 0,
+            "value" => !empty($req['value']) ? str_replace(",", "", $req['value']) : 0,
             "reference" => $req['reference'],
-            "description" => $req['description']
+            "description" => $req['description'],
+            "createby" => $auth_user->id,
+            "updateby" => $auth_user->id
         ];
         $trans = TransactionIn::create($data);
         // insert auto
@@ -63,9 +66,11 @@ class GoodsPurchaseController extends Controller
             "trans_date" => $req['trans_date'],
             "receive_from" => $acc1->id,
             "store_to" => $acc2->id,
-            "value" => !empty($req['value']) ? $req['value'] : 0,
+            "value" => !empty($req['value']) ? str_replace(",", "", $req['value']) : 0,
             "reference" => $req['reference'],
-            "description" => $req['description']
+            "description" => $req['description'],
+            "createby" => $auth_user->id,
+            "updateby" => $auth_user->id
         ];
         $trans2 = TransactionIn::create($data2);
 
@@ -113,8 +118,17 @@ class GoodsPurchaseController extends Controller
         // dd($request->all());
         $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        $auth_user = AuthHelper::authSession();
+        $req = $request->all();
+        $trans->trans_date = $req['trans_date'];
+        $trans->receive_from = $req['receive_from'];
+        $trans->store_to = $req['store_to'];
+        $trans->value = !empty($req['value']) ? str_replace(",", "", $req['value']) : 0;
+        $trans->reference = $req['reference'];
+        $trans->description = $req['description'];
+        $trans->updateby = $auth_user->id;
+        $trans->save();
+        //$trans->fill($request->all())->update();
 
         if(auth()->check()){
             return redirect()->route('goods.purchase.index')->withSuccess(__('message.msg_updated',['name' => __('goods-purchase.title')]));

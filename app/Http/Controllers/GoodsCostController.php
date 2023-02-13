@@ -46,8 +46,13 @@ class GoodsCostController extends Controller
      */
     public function store(TransactionOutRequest $request)
     {
-        // dd($request->all());
-        $trans = TransactionOut::create($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
+
+        $data['value'] = str_replace(",", "", $data['value']);
+        $data['createby'] = $auth_user->id;
+        $data['updateby'] = $auth_user->id;
+        $trans = TransactionOut::create($data);
 
         return redirect()->route('goods.cost.index')->withSuccess(__('message.msg_added',['name' => __('goods-cost.title')]));
     }
@@ -90,11 +95,13 @@ class GoodsCostController extends Controller
      */
     public function update(TransactionOutRequest $request, $id)
     {
-        // dd($request->all());
+        $auth_user = AuthHelper::authSession();
+        $data = $request->all();
         $trans = TransactionOut::with('receiveFrom')->with('storeTo')->findOrFail($id);
 
-        // Update master account data...
-        $trans->fill($request->all())->update();
+        $data['value'] = str_replace(",", "", $data['value']);
+        $data['updateby'] = $auth_user->id;
+        $trans->fill($data)->update();
 
         if(auth()->check()){
             return redirect()->route('goods.cost.index')->withSuccess(__('message.msg_updated',['name' => __('goods-cost.title')]));

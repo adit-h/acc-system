@@ -51,5 +51,14 @@
 <script src="{{asset('js/hope-ui.js') }}"></script>
 <script src="{{asset('js/modelview.js')}}"></script>
 
+<!-- AutoNumber Javascript -->
+<script src="{{asset('js/autoNumeric.js')}}"></script>
+<!-- Initiate -->
+<script type="text/javascript">
+    new AutoNumeric('#value', 'float');
+    new AutoNumeric('#disc', 'float');
+</script>
+
 <!-- Include Custom Development scripts -->
 <script src="{{asset('js/custom.js')}}"></script>
+

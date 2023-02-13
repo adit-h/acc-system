@@ -28,11 +28,11 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="value">Nilai: <span class="text-danger">*</span></label>
-                                {{ Form::text('value', old('value'), ['class' => 'form-control', 'placeholder' => 'Nilai Penjualan', 'required']) }}
+                                {{ Form::text('value', old('value'), ['id' => 'value', 'class' => 'form-control', 'placeholder' => 'Nilai Penjualan', 'required']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="value">Diskon: </label>
-                                {{ Form::text('disc', old('disc') ? old('disc') : $data_disc->value ?? '', ['class' => 'form-control', 'placeholder' => 'Nilai Diskon']) }}
+                                {{ Form::text('disc', old('disc') ? old('disc') : $data_disc->value ?? '', ['id' => 'disc', 'class' => 'form-control', 'placeholder' => 'Nilai Diskon']) }}
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="received_from">Debet: <span class="text-danger">*</span></label>
