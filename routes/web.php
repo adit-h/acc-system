@@ -36,6 +36,7 @@ use App\Http\Controllers\Report\ReportTransJournalController;
 use App\Http\Controllers\Report\ReportGeneralLedgerController;
 use App\Http\Controllers\Report\ReportBalanceSheetController;
 
+use App\Http\Controllers\Report\ReportIncomeStateAdminController;
 use App\Http\Controllers\Report\ReportGeneralLedgerAdminController;
 
 use Illuminate\Support\Facades\Artisan;
@@ -324,6 +325,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('export-excel/', [ReportIncomeStateController::class, 'exportExcel'])->name('report.income.state.export.excel');
         Route::get('export-pdf/', [ReportIncomeStateController::class, 'exportPdf'])->name('report.income.state.export.pdf');
         Route::get('export-html/', [ReportIncomeStateController::class, 'exportHtml'])->name('report.income.state.export.html');
+    });
+
+    Route::group(['prefix' => 'report/income-state-adm'], function () {
+        //Income Statement Routes
+        Route::get('/', [ReportIncomeStateAdminController::class, 'index'])->name('report.income.state.adm');
+        Route::get('index', [ReportIncomeStateAdminController::class, 'index'])->name('report.income.state.adm.index');
+        Route::post('filter', [ReportIncomeStateAdminController::class, 'filter'])->name('report.income.state.adm.filter');
+
+        Route::get('export-excel/', [ReportIncomeStateAdminController::class, 'exportExcel'])->name('report.income.state.adm.export.excel');
+        Route::get('export-pdf/', [ReportIncomeStateAdminController::class, 'exportPdf'])->name('report.income.state.adm.export.pdf');
+        Route::get('export-html/', [ReportIncomeStateAdminController::class, 'exportHtml'])->name('report.income.state.adm.export.html');
     });
 
     Route::group(['prefix' => 'report/trans-journal'], function () {
