@@ -177,7 +177,7 @@
                     <div class="card" data-aos="fade-up" data-aos-delay="800">
                         <div class="card-header d-flex justify-content-between flex-wrap">
                             <div class="header-title">
-                                <h4 class="card-title">$855.8K</h4>
+                                <h4 class="card-title">Rp. {{ $total_sales }}</h4>
                                 <p class="mb-0">Gross Sales</p>
                             </div>
                             <div class="d-flex align-items-center align-self-center">
@@ -214,6 +214,7 @@
                      </div> -->
                         </div>
                         <div class="card-body">
+                            <input type="hidden" id="chart_data" value="{{ $data }}"></input>
                             <div id="d-main" class="d-main"></div>
                         </div>
                     </div>

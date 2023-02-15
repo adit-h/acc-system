@@ -213,10 +213,10 @@ class Report extends Model
         return $return;
     }
 
-    function calculateIncomeState()
+    function calculateDashWidget()
     {
         $res = [];
-        $param = '2022-12-01';  // for test or null as default year
+        $param = date('Y-m-d');  // for test or null as default year
         $trans = $this->getYearlyTrans($param);
 
         // initiate data bucket
@@ -259,6 +259,60 @@ class Report extends Model
             'total_cost' => $this->currFormatter($cost),
             'gross_profit' => $this->currFormatter($profit)
         ];
+
+        return $res;
+    }
+
+    function calculateDashSalesMonth($date)
+    {
+        $res = 0;
+        $trans = $this->getMonthlyTrans($date);
+
+        // initiate data bucket
+        $in_data = $this->initMasterContainer();
+        // calculate trans
+        foreach ($trans as $key => $t) {
+            if (array_key_exists($t->toId, $in_data)) {
+                //$in_data[$t->toId]['balance'] += $t->value;
+                $in_data[$t->toId]['debet'] += $t->value;
+                $in_data[$t->toId]['balance'] = $in_data[$t->toId]['debet'] - $in_data[$t->toId]['kredit'];
+            }
+            if (array_key_exists($t->fromId, $in_data)) {
+                $in_data[$t->fromId]['kredit'] += $t->value;
+                $in_data[$t->fromId]['balance'] = $in_data[$t->fromId]['debet'] - $in_data[$t->fromId]['kredit'];
+            }
+            if (array_key_exists($t->toId, $in_data) && array_key_exists($t->fromId, $in_data)) {
+                $in_data[$t->fromId]['balance'] = $in_data[$t->fromId]['debet'] - $in_data[$t->fromId]['kredit'];
+            }
+        }
+
+        $sales_netto = 0;
+        foreach ($in_data as $key => $d) {
+            if ($d['catid'] == 6) {
+                $sales_netto += $d['debet'] - $d['kredit'];
+            }
+        }
+
+        $res = $sales_netto;
+
+        return $res;
+    }
+
+    function calculateDashCostMonth($date)
+    {
+        $res = 0;
+        $trans = $this->getMonthlyTrans($date);
+
+        // initiate data bucket
+        $in_data = $this->initMasterContainer();
+        $cost = 0;
+        // calculate trans
+        foreach ($in_data as $key => $d) {
+            if ($d['catid'] == 8 || $d['catid'] == 9) {
+                $cost += $d['kredit'] - $d['debet'];
+            }
+        }
+        $res = $cost;
 
         return $res;
     }

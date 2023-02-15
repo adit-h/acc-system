@@ -55,8 +55,12 @@
 <script src="{{asset('js/autoNumeric.js')}}"></script>
 <!-- Initiate -->
 <script type="text/javascript">
-    new AutoNumeric('#value', 'float');
-    new AutoNumeric('#disc', 'float');
+    if (document.querySelectorAll('#value').length) {
+        new AutoNumeric('#value', 'float');
+    }
+    if (document.querySelectorAll('#disc').length) {
+        new AutoNumeric('#disc', 'float');
+    }
 </script>
 
 <!-- Include Custom Development scripts -->

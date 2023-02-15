@@ -18,14 +18,28 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // get total value of Sales
-        $data = $this->reportModel->calculateIncomeState();
+        $data = $this->reportModel->calculateDashWidget();
         //dump($data);
         $total_sales = $data['total_sales'];
         $total_cost = $data['total_cost'];
         $gross_profit = $data['gross_profit'];
 
+        // TODO : get total sales each month
+        // loop through month
+        $ar_chart = [];     // chart array values
+        $cm = [];           // cost monthly array
+        $sm = [];           // sales monthly array
+        $mlimit = 12;        // how many month to include
+        for ($i=1; $i<=$mlimit; $i++) {
+            $d = date("Y-$i-1");
+            $cm = $this->reportModel->calculateDashCostMonth($d);
+            $sm = $this->reportModel->calculateDashSalesMonth($d);
+            $ar_chart[] = array('cost' => $cm, 'sales' => $sm);
+        }
+        $data = json_encode($ar_chart);
+
         $assets = ['chart', 'animation'];
-        return view('dashboards.dashboard', compact('assets', 'total_sales', 'total_cost', 'gross_profit'));
+        return view('dashboards.dashboard', compact('assets', 'total_sales', 'total_cost', 'gross_profit', 'data'));
     }
 
     /*

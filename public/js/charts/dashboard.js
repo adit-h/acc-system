@@ -114,13 +114,27 @@ if (document.querySelectorAll('#d-activity').length) {
     })
   }
 if (document.querySelectorAll('#d-main').length) {
+    var test = document.getElementById('chart_data').value;
+    var ar_data = JSON.parse(test);
+
+    var dsales = [94, 80, 94, 80, 94, 80, 94];
+    var dcost = [75, 60, 84, 60, 74, 60, 78];
+    if (ar_data.length > 0) {
+        dsales = [];    // init array
+        dcost = [];
+        ar_data.forEach(element => {
+            dsales.push(element['sales']);
+            dcost.push(element['cost']);
+        });
+    }
+
   const options = {
       series: [{
           name: 'total',
-          data: [94, 80, 94, 80, 94, 80, 94]
+          data: dsales
       }, {
           name: 'pipline',
-          data: [72, 60, 84, 60, 74, 60, 78]
+          data: dcost
       }],
       chart: {
           fontFamily: '"Inter", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -146,11 +160,14 @@ if (document.querySelectorAll('#d-main').length) {
         labels: {
           show: true,
           minWidth: 19,
-          maxWidth: 19,
+          maxWidth: 100,
           style: {
             colors: "#8A92A6",
           },
           offsetX: -5,
+          formatter: function(value) {
+            return 'Rp. '+ value.toLocaleString();
+          }
         },
       },
       legend: {
@@ -168,7 +185,7 @@ if (document.querySelectorAll('#d-main').length) {
           lines: {
               show: false  //or just here to disable only x axis grids
           },
-          categories: ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug"]
+          categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
       },
       grid: {
           show: false,
