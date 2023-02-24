@@ -25,7 +25,7 @@
                 $total1 = $total2 = $total3 = $total4 = 0;
             @endphp
             @foreach ($bucket as $key => $m)
-            @if (in_array($m['catid'], $catid))
+            @if (in_array($m['catid'], $catid) && !in_array($m['code'], $ex_code))
             @php
                 $bal = $m['last_balance'] + $m['debet'] - $m['kredit'];
                 if ($bal < 0) {

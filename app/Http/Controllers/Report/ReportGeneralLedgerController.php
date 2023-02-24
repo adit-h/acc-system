@@ -127,7 +127,7 @@ class ReportGeneralLedgerController extends Controller
                 ->get();
 
             //$trans_prev = $trans_prev_raw->get();
-            $bucket = $bucket_prev = $this->initMasterContainer();
+            $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
             // calculate previous month transactions
             foreach ($trans_prev as $key => $t) {
                 $bucket_prev[$t->fromId]['debet'] += $t->value;
@@ -286,7 +286,7 @@ class ReportGeneralLedgerController extends Controller
         $result = [];
         // income data. filter master account with account id = 6
         // switch debet & kredit position
-        $in1 = $this->initMasterContainer(6);
+        $in1 = $this->reportModel->initMasterContainer(6);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in1)) {
                 $in1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] + $bucket_prev[$t->toId]['kredit'];
@@ -313,7 +313,7 @@ class ReportGeneralLedgerController extends Controller
             }
         }
         // income data. filter master account with account id = 7
-        $in2 = $this->initMasterContainer(7);
+        $in2 = $this->reportModel->initMasterContainer(7);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in2)) {
                 $in2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -337,7 +337,7 @@ class ReportGeneralLedgerController extends Controller
         }
 
         // outcome data. filter master account with account id = 8
-        $out1 = $this->initMasterContainer(8);
+        $out1 = $this->reportModel->initMasterContainer(8);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out1)) {
                 $out1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -360,7 +360,7 @@ class ReportGeneralLedgerController extends Controller
             }
         }
         // outcome data. filter master account with account id = 9
-        $out2 = $this->initMasterContainer(9);
+        $out2 = $this->reportModel->initMasterContainer(9);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out2)) {
                 $out2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -424,7 +424,9 @@ class ReportGeneralLedgerController extends Controller
 
     /**
      * Init Master Account array container
+     * not used
      */
+    /*
     function initMasterContainer($catid = null)
     {
         // Query Master Accounts data
@@ -447,5 +449,5 @@ class ReportGeneralLedgerController extends Controller
             );
         }
         return $bucket;
-    }
+    }*/
 }

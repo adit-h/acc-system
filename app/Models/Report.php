@@ -320,11 +320,11 @@ class Report extends Model
     function initMasterContainer($catid = null)
     {
         // Query Master Accounts data
-        $master = MasterAccount::get();
+        $master = MasterAccount::orderBy('code')->get();
         if (is_array($catid)) {
-            $master = MasterAccount::whereIn('category_id', $catid)->get();
+            $master = MasterAccount::whereIn('category_id', $catid)->orderBy('code')->get();
         } else if ($catid > 0) {
-            $master = MasterAccount::where('category_id', $catid)->get();
+            $master = MasterAccount::where('category_id', $catid)->orderBy('code')->get();
         }
         $bucket = [];   // Master container
 

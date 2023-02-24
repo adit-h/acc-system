@@ -137,7 +137,8 @@ class ReportGeneralLedgerAdminExport implements FromView, WithColumnWidths, With
             ->orderBy('trans_date')
             ->get();
 
-        $catid = [1, 2, 6, 7, 8, 9];
+        $catid = [1, 2, 4, 6, 7, 8, 9];     // included account category
+        $ex_code = ['4003'];                // excluded account code
         $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
         // calculate previous month transactions
         foreach ($trans_prev as $key => $t) {
@@ -177,7 +178,7 @@ class ReportGeneralLedgerAdminExport implements FromView, WithColumnWidths, With
         // $bucket[29]['balance'] = $special['balance'];
         // $bucket[29]['last_balance'] = $special['last_balance'];
 
-        return view('reports.export-generalLedger-adm', compact('bucket', 'catid', 'trans', 'filter'));
+        return view('reports.export-generalLedger-adm', compact('bucket', 'catid', 'ex_code', 'trans', 'filter'));
     }
 
     function countIncomeState($trans, $trans_prev, $bucket_prev)

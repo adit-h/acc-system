@@ -5,6 +5,7 @@ namespace App\Exports;
 use Illuminate\Support\Facades\DB;
 use App\Models\MasterAccount;
 use App\Models\TransactionIn;
+use App\Models\Report;
 //use Maatwebsite\Excel\Concerns\FromQuery;
 //use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\View\View;
@@ -17,10 +18,13 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
 {
     //use Exportable;
 
+    protected $reportModel;
     public function __construct(int $month, int $year)
     {
         $this->month = $month;
         $this->year = $year;
+
+        $this->reportModel = new Report();
     }
 
     /**
@@ -133,7 +137,7 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
             ->orderBy('trans_date')
             ->get();
 
-        $bucket = $bucket_prev = $this->initMasterContainer();
+        $bucket = $bucket_prev = $this->reportModel->initMasterContainer();
         // calculate previous month transactions
         foreach ($trans_prev as $key => $t) {
             $bucket_prev[$t->fromId]['debet'] += $t->value;
@@ -181,7 +185,7 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
         $result = [];
         // income data. filter master account with account id = 6
         // switch debet & kredit position
-        $in1 = $this->initMasterContainer(6);
+        $in1 = $this->reportModel->initMasterContainer(6);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in1)) {
                 $in1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] + $bucket_prev[$t->toId]['kredit'];
@@ -208,7 +212,7 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
             }
         }
         // income data. filter master account with account id = 7
-        $in2 = $this->initMasterContainer(7);
+        $in2 = $this->reportModel->initMasterContainer(7);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $in2)) {
                 $in2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -232,7 +236,7 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
         }
 
         // outcome data. filter master account with account id = 8
-        $out1 = $this->initMasterContainer(8);
+        $out1 = $this->reportModel->initMasterContainer(8);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out1)) {
                 $out1[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -255,7 +259,7 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
             }
         }
         // outcome data. filter master account with account id = 9
-        $out2 = $this->initMasterContainer(9);
+        $out2 = $this->reportModel->initMasterContainer(9);
         foreach ($trans_prev as $key => $t) {
             if (array_key_exists($t->toId, $out2)) {
                 $out2[$t->toId]['last_balance'] = $bucket_prev[$t->toId]['debet'] - $bucket_prev[$t->toId]['kredit'];
@@ -319,7 +323,9 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
 
     /**
      * Init Master Account array container
+     * Not used
      */
+    /*
     function initMasterContainer($catid = null)
     {
         // Query Master Accounts data
@@ -342,5 +348,5 @@ class ReportGeneralLedgerExport implements FromView, WithColumnWidths, WithStyle
             );
         }
         return $bucket;
-    }
+    }*/
 }
