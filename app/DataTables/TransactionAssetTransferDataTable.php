@@ -96,8 +96,8 @@ class TransactionAssetTransferDataTable extends DataTable
             ['data' => 'value', 'name' => 'value', 'title' => 'Value'],
             ['data' => 'reference', 'name' => 'reference', 'title' => 'Ref Number'],
             ['data' => 'description', 'name' => 'description', 'title' => 'Description'],
-            ['data' => 'first_name', 'name' => 'first_name', 'title' => 'Update By'],
-            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Last Update'],
+            ['data' => 'first_name', 'name' => 'first_name', 'title' => 'Update By', 'searchable' => false],
+            ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Last Update', 'searchable' => false],
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
