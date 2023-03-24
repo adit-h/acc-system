@@ -35,6 +35,8 @@ class Report extends Model
             }
 
             $filter = date('F Y', strtotime($year . '-' . $month . '-01'));
+            $start_date = date('Y-m-d', strtotime($prev_year .'-01-01'));   // first date of current year
+            $cur_date = date('Y-m-d', strtotime($date));
             $trans_in = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
@@ -66,14 +68,15 @@ class Report extends Model
 
             // Query all trans to previous Month
             $filter_prev = date('F Y', strtotime($prev_year . '-' . $prev_month . '-01'));
-            $prev_date = date('Y-m-t', strtotime($prev_year . '-' . $prev_month . '-01'));
+            $prev_date = date('Y-m-d', strtotime($prev_year . '-' . $prev_month . '-01'));
             $trans_in_prev = DB::table('transaction_in AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date', '<=', $prev_date);
+                //->where('t.trans_date', '<=', $prev_date);
+                ->whereBetween('t.trans_date', [$start_date, $cur_date]);
             $trans_sale_prev = DB::table('transaction_sale AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
