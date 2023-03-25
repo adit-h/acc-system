@@ -83,14 +83,16 @@ class Report extends Model
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date', '<=', $prev_date);
+                //->where('t.trans_date', '<=', $prev_date);
+                ->whereBetween('t.trans_date', [$start_date, $cur_date]);
             $trans_prev = DB::table('transaction_out AS t')
                 ->select(DB::raw('t.id, t.trans_date, maf.id AS fromId, maf.code AS fromCode, maf.name AS fromName,
                     maf.category_id AS fromCat, mat.id AS toId, mat.code AS toCode, mat.name AS toName, mat.category_id AS toCat,
                     t.value, t.reference, t.description'))
                 ->join('master_accounts AS maf', 'maf.id', 't.receive_from')
                 ->join('master_accounts AS mat', 'mat.id', 't.store_to')
-                ->where('t.trans_date', '<=', $prev_date)
+                //->where('t.trans_date', '<=', $prev_date)
+                ->whereBetween('t.trans_date', [$start_date, $cur_date])
                 ->union($trans_in_prev)
                 ->union($trans_sale_prev)
                 ->orderBy('trans_date')
