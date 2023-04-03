@@ -159,6 +159,7 @@ class ReportGeneralLedgerController extends Controller
                     $bucket[$t->toId]['kredit'] += $t->value;
                 }
             }
+            //dump($bucket[6]);
 
             // lets count special account
             $special = $this->countIncomeState($trans, $trans_prev, $bucket_prev);
