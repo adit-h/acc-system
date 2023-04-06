@@ -258,7 +258,7 @@ class ReportIncomeStateController extends Controller
             $in_data2[$last_supp_id]['last_balance'] = $bucket_supply[$supp_id]['last_balance'];
             $in_data2[$last_supp_id]['balance'] = $bucket_supply[$supp_id]['balance'];
 
-            foreach ($trans_last_month_open as $key => $t) {`
+            foreach ($trans_last_month_open as $key => $t) {
                 // lets loop through all trans first and create result like General ledger Report for each account
                 $bucket_supply_prev[$t->fromId]['debet'] += $t->value;
                 $bucket_supply_prev[$t->toId]['kredit'] += $t->value;
