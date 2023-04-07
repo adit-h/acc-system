@@ -163,7 +163,10 @@ class ReportIncomeStateController extends Controller
             $supp_id = $supp[0];
             $begin_supp_id = 33;
             $purchase_id = 34;
+            $total_purchase_prev = 0;   // bucket to store any previous purchase from jan to previous month
             $last_supp_id = 35;
+            $hpp = MasterAccount::where('code', "7003")->pluck('id');
+            $hpp_id = $hpp[0];
 
             foreach ($trans_prev as $key => $t) {
                 if (array_key_exists($t->toId, $in_data2)) {
@@ -175,6 +178,14 @@ class ReportIncomeStateController extends Controller
                 if (array_key_exists($t->toId, $in_data2) && array_key_exists($t->fromId, $in_data2)) {
                     //$in_data2[$t->fromId]['balance'] = $in_data2[$t->fromId]['last_balance'] + $in_data2[$t->fromId]['debet'] - $in_data2[$t->fromId]['kredit'];
                 }
+                if ($t->fromId == $hpp_id) {
+                    $in_data2[$hpp_id]['last_balance'] = $bucket_prev[$t->fromId]['debet'];
+                }
+                // TODO : Count total pembelian bersih bulan sebelumnya
+                if ($t->fromId == $purchase_id) {
+                    //dump($t);
+                    $total_purchase_prev += $t->value;
+                }
             }
 
             foreach ($trans_last_month as $key => $t) {
@@ -184,7 +195,12 @@ class ReportIncomeStateController extends Controller
                 if (array_key_exists($t->fromId, $in_data2)) {
                     $in_data2[$t->fromId]['last_balance'] = $bucket_last_month[$t->fromId]['debet'] - $bucket_last_month[$t->fromId]['kredit'];
                 }
+                if ($t->fromId == $hpp_id) {
+                    // TODO : overwrite with bucket_prev value
+                    $in_data2[$hpp_id]['last_balance'] = $bucket_prev[$t->fromId]['debet'];
+                }
             }
+            $in_data2[$purchase_id]['last_balance'] = $total_purchase_prev;
 
             $deb_supp_prev = $cred_supp_prev = 0;
             foreach ($trans_prev_last_month as $key => $t) {
@@ -241,12 +257,6 @@ class ReportIncomeStateController extends Controller
             foreach ($trans_prev_open as $key => $t) {
                 $bucket_supply[$t->fromId]['last_balance'] = $bucket_prev_open[$t->fromId]['debet'] - $bucket_prev_open[$t->fromId]['kredit'];
                 $bucket_supply[$t->toId]['last_balance'] = $bucket_prev_open[$t->toId]['debet'] - $bucket_prev_open[$t->toId]['kredit'];
-
-                // handle pembelian bersih total
-                if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
-                    $in_data2[$purchase_id]['last_balance'] = $bucket_prev_open[$purchase_id]['debet'];
-                    //$in_data2[$purchase_id]['balance'] = $bucket_prev_open[$purchase_id]['kredit'];
-                }
             }
             // 2nd loop to count balance value
             foreach ($trans_prev_open as $key => $t) {
@@ -262,11 +272,6 @@ class ReportIncomeStateController extends Controller
                 // lets loop through all trans first and create result like General ledger Report for each account
                 $bucket_supply_prev[$t->fromId]['debet'] += $t->value;
                 $bucket_supply_prev[$t->toId]['kredit'] += $t->value;
-
-                // handle pembelian bersih total
-                if ($t->toId == $purchase_id || $t->fromId == $purchase_id) {
-                    //$in_data2[$purchase_id]['last_balance'] = $bucket_last_month_open[$purchase_id]['debet'];
-                }
             }
             foreach ($trans_prev_last_month_open as $key => $t) {
                 $bucket_supply_prev[$t->fromId]['last_balance'] = $bucket_prev_last_month_open[$t->fromId]['debet'] - $bucket_prev_last_month_open[$t->fromId]['kredit'];
@@ -278,8 +283,9 @@ class ReportIncomeStateController extends Controller
                 $bucket_supply_prev[$t->toId]['balance'] = $bucket_supply_prev[$t->toId]['last_balance'] + $bucket_supply_prev[$t->toId]['debet'] - $bucket_supply_prev[$t->fromId]['kredit'];
             }
             $in_data2[$begin_supp_id]['last_balance'] = $bucket_supply_prev[$supp_id]['last_balance'];
+            //$in_data2[$purchase_id]['last_balance'] = $bucket_supply_prev[$purchase_id]['debet'];
             //dump($bucket_supply[6]);
-            //dump($bucket_supply_prev[6]);
+        //dump($bucket_supply_prev[6]);
 
             // outcome data. filter master account with account id = 8
             $out_data1 = $this->initMasterContainer(8);
@@ -296,7 +302,6 @@ class ReportIncomeStateController extends Controller
             }
             foreach ($trans as $key => $t) {
                 if (array_key_exists($t->toId, $out_data1)) {
-                    //$out_data1[$t->toId]['balance'] += $t->value;
                     $out_data1[$t->toId]['kredit'] += $t->value;
                     $out_data1[$t->toId]['balance'] = $out_data1[$t->toId]['debet'] - $out_data1[$t->toId]['kredit'];
                 }
