@@ -159,16 +159,12 @@ class GoodsPurchaseController extends Controller
     public function destroy($id)
     {
         $trans = TransactionIn::findOrFail($id);
+        $trans_purc = TransactionIn::where('link_id', $trans->id)->first();
         $status = 'errors';
         $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
-        $trans_purc = TransactionIn::where('link_id', $trans->id)->first();
 
         if ($trans != '') {
             $trans->delete();
-            $status = 'success';
-            $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
-        }
-        if (!$trans_purc != '') {
             $trans_purc->delete();
             $status = 'success';
             $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
