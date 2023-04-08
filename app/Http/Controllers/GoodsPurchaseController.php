@@ -53,6 +53,7 @@ class GoodsPurchaseController extends Controller
             "receive_from" => $req['receive_from'],
             "store_to" => $req['store_to'],
             "value" => !empty($req['value']) ? str_replace(",", "", $req['value']) : 0,
+            "link_id" => 0,
             "reference" => $req['reference'],
             "description" => $req['description'],
             "createby" => $auth_user->id,
@@ -67,6 +68,7 @@ class GoodsPurchaseController extends Controller
             "receive_from" => $acc1->id,
             "store_to" => $acc2->id,
             "value" => !empty($req['value']) ? str_replace(",", "", $req['value']) : 0,
+            "link_id" => $trans->id,
             "reference" => $req['reference'],
             "description" => $req['description'],
             "createby" => $auth_user->id,
@@ -117,6 +119,7 @@ class GoodsPurchaseController extends Controller
     {
         // dd($request->all());
         $trans = TransactionIn::with('receiveFrom')->with('storeTo')->findOrFail($id);
+        $trans_purc = TransactionIn::with('receiveFrom')->with('storeTo')->where('link_id', $trans->id)->first();
 
         $auth_user = AuthHelper::authSession();
         $req = $request->all();
@@ -128,7 +131,18 @@ class GoodsPurchaseController extends Controller
         $trans->description = $req['description'];
         $trans->updateby = $auth_user->id;
         $trans->save();
-        //$trans->fill($request->all())->update();
+
+        // Update trans purchase
+        $acc1 = MasterAccount::whereIn('code', ["2000"])->first();  // persediaan
+        $acc2 = MasterAccount::whereIn('code', ["7001"])->first();  // pembelian bersih total
+        $trans_purc->trans_date = $req['trans_date'];
+        $trans_purc->receive_from = $acc1->id;
+        $trans_purc->store_to = $acc2->id;
+        $trans_purc->value = !empty($req['value']) ? str_replace(",", "", $req['value']) : 0;
+        $trans_purc->reference = $req['reference'];
+        $trans_purc->description = $req['description'];
+        $trans_purc->updateby = $auth_user->id;
+        $trans_purc->save();
 
         if(auth()->check()){
             return redirect()->route('goods.purchase.index')->withSuccess(__('message.msg_updated',['name' => __('goods-purchase.title')]));
@@ -147,9 +161,15 @@ class GoodsPurchaseController extends Controller
         $trans = TransactionIn::findOrFail($id);
         $status = 'errors';
         $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
+        $trans_purc = TransactionIn::where('link_id', $trans->id)->first();
 
         if ($trans != '') {
             $trans->delete();
+            $status = 'success';
+            $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
+        }
+        if (!$trans_purc != '') {
+            $trans_purc->delete();
             $status = 'success';
             $message= __('global-message.delete_form', ['form' => __('goods-purchase.title')]);
         }

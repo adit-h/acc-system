@@ -24,6 +24,7 @@ class TransactionIn extends Model
         'receive_from',
         'store_to',
         'value',
+        'link_id',
         'reference',
         'description',
         'createby',
